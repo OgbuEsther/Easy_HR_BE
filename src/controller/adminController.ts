@@ -56,6 +56,15 @@ export const adminSignup = asyncHandler(
           admin?.wallet.push(new mongoose.Types.ObjectId(createWallet?._id));
       
           admin.save();
+
+          if (!createWallet) {
+            next(
+              new AppError({
+                message: "couldn't create admin wallet",
+                httpCode: HttpCode.BAD_REQUEST,
+              })
+            );
+          }
       
           return res.status(200).json({
             message: "Success",
