@@ -5,7 +5,7 @@ import staffAuth from "../model/staff/staffAuth";
 import { AppError, HttpCode } from "../utils/appError";
 import { asyncHandler } from "../utils/asyncHandler";
 
-export const register = asyncHandler(
+export const staffRegister = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, yourName, password, companyname , position } = req.body;
 
