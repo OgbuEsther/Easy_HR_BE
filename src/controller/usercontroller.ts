@@ -1,18 +1,20 @@
 import { Request, Response, NextFunction } from "express";
-import { Iuser } from "../interfaces/userInterface";
-import userModel from "../model/userModel";
+
+import staffAuth from "../model/staff/staffAuth";
+
 import { AppError, HttpCode } from "../utils/appError";
 import { asyncHandler } from "../utils/asyncHandler";
 
 export const register = asyncHandler(
-  async (req: Request<{}, {}, Iuser>, res: Response, next: NextFunction) => {
-    const { email, name, password, confirmpassword } = req.body;
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, yourName, password, companyname , position } = req.body;
 
-    const user = await userModel.create({
+    const user = await staffAuth.create({
       email,
-      name,
+      yourName,
       password,
-      confirmpassword,
+      companyname,
+      position
     });
     if (!user) {
       next(
@@ -42,7 +44,7 @@ export const login = asyncHandler(
         })
       );
 
-    const user = await userModel.findOne({ email });
+    const user = await staffAuth.findOne({ email });
     if (!user)
       next(
         new AppError({
@@ -51,7 +53,7 @@ export const login = asyncHandler(
         })
       );
 
-    user?.comparePassword(password);
+
 
     return res.status(HttpCode.OK).json({
       message: "Success",
