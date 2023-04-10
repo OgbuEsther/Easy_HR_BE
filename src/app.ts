@@ -6,13 +6,15 @@ import { AppError, HttpCode } from "./utils/appError";
 
 
 import staffAuthRoutes from "./router/staff/staffAuthRoutes";
+import adminAuthRoutes from "./router/admin/adminAuth";
 
 //creating our application
 const appConfig = (app: Application) => {
   app.use(express.json()).use(cors()).use(morgan("dev"));
 
   //routes (API endpoints)
-  app.use("/api", staffAuthRoutes);
+  app.use("/api/staff", staffAuthRoutes);
+  app.use("/api/admin", adminAuthRoutes);
   // app.use("/api/auth", userRoutes);
 
   //checking all routes

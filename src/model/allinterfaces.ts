@@ -4,7 +4,7 @@ export interface adminSignUp extends mongoose.Document {
   viewUser: mongoose.Types.Array<mongoose.Types.ObjectId>;
    // companyName: string;
    companyname: string;
-   companyEmail: string;
+   email: string;
    yourName: string;
    password: string;
    wallet: {}[];

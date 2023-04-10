@@ -1,18 +1,11 @@
 import { Router } from "express";
-import { staffRegister } from "../../controller/usercontroller";
-// import {
-//   deactivateStaff,
-//   getAllStaff,
-//   getOneStaff,
-//   staffSignin,
-//   staffSignup,
-//   updateStaff,
-// } from "../../controller/staff/staffAuthController";
+import { staffSignin, staffSignup } from "../../controller/usercontroller";
+import { loginValidation, registerValidation } from "../../middleware/validator/userValidation/userValidation";
 
 const staffAuthRoutes = Router();
 
-// staffAuthRoutes.post("/stafflogin", staffSignin);
-staffAuthRoutes.post("/staffregister", staffRegister);
+staffAuthRoutes.post("/stafflogin", loginValidation ,  staffSignin);
+staffAuthRoutes.post("/staffregister", registerValidation, staffSignup);
 // staffAuthRoutes.get("/allstaff/", getAllStaff);
 // staffAuthRoutes.get("/staff/:staffId", getOneStaff);
 // staffAuthRoutes.patch("/updateStaff/:staffId", updateStaff);

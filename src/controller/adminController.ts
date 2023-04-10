@@ -10,7 +10,7 @@ import { asyncHandler } from "../utils/asyncHandler";
 export const adminSignup = asyncHandler(
     async (req: Request, res: Response , next:NextFunction) => {
         try {
-          const { companyname, companyEmail, yourName, password, walletNumber } =
+          const { companyname, email, yourName, password, walletNumber } =
             req.body;
       
             
@@ -30,7 +30,7 @@ export const adminSignup = asyncHandler(
           const admin = await adminAuth.create({
             companyCode: genCode,
             companyname,
-            companyEmail,
+            email,
             yourName,
             password: hash,
             walletNumber: generateNumber,
@@ -81,11 +81,11 @@ export const adminSignup = asyncHandler(
 
 export const adminSignin = async (req: Request, res: Response) => {
   try {
-    const { companyEmail, password, companyname } = req.body;
+    const { email, password, companyname } = req.body;
 
   
 
-    const admin = await adminAuth.findOne({ companyEmail });
+    const admin = await adminAuth.findOne({ email });
 
     
 
