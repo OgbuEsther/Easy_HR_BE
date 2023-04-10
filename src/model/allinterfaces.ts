@@ -20,7 +20,7 @@ export interface staffSignUp {
   email: string;
   password: string;
   plans:boolean;
-  amount:Number;
+  amount:number;
   // companyName: string;
   companyname: string;
   position: string;
