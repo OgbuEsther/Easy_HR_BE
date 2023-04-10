@@ -1,4 +1,4 @@
-console.log("--------------------------------");
+
 import express, { Application } from "express";
 import appConfig from "./app";
 import dbConfig from "./config/db";
@@ -11,3 +11,6 @@ dbConfig();
 app.listen(envVariables.PORT, () => {
   console.log(`server is up on port ${envVariables.PORT}`);
 });
+
+
+console.log("--------------------------------");

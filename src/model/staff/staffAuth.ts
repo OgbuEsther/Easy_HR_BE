@@ -32,6 +32,7 @@ type:Number
       type: String,
       required: true,
       min: 6,
+      
     },
     companyname: {
       type: String,

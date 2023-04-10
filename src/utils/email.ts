@@ -27,7 +27,7 @@ export const emailEnv = async (user: any) => {
         refreshToken: GOOGLE_REFRESHTOKEN,
         // accessToken: getToken,
         accessToken:
-          "ya29.a0Ael9sCPu8_kNL_xWPygHuxEOX3rYMJaO_D2hbFyOpcAsfLf0Y_EC0ZcAZ5yOx_5G5iWDpb83glg0DN9FydYNejVew8pIMW6M3x6p4SNWvRdhX3B19CPcC6R0fRNNwGt9gO-0RT9AUY5vbAg8rLfjtk1-X-zYaCgYKASQSARASFQF4udJhJwHDsG439MvQxoOIV6Fq1Q0163",
+          "ya29.a0Ael9sCMQQ49BM0mYbc5Ve2cM6r6QfY-UKE0U8MEorazCY49Tx4udjpoHVpWwvwqktg3sL36Ue0kb5RRYXKeyCtWJ46bFkUWoqu3-QrdZ5gx5S29v-UdzdcA-uIREc05Q_sXUhd0-l5214B9LPNB4g7GnE04WaCgYKASISARASFQF4udJht_jbJhpntyJZ4Kefz3s-Dw0163",
         // accessToken: getToken.token || "",
       },
     });
@@ -36,7 +36,7 @@ export const emailEnv = async (user: any) => {
       from: "Easy Pay💰💸 <ogbuozichi2002@gmail.com>",
       to: user.email,
       subject: "Account verification",
-      html: `<div>Welcome ${user.name} 
+      html: `<div>Welcome to easyHR , your just signed up to our platform , wait for verification from the admin ${user.yourName} 
       <a href="http://localhost:3111/api/user/${user._id}/verified">verified</a>
       <br/>
       <br/>
