@@ -36,8 +36,8 @@ export const emailEnv = async (user: any) => {
       from: "Easy Pay💰💸 <ogbuozichi2002@gmail.com>",
       to: user.email,
       subject: "Account verification",
-      html: `<div>Welcome to easyHR , your just signed up to our platform , wait for verification from the admin ${user.yourName} 
-      <a href="http://localhost:3111/api/user/${user._id}/verified">verified</a>
+      html: `<div>Welcome "${user.yourName}"  to easyHR , your just signed up to our platform , wait for verification from the admin 
+      <a href="http://localhost:2023/api/user/${user._id}/verified">verified</a>
       <br/>
       <br/>
       ${user.OTP}
@@ -82,7 +82,7 @@ export const resetPassword = async (user: any) => {
       to: user.email,
       subject: "Reset Password Request",
       html: `<div>Welcome ${user.userName} 
-      <a href="http://localhost:3111/api/user/${user._id}/${user.token}/reset-password">verified</a>
+      <a href="http://localhost:2023/api/user/${user._id}/${user.token}/reset-password">verified</a>
       <br/>
       <br/>
       ${user.OTP}
