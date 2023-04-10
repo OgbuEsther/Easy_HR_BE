@@ -15,7 +15,7 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
 
     },
     
-    companyEmail: {
+    email: {
       type: String,
       unique: true,
       required: [true, "please enter your company email"],
