@@ -88,3 +88,37 @@ export const MakeTransfer = async (req: Request, res: Response) => {
       });
     }
   };
+
+
+  export const fundWalletFromBank = async (req: Request, res: Response) => {
+    try {
+      const getUser = await adminAuth.findById(req.params.userId);
+      const getWallet = await adminWalletModel.findById(req.params.walletId);
+  
+      const { amount, transactinRef } = req.body;
+      await adminWalletModel.findByIdAndUpdate(getWallet?._id, {
+        balance: getWallet?.balance + amount,
+      });
+  
+      const createHisorySender = await adminTransactionHistory.create({
+        message: `an amount of ${amount} has been credited to your wallet`,
+        transactionType: "credit",
+        transactionReference: transactinRef,
+      });
+  
+      getUser?.transactionHistory?.push(
+        new mongoose.Types.ObjectId(createHisorySender?._id)
+      );
+  
+      res.status(200).json({
+        message: "Wallet updated successfully",
+      });
+    } catch (err) {
+      console.log("here",err)
+      return res.status(404).json({
+        message: "an error occurred",
+        err,
+      });
+    }
+  };
+  
