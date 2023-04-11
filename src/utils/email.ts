@@ -11,7 +11,7 @@ const GOOGLE_REDIRECT: string =
 
 const oAuth = new google.auth.OAuth2(GOOGLE_ID, GOOGLE_SECRET, GOOGLE_REDIRECT);
 
-export const emailEnv = async (user: any) => {
+export const emailEnv = async (user: any , company:any) => {
   try {
     oAuth.setCredentials({ access_token: GOOGLE_REFRESHTOKEN });
     const getToken: any = (await oAuth.getAccessToken()).token;
@@ -36,7 +36,7 @@ export const emailEnv = async (user: any) => {
       from: "Easy Pay💰💸 <ogbuozichi2002@gmail.com>",
       to: user.email,
       subject: "Account verification",
-      html: `<div>Welcome "${user.yourName}"  to easyHR , your just signed up to our platform , wait for verification from the admin 
+      html: `<div>Welcome "${user.yourName}"  to easyHR , your just signed up under ${company.companyname} , wait for verification from the admin 
       <a href="http://localhost:2023/api/user/${user._id}/verified">verified</a>
       <br/>
       <br/>
@@ -47,7 +47,54 @@ export const emailEnv = async (user: any) => {
     transporter
       .sendMail(mailerOption)
       .then(() => {
-        console.log("Email Send");
+        console.log("Email Sent");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//verify admin email
+export const AdminEmailEnv = async (admin: any) => {
+  try {
+    oAuth.setCredentials({ access_token: GOOGLE_REFRESHTOKEN });
+    const getToken: any = (await oAuth.getAccessToken()).token;
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+
+      auth: {
+        type: "OAuth2",
+        user: "ogbuozichi2002@gmail.com",
+        clientId: GOOGLE_ID,
+        clientSecret: GOOGLE_SECRET,
+        refreshToken: GOOGLE_REFRESHTOKEN,
+        // accessToken: getToken,
+        accessToken:
+          "ya29.a0Ael9sCMQQ49BM0mYbc5Ve2cM6r6QfY-UKE0U8MEorazCY49Tx4udjpoHVpWwvwqktg3sL36Ue0kb5RRYXKeyCtWJ46bFkUWoqu3-QrdZ5gx5S29v-UdzdcA-uIREc05Q_sXUhd0-l5214B9LPNB4g7GnE04WaCgYKASISARASFQF4udJht_jbJhpntyJZ4Kefz3s-Dw0163",
+        // accessToken: getToken.token || "",
+      },
+    });
+
+    const mailerOption = {
+      from: "Easy Pay💰💸 <ogbuozichi2002@gmail.com>",
+      to: admin.email,
+      subject: "Account verification",
+      html: `<div>Welcome "${admin.yourName}"  to easyHR , your just signed up to our platform , wait for verification from the admin 
+      <a href="https://easypay-teamace.netlify.app/api/user/${admin._id}/verified">verified</a>
+      <br/>
+      <br/>
+      ${admin.OTP}
+        </div>`,
+    };
+
+    transporter
+      .sendMail(mailerOption)
+      .then(() => {
+        console.log("Email Sent");
       })
       .catch((err) => {
         console.log(err);
