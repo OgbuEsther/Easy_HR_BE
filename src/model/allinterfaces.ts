@@ -35,4 +35,5 @@ export interface staffSignUp {
   investmentPlan: {}[];
   travelAndTour: {}[];
   other: {}[];
+  payRoll : {}[]
 }
