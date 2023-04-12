@@ -10,7 +10,6 @@ const payRollSchema = new mongoose.Schema<PayRoll>({
     },
     netPay : {
         type : Number,
-
     },
     taxes : {
         type : Number
