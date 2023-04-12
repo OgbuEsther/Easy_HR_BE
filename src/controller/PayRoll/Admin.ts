@@ -100,20 +100,28 @@ export const createPayRoll = async (req: Request, res: Response) => {
     const getStaff = await staffAuth.findById(req.params.staffId);
 
     if (getStaff) {
-      const payroll = await payRollModel.create({
-        grossPay,
-        netPay: pay,
-        taxes,
-        pension,
-        medicals,
-      });
-      await getStaff?.payRoll?.push(new mongoose.Types.ObjectId(payroll?._id));
 
-      await getStaff?.save();
-      return res.status(201).json({
-        message: "created staff payroll",
-        data: payroll,
-      });
+      if(expenses > grossPay){
+        return res.status(400).json({
+          message : "a staff's expenses can't be more than his/her gross pay"
+        })
+      }else{
+        const payroll = await payRollModel.create({
+          grossPay,
+          netPay: pay,
+          taxes,
+          pension,
+          medicals,
+        });
+        await getStaff?.payRoll?.push(new mongoose.Types.ObjectId(payroll?._id));
+  
+        await getStaff?.save();
+        return res.status(201).json({
+          message: "created staff payroll",
+          data: payroll,
+        });
+      }
+
     } else {
       return res.status(404).json({
         message: "couldn't get staff or create payroll",
