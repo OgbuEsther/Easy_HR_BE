@@ -49,7 +49,8 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "staffAuth",
     }
-  ]
+  ],
+  
   },
   { timestamps: true }
 );

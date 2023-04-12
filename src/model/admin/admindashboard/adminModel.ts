@@ -11,11 +11,11 @@ export interface adminTransactionProps {
   transactionReference: number;
 }
 
-export interface PayRoll {
-  grossPay : number;
-  netPay: number;
-  taxes:number;
-  pension:number;
-  medicals:number
+// export interface PayRoll {
+//   grossPay : number;
+//   netPay: number;
+//   taxes:number;
+//   pension:number;
+//   medicals:number
 
-}
+// }
