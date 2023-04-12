@@ -19,3 +19,12 @@ export interface staffTransactionProps {
 }
 
 
+
+export interface PayRoll {
+  grossPay : number;
+  netPay: number;
+  taxes:number;
+  pension:number;
+  medicals:number
+
+}

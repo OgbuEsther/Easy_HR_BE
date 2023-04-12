@@ -92,6 +92,12 @@ type:Number
         ref: "staffOther",
       },
     ],
+    payRoll : [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref : "StaffPayRoll"
+      }
+    ]
   },
   { timestamps: true }
 );
