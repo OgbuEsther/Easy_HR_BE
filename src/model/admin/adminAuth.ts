@@ -14,7 +14,15 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
       unique:true
 
     },
-    
+    OTP: {
+      type :String
+    },
+    verified: {
+      type : String
+    },
+    token : {
+      type : String
+    },
     email: {
       type: String,
       unique: true,

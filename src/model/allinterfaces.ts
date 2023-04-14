@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 export interface adminSignUp extends mongoose.Document {
   viewUser: mongoose.Types.Array<mongoose.Types.ObjectId>;
-   // companyName: string;
+  OTP : string;
+  verified : string;
+  token : string
    companyname: string;
    email: string;
    yourName: string;
@@ -21,12 +23,14 @@ export interface staffSignUp {
   password: string;
   plans:boolean;
   amount:number;
-  // companyName: string;
   companyname: string;
   position: string;
   walletNumber: number;
   subscribe :boolean,
   companyCode: string
+  OTP : string;
+  verified : string;
+  token : string
   wallet: {}[];
   transactionHistory: {}[];
   savingsPlan: {}[];

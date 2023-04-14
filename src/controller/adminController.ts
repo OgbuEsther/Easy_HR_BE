@@ -7,12 +7,26 @@ import otpgenerator from "otp-generator";
 import adminWalletModel from "../model/admin/admindashboard/adminWallets";
 import { AppError, HttpCode } from "../utils/appError";
 import { asyncHandler } from "../utils/asyncHandler";
+import crypto from "crypto"
+
 export const adminSignup = asyncHandler(
     async (req: Request, res: Response , next:NextFunction) => {
         try {
-          const { companyname, email, yourName, password, walletNumber } =
+          const { companyname, email, yourName, password, walletNumber , token , OTP } =
             req.body;
-      
+
+            const genToken = crypto.randomBytes(32).toString("hex");
+            const genOTP = crypto.randomBytes(2).toString("hex");
+      if(companyname){
+        return res.status(400).json({
+          message : "a company with this name already"
+        })
+      }
+      if(!email || !yourName ){
+        return res.status(400).json({
+          message : "please fill in the required fields"
+        })
+      }
             
       
           const salt = await bcrypt.genSalt(10);
@@ -34,6 +48,7 @@ export const adminSignup = asyncHandler(
             yourName,
             password: hash,
             walletNumber: generateNumber,
+            token : genToken , OTP :genOTP
           });
       
           if (!admin) {
