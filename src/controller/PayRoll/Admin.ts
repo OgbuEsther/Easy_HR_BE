@@ -97,15 +97,31 @@ export const createPayRoll = async (req: Request, res: Response) => {
 
     const pay = grossPay - expenses;
 
-    const getStaff = await staffAuth.findById(req.params.staffId);
+    const referenceGeneratedNumber = Math.floor(Math.random() * 67485753) + 243;
 
-    if (getStaff) {
 
-      if(expenses > grossPay){
-        return res.status(400).json({
-          message : "a staff's expenses can't be more than his/her gross pay"
-        })
-      }else{
+    // const getStaff = await staffAuth.findById(req.params.staffId);
+
+      //RECIEVER ACCOUNT
+      const getStaff = await staffAuth.findOne({ walletNumber });
+      const getStaffWallet = await staffWalletModel.findById(getStaff?._id);
+  
+
+       // SENDER ACCOUNT
+    const getUser = await adminAuth.findById(req.params.UserId);
+    const getUserWallet = await adminWalletModel.findById(getUser?._id);
+
+
+    if (getStaff && getUser) {
+
+if (amount > getUserWallet?.balance!) {
+        if(expenses > grossPay){
+          return res.status(400).json({
+            message : "a staff's expenses can't be more than his/her gross pay"
+          })
+        }
+      } else {
+
         const payroll = await payRollModel.create({
           grossPay,
           netPay: pay,
@@ -116,11 +132,51 @@ export const createPayRoll = async (req: Request, res: Response) => {
         await getStaff?.payRoll?.push(new mongoose.Types.ObjectId(payroll?._id));
   
         await getStaff?.save();
+       
+        // undating the sender walllet
+        await adminWalletModel.findByIdAndUpdate(getUserWallet?._id, {
+          balance: getUserWallet?.balance! - amount,
+          credit: 0,
+          debit: amount,
+        });
+
+        const createHisorySender = await adminTransactionHistory.create({
+          message: `you have sent ${amount} to ${getStaff?.yourName}`,
+          receiver: getStaff?.yourName,
+          transactionReference: referenceGeneratedNumber,
+          // date: getDate,
+        });
+
+        getUser?.transactionHistory?.push(
+          new mongoose.Types.ObjectId(createHisorySender?._id)
+        );
+
+        getUser?.save();
+
+        // reciever wallet
+        await staffWalletModel.findByIdAndUpdate(getStaffWallet?._id, {
+          balance: getStaffWallet?.balance! + amount,
+          credit: amount,
+          debit: 0,
+        });
+
+        const createHisoryReciever = await staffTransactionHistory.create({
+          message: `an amount of ${amount} has been sent to you by ${getUser?.companyname}`,
+          transactionType: "credit",
+          receiver: getUser?.yourName,
+          transactionReference: referenceGeneratedNumber,
+        });
+        getStaff?.transactionHistory?.push(
+          new mongoose.Types.ObjectId(createHisoryReciever?._id)
+        );
+        getStaff?.save();
+
         return res.status(201).json({
           message: "created staff payroll",
           data: payroll,
         });
       }
+     
 
     } else {
       return res.status(404).json({
