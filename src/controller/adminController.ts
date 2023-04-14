@@ -7,109 +7,129 @@ import otpgenerator from "otp-generator";
 import adminWalletModel from "../model/admin/admindashboard/adminWallets";
 import { AppError, HttpCode } from "../utils/appError";
 import { asyncHandler } from "../utils/asyncHandler";
+import crypto from "crypto";
+
 export const adminSignup = asyncHandler(
-    async (req: Request, res: Response , next:NextFunction) => {
-        try {
-          const { companyname, email, yourName, password, walletNumber } =
-            req.body;
-      
-            
-      
-          const salt = await bcrypt.genSalt(10);
-          const hash = await bcrypt.hash(password, salt);
-      
-          const dater = Date.now();
-      
-          const generateNumber = Math.floor(Math.random() * 78) + dater;
-          const genCode = otpgenerator.generate(6, {
-            upperCaseAlphabets: false,
-            specialChars: false,
-            digits: true,
-            lowerCaseAlphabets: false,
-          });
-          const admin = await adminAuth.create({
-            companyCode: genCode,
-            companyname,
-            email,
-            yourName,
-            password: hash,
-            walletNumber: generateNumber,
-          });
-      
-          if (!admin) {
-              next(
-                new AppError({
-                  message: "Account not created",
-                  httpCode: HttpCode.BAD_REQUEST,
-                })
-              );
-            }
-      
-          const createWallet = await adminWalletModel.create({
-            _id: admin?._id,
-            balance: 15000,
-      
-            credit: 0,
-            debit: 0,
-          });
-      
-          admin?.wallet.push(new mongoose.Types.ObjectId(createWallet?._id));
-      
-          admin.save();
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {
+        companyname,
+        email,
+        yourName,
+        password,
+        walletNumber,
+        token,
+        OTP,
+      } = req.body;
 
-          if (!createWallet) {
-            next(
-              new AppError({
-                message: "couldn't create admin wallet",
-                httpCode: HttpCode.BAD_REQUEST,
-              })
-            );
-          }
-      
-          return res.status(200).json({
-            message: "Success",
-            data: admin,
-          });
-        } catch (error: any) {
-          return res.status(400).json({
-            message: "an error occurred while creating admin",
-            data: error.message,
-          });
-        }
+      const genToken = crypto.randomBytes(32).toString("hex");
+      const genOTP = crypto.randomBytes(2).toString("hex");
+      if (companyname) {
+        return res.status(400).json({
+          message: "a company with this name already",
+        });
       }
-)
+      if (!email || !yourName) {
+        return res.status(400).json({
+          message: "please fill in the required fields",
+        });
+      }
 
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(password, salt);
+
+      const dater = Date.now();
+
+      const generateNumber = Math.floor(Math.random() * 78) + dater;
+      const genCode = otpgenerator.generate(6, {
+        upperCaseAlphabets: false,
+        specialChars: false,
+        digits: true,
+        lowerCaseAlphabets: false,
+      });
+      const admin = await adminAuth.create({
+        companyCode: genCode,
+        companyname,
+        email,
+        yourName,
+        password: hash,
+        walletNumber: generateNumber,
+        token: genToken,
+        OTP: genOTP,
+      });
+
+      if (!admin) {
+        next(
+          new AppError({
+            message: "Account not created",
+            httpCode: HttpCode.BAD_REQUEST,
+          })
+        );
+      }
+
+      const createWallet = await adminWalletModel.create({
+        _id: admin?._id,
+        balance: 15000,
+
+        credit: 0,
+        debit: 0,
+      });
+
+      admin?.wallet.push(new mongoose.Types.ObjectId(createWallet?._id));
+
+      admin.save();
+
+      if (!createWallet) {
+        next(
+          new AppError({
+            message: "couldn't create admin wallet",
+            httpCode: HttpCode.BAD_REQUEST,
+          })
+        );
+      }
+
+      return res.status(200).json({
+        message: "Success",
+        data: admin,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        message: "an error occurred while creating admin",
+        data: error.message,
+      });
+    }
+  }
+);
+
+//sign in
 export const adminSignin = async (req: Request, res: Response) => {
   try {
-    const { email, password, companyname } = req.body;
-
-  
+    const { email, password, companyname , OTP } = req.body;
 
     const admin = await adminAuth.findOne({ email });
 
-    
+    if (admin?.companyname! !== companyname) {
+      return res.status(400).json({
+        message : "please enter the valid company name"
+      });
+    } else {
+      const check = await bcrypt.compare(password, admin?.password!);
 
-    if (admin?.companyname! !== companyname){
-      return;
-    }else{
-      const check = await bcrypt.compare(password, admin?.password!)
-
-      if(check){
+      if (check) {
         res.status(201).json({
           message: "welcome",
-          data: admin
-        })
-      }else{
-        console.log("bad")
+          data: admin,
+        });
+      } else {
+        console.log("bad");
         return res.status(400).json({
-          message : "login failed"
-        })
+          message: "login failed",
+        });
       }
     }
-
   } catch (error: any) {
     return res.status(400).json({
-      message: "an error occurred while creating admin",
+      message: "an error occurred while logging in admin",
       data: error.message,
     });
   }
@@ -144,9 +164,8 @@ export const getOneAdmin = async (req: Request, res: Response) => {
         path: "viewUser",
       },
       {
-        path : "transactionHistory"
-      }
-     
+        path: "transactionHistory",
+      },
     ]);
 
     return res.status(200).json({
@@ -161,3 +180,69 @@ export const getOneAdmin = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+//verify account via mail
+
+// export const verifyUser = async (req: Request, res: Response) => {
+//   try {
+//     const { email, password, companyname , OTP } = req.body;
+
+//     const admin = await adminAuth.findById(req.params.adminId);
+
+//     if (admin?.OTP === OTP) {
+//       if (admin?.token !== "") {
+//         if(admin?.companyname! !== companyname){
+//           return res.status(400).json({
+//             message : "please enter the valid company name"
+//           });
+        
+//         }else{
+//           const check = await bcrypt.compare(password, admin?.password!);
+//           if (check) {
+
+//             await adminAuth.findByIdAndUpdate(
+//               admin?._id,
+//               {
+//                 token: "",
+//                 verified: true,
+//               },
+//               { new: true }
+//             );
+    
+//             return res.status(201).json({
+//               message: "Account has been verified, you can now signin",
+//               //   data: user,
+//             });
+//             res.status(201).json({
+//               message: "welcome",
+//               data: admin,
+//             });
+
+
+//           } else {
+//             console.log("bad");
+//             return res.status(400).json({
+//               message: "verification  failed",
+//             });
+//           }
+//         }
+        
+      
+//       } else {
+//         return res.status(400).json({
+//           message: "you have inputed a wrong otp",
+//         });
+//       }
+//     } else {
+//       return res.status(400).json({
+//         message: "you didn't meet the set credentials",
+//       });
+//     }
+//   } catch (error) {
+//     return res.status(404).json({
+//       message: "error",
+//       data: error,
+//     });
+//   }
+// };
