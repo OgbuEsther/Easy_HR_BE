@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
-
+import crypto from "crypto"
 
 import otpgenerator from "otp-generator";
 import adminAuth from "../model/admin/adminAuth";
@@ -15,8 +15,11 @@ import { emailEnv } from "../utils/email";
 export const staffSignup = asyncHandler(
   async (req: Request, res: Response , next:NextFunction) => {
     try {
-      const { companyname, email, yourName, password, position, walletNumber } =
+      const { companyname, email, yourName, password, position, walletNumber  } =
         req.body;
+
+        const token = crypto.randomBytes(32).toString("hex");
+        const OTP = crypto.randomBytes(2).toString("hex");
   
       const getAdmin = await adminAuth.findOne({ companyname });
   
@@ -52,6 +55,8 @@ export const staffSignup = asyncHandler(
         position,
         walletNumber: generateNumber,
         amount: 0,
+        token,
+        OTP,
       });
 
       if (!staff) {
@@ -260,6 +265,69 @@ export const deactivateStaff = async(req:Request , res:Response)=>{
     });
   }
 }
+
+
+//verify account via mail
+
+export const verifyUser = async (req: Request, res: Response) => {
+  try {
+    const { email, password, companyname , OTP } = req.body;
+
+    const staff = await staffAuth.findById(req.params.adminId);
+
+    if (staff?.OTP === OTP) {
+      if (staff?.token !== "") {
+        if(staff?.companyname! !== companyname){
+          return res.status(400).json({
+            message : "please enter the valid company name"
+          });
+        
+        }else{
+          const check = await bcrypt.compare(password, staff?.password!);
+          if (check) {
+
+            await staffAuth.findByIdAndUpdate(
+              staff?._id,
+              {
+                token: "",
+                verified: true,
+              },
+              { new: true }
+            );
+    
+            return res.status(201).json({
+              message: "Account has been verified, you can now signin",
+              //   data: user,
+            });
+           
+
+
+          } else {
+            console.log("bad");
+            return res.status(400).json({
+              message: "verification  failed",
+            });
+          }
+        }
+        
+      
+      } else {
+        return res.status(400).json({
+          message: "you have inputed a wrong otp",
+        });
+      }
+    } else {
+      return res.status(400).json({
+        message: "you didn't meet the set credentials",
+      });
+    }
+  } catch (error) {
+    return res.status(404).json({
+      message: "error",
+      data: error,
+    });
+  }
+};
 
 /**const staffMonthlySalary = [
   {

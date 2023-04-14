@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export interface adminSignUp extends mongoose.Document {
   viewUser: mongoose.Types.Array<mongoose.Types.ObjectId>;
   OTP : string;
-  verified : string;
+  verified : boolean;
   token : string
    companyname: string;
    email: string;
@@ -11,7 +11,6 @@ export interface adminSignUp extends mongoose.Document {
    password: string;
    wallet: {}[];
    transactionHistory: {}[];
-   
    walletNumber: number;
    companyCode: string
   // ... other fields ...

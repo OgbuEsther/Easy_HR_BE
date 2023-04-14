@@ -18,7 +18,8 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
       type :String
     },
     verified: {
-      type : String
+      type : Boolean,
+      default : false
     },
     token : {
       type : String
