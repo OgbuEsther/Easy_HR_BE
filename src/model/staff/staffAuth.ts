@@ -6,21 +6,20 @@ interface SAuth extends staffSignUp, mongoose.Document {}
 
 const StaffAuth = new mongoose.Schema<staffSignUp>(
   {
-    companyCode : {
-      type : String,
-   
+    companyCode: {
+      type: String,
     },
     yourName: {
       type: String,
       required: [true, "please enter your name"],
     },
     plans: {
-      type : Boolean
+      type: Boolean,
     },
     amount: {
-type:Number
+      type: Number,
     },
-  
+
     email: {
       type: String,
       required: true,
@@ -32,7 +31,6 @@ type:Number
       type: String,
       required: true,
       min: 6,
-      
     },
     companyname: {
       type: String,
@@ -41,7 +39,7 @@ type:Number
       type: String,
     },
     walletNumber: {
-      type :Number,
+      type: Number,
     },
     wallet: [
       {
@@ -73,7 +71,7 @@ type:Number
         ref: "staffSchoolFeesPlan",
       },
     ],
-    
+
     investmentPlan: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -92,12 +90,18 @@ type:Number
         ref: "staffOther",
       },
     ],
-    payRoll : [
+    payRoll: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref : "StaffPayRoll"
-      }
-    ]
+        ref: "StaffPayRoll",
+      },
+    ],
+    Attendance: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "StaffAttendance",
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -39,4 +39,5 @@ export interface staffSignUp {
   travelAndTour: {}[];
   other: {}[];
   payRoll : {}[]
+  Attendance : {}[]
 }
