@@ -13,10 +13,12 @@ const AttendanceSchema = new mongoose.Schema<Attendance>({
     },
     
     clockIn : {
-        type : String
+        type : Boolean,
+        default : false
     },
     clockOut : {
-        type : String
+        type : Boolean,
+        default : false
     },
     message : {
         type : String

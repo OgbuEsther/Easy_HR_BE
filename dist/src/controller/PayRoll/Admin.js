@@ -128,7 +128,7 @@ const createPayRoll = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     debit: grossPay,
                 });
                 const createHisorySender = yield adminTransactionHistorys_1.default.create({
-                    message: `you have sent ${netPay} to ${getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName}`,
+                    message: `you have sent ${netPay} to ${getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName} after the deductions of ${expenses}`,
                     receiver: getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName,
                     transactionReference: referenceGeneratedNumber,
                     // date: getDate,

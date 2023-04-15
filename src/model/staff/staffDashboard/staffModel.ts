@@ -32,8 +32,8 @@ export interface PayRoll {
 
 export interface Attendance {
   date : string;
-  clockIn : string;
-  clockOut : string;
+  clockIn : boolean;
+  clockOut : boolean;
   message : string;
   time : string
 }

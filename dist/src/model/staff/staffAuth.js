@@ -13,10 +13,10 @@ const StaffAuth = new mongoose_1.default.Schema({
         required: [true, "please enter your name"],
     },
     plans: {
-        type: Boolean
+        type: Boolean,
     },
     amount: {
-        type: Number
+        type: Number,
     },
     email: {
         type: String,
@@ -90,9 +90,15 @@ const StaffAuth = new mongoose_1.default.Schema({
     payRoll: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "StaffPayRoll"
-        }
-    ]
+            ref: "StaffPayRoll",
+        },
+    ],
+    Attendance: [
+        {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "StaffAttendance",
+        },
+    ],
 }, { timestamps: true });
 const staffAuth = mongoose_1.default.model("staffAuth", StaffAuth);
 exports.default = staffAuth;

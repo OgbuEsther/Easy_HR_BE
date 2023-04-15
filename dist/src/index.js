@@ -14,4 +14,5 @@ const app = (0, express_1.default)();
 app.listen(environmentVariables_1.default.PORT, () => {
     console.log(`server is up on port ${environmentVariables_1.default.PORT}`);
 });
-console.log("--------------------------------");
+console.log("-------------------------------- : ");
+console.log("-------------------------------- : ");
