@@ -106,7 +106,7 @@ export const createPayRoll = async (req: Request, res: Response) => {
     const getStaffWallet = await staffWalletModel.findById(getStaff?._id);
 
     // SENDER ACCOUNT
-    const getUser = await adminAuth.findById(req.params.UserId);
+    const getUser = await adminAuth.findById(req.params.adminId);
     const getUserWallet = await adminWalletModel.findById(getUser?._id);
 
     if (getStaff && getUser) {
