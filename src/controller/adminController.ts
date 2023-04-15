@@ -8,6 +8,7 @@ import adminWalletModel from "../model/admin/admindashboard/adminWallets";
 import { AppError, HttpCode } from "../utils/appError";
 import { asyncHandler } from "../utils/asyncHandler";
 import crypto from "crypto";
+import staffAuth from "../model/staff/staffAuth";
 
 export const adminSignup = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -246,3 +247,20 @@ export const getOneAdmin = async (req: Request, res: Response) => {
 //     });
 //   }
 // };
+
+//make search
+
+export const makeQuery = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const search = await staffAuth.find(req.query).sort({name:1});
+    return res.status(200).json({
+      message: "gotten",
+      data: search,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: "an error occurred",
+      data: error,
+    });
+  }
+};
