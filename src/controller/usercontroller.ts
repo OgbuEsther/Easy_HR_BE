@@ -193,6 +193,9 @@ export const getOneStaff = async (req: Request, res: Response) => {
       {
         path: "travelAndTour",
       },
+      {
+        path: "payRoll",
+      },
     ]);
 
     return res.status(200).json({
