@@ -7,6 +7,12 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <div>
+        Welcome "  <%=(data.name) %>"  to easyHR , your just signed up to our platform , wait for verification from the admin 
+       <a href="https://easypay-teamace.netlify.app/api/user/<%=(data.name) %>/verified">verified</a>
+       <br/>
+     <br/>
+     <%=(data.OTP) %>
+    </div>
 </body>
 </html>

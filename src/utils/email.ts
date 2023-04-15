@@ -1,5 +1,7 @@
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
+import path from "path";
+import ejs from "ejs"
 
 const GOOGLE_ID: string =
   "1060451973749-99rp9ckrgq62aa28bh4i52kfrna58q0i.apps.googleusercontent.com";
@@ -31,6 +33,7 @@ export const emailEnv = async (user: any , company:any) => {
         // accessToken: getToken.token || "",
       },
     });
+
 
     const mailerOption = {
       from: "Easy Pay💰💸 <ogbuozichi2002@gmail.com>",
@@ -78,6 +81,11 @@ export const AdminEmailEnv = async (admin: any) => {
         // accessToken: getToken.token || "",
       },
     });
+    
+    const {companyCode , yourName , OTP} = admin
+    const readEjs = path.join(__dirname , "../../views/index.ejs")
+
+    const companyData = await ejs.renderFile(readEjs , {companyCode , yourName , OTP})
 
     const mailerOption = {
       from: "Easy Pay💰💸 <ogbuozichi2002@gmail.com>",
