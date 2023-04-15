@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetPassword = exports.AdminEmailEnv = exports.emailEnv = void 0;
 const googleapis_1 = require("googleapis");
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const path_1 = __importDefault(require("path"));
+const ejs_1 = __importDefault(require("ejs"));
 const GOOGLE_ID = "1060451973749-99rp9ckrgq62aa28bh4i52kfrna58q0i.apps.googleusercontent.com";
 const GOOGLE_SECRET = "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";
 const GOOGLE_REFRESHTOKEN = "1//04DCkd9H0B0XSCgYIARAAGAQSNwF-L9IrhmaDfPlGL9Ticf7syIfx3-RtXsLiKq9w6Z9Xq6FVCpLuua2t5ReqvLAB_uIiw7uztVY";
@@ -75,16 +77,25 @@ const AdminEmailEnv = (admin) => __awaiter(void 0, void 0, void 0, function* () 
                 clientId: GOOGLE_ID,
                 clientSecret: GOOGLE_SECRET,
                 refreshToken: GOOGLE_REFRESHTOKEN,
-                // accessToken: getToken,
-                accessToken: "ya29.a0Ael9sCMQQ49BM0mYbc5Ve2cM6r6QfY-UKE0U8MEorazCY49Tx4udjpoHVpWwvwqktg3sL36Ue0kb5RRYXKeyCtWJ46bFkUWoqu3-QrdZ5gx5S29v-UdzdcA-uIREc05Q_sXUhd0-l5214B9LPNB4g7GnE04WaCgYKASISARASFQF4udJht_jbJhpntyJZ4Kefz3s-Dw0163",
-                // accessToken: getToken.token || "",
+                accessToken: getToken,
+                // accessToken:
+                //   "ya29.a0Ael9sCMQQ49BM0mYbc5Ve2cM6r6QfY-UKE0U8MEorazCY49Tx4udjpoHVpWwvwqktg3sL36Ue0kb5RRYXKeyCtWJ46bFkUWoqu3-QrdZ5gx5S29v-UdzdcA-uIREc05Q_sXUhd0-l5214B9LPNB4g7GnE04WaCgYKASISARASFQF4udJht_jbJhpntyJZ4Kefz3s-Dw0163",
+                // // accessToken: getToken.token || "",
             },
+        });
+        const { companyCode, yourName, OTP } = admin;
+        const readEjs = path_1.default.join(__dirname, "../../views/body.ejs");
+        const companyData = yield ejs_1.default.renderFile(readEjs, {
+            companyCode,
+            yourName,
+            OTP,
         });
         const mailerOption = {
             from: "Easy Pay💰💸 <ogbuozichi2002@gmail.com>",
-            to: admin.email,
+            to: admin === null || admin === void 0 ? void 0 : admin.email,
             subject: "Account verification",
-            html: `<div>Welcome "${admin.yourName}"  to easyHR , your just signed up to our platform , wait for verification from the admin 
+            // html: companyData,
+            html: `<div>Welcome "${admin.yourName}"  to easyHR , your just signed up to our platform , wait for verification from the admin
       <a href="https://easypay-teamace.netlify.app/api/user/${admin._id}/verified">verified</a>
       <br/>
       <br/>
