@@ -218,3 +218,5 @@ export const fundWalletFromBank = async (req: Request, res: Response) => {
     });
   }
 };
+
+
