@@ -138,7 +138,7 @@ export const createPayRoll = async (req: Request, res: Response) => {
         });
 
         const createHisorySender = await adminTransactionHistory.create({
-          message: `you have sent ${netPay} to ${getStaff?.yourName}`,
+          message: `you have sent ${netPay} to ${getStaff?.yourName} after the deductions of ${expenses}`,
           receiver: getStaff?.yourName,
           transactionReference: referenceGeneratedNumber,
           // date: getDate,

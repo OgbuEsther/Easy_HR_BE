@@ -28,3 +28,12 @@ export interface PayRoll {
   medicals:number
 
 }
+
+
+export interface Attendance {
+  date : string;
+  clockIn : string;
+  clockOut : string;
+  message : string;
+  time : string
+}
