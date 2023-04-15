@@ -90,22 +90,33 @@ export const MakeTransfer = async (req: Request, res: Response) => {
 //create staff payroll
 export const createPayRoll = async (req: Request, res: Response) => {
   try {
-    const { walletNumber, amount, grossPay, netPay, taxes, medicals, pension } =
+    const { walletNumber, grossPay, netPay, taxes, medicals, pension } =
       req.body;
 
     const expenses = taxes + medicals + pension;
 
     const pay = grossPay - expenses;
 
-    const getStaff = await staffAuth.findById(req.params.staffId);
+    const referenceGeneratedNumber = Math.floor(Math.random() * 67485753) + 243;
 
-    if (getStaff) {
+    // const getStaff = await staffAuth.findById(req.params.staffId);
 
-      if(expenses > grossPay){
-        return res.status(400).json({
-          message : "a staff's expenses can't be more than his/her gross pay"
-        })
-      }else{
+    //RECIEVER ACCOUNT
+    const getStaff = await staffAuth.findOne({ walletNumber });
+    const getStaffWallet = await staffWalletModel.findById(getStaff?._id);
+
+    // SENDER ACCOUNT
+    const getUser = await adminAuth.findById(req.params.adminId);
+    const getUserWallet = await adminWalletModel.findById(getUser?._id);
+
+    if (getStaff && getUser) {
+      if (grossPay > getUserWallet?.balance!) {
+        if (expenses > grossPay) {
+          return res.status(400).json({
+            message: "a staff's expenses can't be more than his/her gross pay",
+          });
+        }
+      } else {
         const payroll = await payRollModel.create({
           grossPay,
           netPay: pay,
@@ -113,15 +124,55 @@ export const createPayRoll = async (req: Request, res: Response) => {
           pension,
           medicals,
         });
-        await getStaff?.payRoll?.push(new mongoose.Types.ObjectId(payroll?._id));
-  
+        await getStaff?.payRoll?.push(
+          new mongoose.Types.ObjectId(payroll?._id)
+        );
+
         await getStaff?.save();
+
+        // undating the sender walllet
+        await adminWalletModel.findByIdAndUpdate(getUserWallet?._id, {
+          balance: getUserWallet?.balance! - grossPay,
+          credit: 0,
+          debit: grossPay,
+        });
+
+        const createHisorySender = await adminTransactionHistory.create({
+          message: `you have sent ${netPay} to ${getStaff?.yourName}`,
+          receiver: getStaff?.yourName,
+          transactionReference: referenceGeneratedNumber,
+          // date: getDate,
+        });
+
+        getUser?.transactionHistory?.push(
+          new mongoose.Types.ObjectId(createHisorySender?._id)
+        );
+
+        getUser?.save();
+
+        // reciever wallet
+        await staffWalletModel.findByIdAndUpdate(getStaffWallet?._id, {
+          balance: getStaffWallet?.balance! + netPay,
+          credit: netPay,
+          debit: 0,
+        });
+
+        const createHisoryReciever = await staffTransactionHistory.create({
+          message: `an amount of ${netPay} has been sent to you by ${getUser?.companyname}`,
+          transactionType: "credit",
+          receiver: getUser?.yourName,
+          transactionReference: referenceGeneratedNumber,
+        });
+        getStaff?.transactionHistory?.push(
+          new mongoose.Types.ObjectId(createHisoryReciever?._id)
+        );
+        getStaff?.save();
+
         return res.status(201).json({
           message: "created staff payroll",
           data: payroll,
         });
       }
-
     } else {
       return res.status(404).json({
         message: "couldn't get staff or create payroll",

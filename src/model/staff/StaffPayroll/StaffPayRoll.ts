@@ -3,11 +3,13 @@ import { PayRoll } from "../staffDashboard/staffModel";
 
 interface payroll extends PayRoll , mongoose.Document{}
 
+// const payRollSchema = new mongoose.Schema<PayRoll>({
 const payRollSchema = new mongoose.Schema<PayRoll>({
     grossPay : {
         type : Number,
         required : true
     },
+    
     netPay : {
         type : Number,
     },
@@ -19,7 +21,8 @@ const payRollSchema = new mongoose.Schema<PayRoll>({
     },
     medicals : {
         type : Number
-    }
+    },
+    
 })
 
 
