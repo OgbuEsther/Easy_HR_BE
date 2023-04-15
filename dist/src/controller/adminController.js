@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOneAdmin = exports.getAllAdmin = exports.adminSignin = exports.adminSignup = void 0;
+exports.makeQuery = exports.getOneAdmin = exports.getAllAdmin = exports.adminSignin = exports.adminSignup = void 0;
 const adminAuth_1 = __importDefault(require("../model/admin/adminAuth"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -21,6 +21,7 @@ const adminWallets_1 = __importDefault(require("../model/admin/admindashboard/ad
 const appError_1 = require("../utils/appError");
 const asyncHandler_1 = require("../utils/asyncHandler");
 const crypto_1 = __importDefault(require("crypto"));
+const staffAuth_1 = __importDefault(require("../model/staff/staffAuth"));
 exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { companyname, email, yourName, password, walletNumber, token, OTP, } = req.body;
@@ -222,3 +223,20 @@ exports.getOneAdmin = getOneAdmin;
 //     });
 //   }
 // };
+//make search
+const makeQuery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const search = yield staffAuth_1.default.find(req.query).sort({ name: 1 });
+        return res.status(200).json({
+            message: "gotten",
+            data: search,
+        });
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: "an error occurred",
+            data: error,
+        });
+    }
+});
+exports.makeQuery = makeQuery;
