@@ -6,8 +6,8 @@ const userValidation_1 = require("../../middleware/validator/userValidation/user
 const staffAuthRoutes = (0, express_1.Router)();
 staffAuthRoutes.post("/stafflogin", userValidation_1.loginValidation, usercontroller_1.staffSignin);
 staffAuthRoutes.post("/staffregister", userValidation_1.registerValidation, usercontroller_1.staffSignup);
-// staffAuthRoutes.get("/allstaff/", getAllStaff);
-// staffAuthRoutes.get("/staff/:staffId", getOneStaff);
-// staffAuthRoutes.patch("/updateStaff/:staffId", updateStaff);
-// staffAuthRoutes.delete("/deactivateStaff/:staffId/:adminId", deactivateStaff);
+staffAuthRoutes.get("/allstaff/", usercontroller_1.getAllStaff);
+staffAuthRoutes.get("/staff/:staffId", usercontroller_1.getOneStaff);
+staffAuthRoutes.patch("/updateStaff/:staffId", usercontroller_1.updateStaff);
+staffAuthRoutes.delete("/deactivateStaff/:staffId/:adminId", usercontroller_1.deactivateStaff);
 exports.default = staffAuthRoutes;
