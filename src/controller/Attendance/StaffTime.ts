@@ -59,4 +59,4 @@ export const createClockOut = async (req: Request, res: Response) => {
         message: "staff couldn't clocked out",
       });
     }
-  };
+};
