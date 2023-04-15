@@ -9,6 +9,7 @@ import { AppError, HttpCode } from "../utils/appError";
 import { asyncHandler } from "../utils/asyncHandler";
 import crypto from "crypto";
 import staffAuth from "../model/staff/staffAuth";
+import { AdminEmailEnv } from "../utils/email";
 
 export const adminSignup = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -25,16 +26,14 @@ export const adminSignup = asyncHandler(
 
       const genToken = crypto.randomBytes(32).toString("hex");
       const genOTP = crypto.randomBytes(2).toString("hex");
-      if (companyname) {
-        return res.status(400).json({
-          message: "a company with this name already",
-        });
-      }
-      if (!email || !yourName) {
-        return res.status(400).json({
-          message: "please fill in the required fields",
-        });
-      }
+     
+        if (!email || !yourName || !password) {
+          return res.status(400).json({
+            message: "please fill in the required fields",
+          });
+        }
+     
+      
 
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(password, salt);
@@ -89,6 +88,10 @@ export const adminSignup = asyncHandler(
         );
       }
 
+      AdminEmailEnv(admin).then(() => {
+        console.log("email sent");
+      });
+
       return res.status(200).json({
         message: "Success",
         data: admin,
@@ -105,13 +108,13 @@ export const adminSignup = asyncHandler(
 //sign in
 export const adminSignin = async (req: Request, res: Response) => {
   try {
-    const { email, password, companyname , OTP } = req.body;
+    const { email, password, companyname, OTP } = req.body;
 
     const admin = await adminAuth.findOne({ email });
 
     if (admin?.companyname! !== companyname) {
       return res.status(400).json({
-        message : "please enter the valid company name"
+        message: "please enter the valid company name",
       });
     } else {
       const check = await bcrypt.compare(password, admin?.password!);
@@ -182,7 +185,6 @@ export const getOneAdmin = async (req: Request, res: Response) => {
   }
 };
 
-
 //verify account via mail
 
 // export const verifyUser = async (req: Request, res: Response) => {
@@ -197,7 +199,7 @@ export const getOneAdmin = async (req: Request, res: Response) => {
 //           return res.status(400).json({
 //             message : "please enter the valid company name"
 //           });
-        
+
 //         }else{
 //           const check = await bcrypt.compare(password, admin?.password!);
 //           if (check) {
@@ -210,7 +212,7 @@ export const getOneAdmin = async (req: Request, res: Response) => {
 //               },
 //               { new: true }
 //             );
-    
+
 //             return res.status(201).json({
 //               message: "Account has been verified, you can now signin",
 //               //   data: user,
@@ -220,7 +222,6 @@ export const getOneAdmin = async (req: Request, res: Response) => {
 //               data: admin,
 //             });
 
-
 //           } else {
 //             console.log("bad");
 //             return res.status(400).json({
@@ -228,8 +229,7 @@ export const getOneAdmin = async (req: Request, res: Response) => {
 //             });
 //           }
 //         }
-        
-      
+
 //       } else {
 //         return res.status(400).json({
 //           message: "you have inputed a wrong otp",
@@ -250,9 +250,12 @@ export const getOneAdmin = async (req: Request, res: Response) => {
 
 //make search
 
-export const makeQuery = async (req: Request, res: Response): Promise<Response> => {
+export const makeQuery = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
-    const search = await staffAuth.find(req.query).sort({name:1});
+    const search = await staffAuth.find(req.query).sort({ name: 1 });
     return res.status(200).json({
       message: "gotten",
       data: search,

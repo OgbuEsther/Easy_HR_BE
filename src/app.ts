@@ -18,10 +18,10 @@ const data = {
 const appConfig = (app: Application) => {
   //implenting ejs
   app.set("view engine", "ejs");
-  app
-    .use(express.static("public"))
-    .use(express.static(`${__dirname} ./public/css`))
-    .use(express.static(`${__dirname} ./public/asset`));
+  // app
+  //   .use(express.static("public"))
+  //   .use(express.static(`${__dirname} ./public/css`))
+  //   .use(express.static(`${__dirname} ./public/asset`));
   //
   app.use(express.json()).use(cors()).use(morgan("dev"));
 

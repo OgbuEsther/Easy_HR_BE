@@ -20,7 +20,7 @@ const dbConfig = () => __awaiter(void 0, void 0, void 0, function* () {
         console.log(`connected to database on port ${conn.connection.host}`);
     }
     catch (error) {
-        console.log(`failed to connect to database`);
+        console.log(`failed to connect to database`, error);
     }
 });
 exports.default = dbConfig;

@@ -1,19 +1,19 @@
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
 import path from "path";
-import ejs from "ejs"
+import ejs from "ejs";
 
 const GOOGLE_ID: string =
   "1060451973749-99rp9ckrgq62aa28bh4i52kfrna58q0i.apps.googleusercontent.com";
 const GOOGLE_SECRET: string = "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";
 const GOOGLE_REFRESHTOKEN: string =
-  "1//04DCkd9H0B0XSCgYIARAAGAQSNwF-L9IrhmaDfPlGL9Ticf7syIfx3-RtXsLiKq9w6Z9Xq6FVCpLuua2t5ReqvLAB_uIiw7uztVY";
+  "1//04IE7jJ_6LrQxCgYIARAAGAQSNwF-L9IrfMC9oCMQkIX5jvjsx5Ry7eIKUMoIqC459mApXlsl38NWkv1dz8wpx-h7RxSg1CHpAPo";
 const GOOGLE_REDIRECT: string =
   "https://developers.google.com/oauthplayground/";
 
 const oAuth = new google.auth.OAuth2(GOOGLE_ID, GOOGLE_SECRET, GOOGLE_REDIRECT);
 
-export const emailEnv = async (user: any , company:any) => {
+export const emailEnv = async (user: any, company: any) => {
   try {
     oAuth.setCredentials({ access_token: GOOGLE_REFRESHTOKEN });
     const getToken: any = (await oAuth.getAccessToken()).token;
@@ -33,7 +33,6 @@ export const emailEnv = async (user: any , company:any) => {
         // accessToken: getToken.token || "",
       },
     });
-
 
     const mailerOption = {
       from: "Easy Pay💰💸 <ogbuozichi2002@gmail.com>",
@@ -77,21 +76,26 @@ export const AdminEmailEnv = async (admin: any) => {
         refreshToken: GOOGLE_REFRESHTOKEN,
         // accessToken: getToken,
         accessToken:
-          "ya29.a0Ael9sCMQQ49BM0mYbc5Ve2cM6r6QfY-UKE0U8MEorazCY49Tx4udjpoHVpWwvwqktg3sL36Ue0kb5RRYXKeyCtWJ46bFkUWoqu3-QrdZ5gx5S29v-UdzdcA-uIREc05Q_sXUhd0-l5214B9LPNB4g7GnE04WaCgYKASISARASFQF4udJht_jbJhpntyJZ4Kefz3s-Dw0163",
+          "ya29.a0Ael9sCN9etRF51POLRIQ_OmkQqola55IEdmYK7ypVceTcz_-RBO-_zARR6x0nuyKcdE7XUwD02y6sfyWa6TqqZOiuD84pxh1yXcZ4yBMy-wFlbHE9EU6r4lHcYtkh0Gtl-g-1g_AdB2eIIVUq1fulbTK9wXpaCgYKAVISARASFQF4udJhNMlpPaJhmjKcxc2Qe4A2jw0163",
         // accessToken: getToken.token || "",
       },
     });
-    
-    const {companyCode , yourName , OTP} = admin
-    const readEjs = path.join(__dirname , "../../views/index.ejs")
 
-    const companyData = await ejs.renderFile(readEjs , {companyCode , yourName , OTP})
+    // const { companyCode, yourName, OTP } = admin;
+    // const readEjs = path.join(__dirname, "../../views/body.ejs");
+
+    // const companyData = await ejs.renderFile(readEjs, {
+    //   companyCode,
+    //   yourName,
+    //   OTP,
+    // });
 
     const mailerOption = {
       from: "Easy Pay💰💸 <ogbuozichi2002@gmail.com>",
-      to: admin.email,
+      to: admin?.email,
       subject: "Account verification",
-      html: `<div>Welcome "${admin.yourName}"  to easyHR , your just signed up to our platform , wait for verification from the admin 
+      // html: companyData,
+      html: `<div>Welcome "${admin.yourName}"  to easyHR , your just signed up to our platform , wait for verification from the admin
       <a href="https://easypay-teamace.netlify.app/api/user/${admin._id}/verified">verified</a>
       <br/>
       <br/>

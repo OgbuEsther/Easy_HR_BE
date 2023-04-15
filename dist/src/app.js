@@ -11,10 +11,28 @@ const appError_1 = require("./utils/appError");
 const staffAuthRoutes_1 = __importDefault(require("./router/staff/staffAuthRoutes"));
 const adminAuth_1 = __importDefault(require("./router/admin/adminAuth"));
 const adminRoutes_1 = __importDefault(require("./router/admin/adminRoutes"));
+const data = {
+    name: "Peter",
+    matID: 33445,
+    color: "red",
+};
 //creating our application
 const appConfig = (app) => {
+    //implenting ejs
+    app.set("view engine", "ejs");
+    // app
+    //   .use(express.static("public"))
+    //   .use(express.static(`${__dirname} ./public/css`))
+    //   .use(express.static(`${__dirname} ./public/asset`));
+    //
     app.use(express_1.default.json()).use((0, cors_1.default)()).use((0, morgan_1.default)("dev"));
     //routes (API endpoints)
+    app.get("/view", (req, res) => {
+        res.render("index", { data });
+    })
+        .get("/", (req, res) => {
+        res.json({ message: "api ready for consumption" });
+    });
     app.use("/api/staff", staffAuthRoutes_1.default);
     app.use("/api/admin", adminAuth_1.default);
     app.use("/api", adminRoutes_1.default);

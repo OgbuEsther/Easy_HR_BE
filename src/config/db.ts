@@ -6,7 +6,7 @@ const dbConfig = async (): Promise<void> => {
     const conn = await mongoose.connect(envVariables.LIVE_URI);
     console.log(`connected to database on port ${conn.connection.host}`);
   } catch (error) {
-    console.log(`failed to connect to database`);
+    console.log(`failed to connect to database` , error);
   }
 };
 

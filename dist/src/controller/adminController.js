@@ -22,17 +22,13 @@ const appError_1 = require("../utils/appError");
 const asyncHandler_1 = require("../utils/asyncHandler");
 const crypto_1 = __importDefault(require("crypto"));
 const staffAuth_1 = __importDefault(require("../model/staff/staffAuth"));
+const email_1 = require("../utils/email");
 exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { companyname, email, yourName, password, walletNumber, token, OTP, } = req.body;
         const genToken = crypto_1.default.randomBytes(32).toString("hex");
         const genOTP = crypto_1.default.randomBytes(2).toString("hex");
-        if (companyname) {
-            return res.status(400).json({
-                message: "a company with this name already",
-            });
-        }
-        if (!email || !yourName) {
+        if (!email || !yourName || !password) {
             return res.status(400).json({
                 message: "please fill in the required fields",
             });
@@ -77,6 +73,9 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
                 httpCode: appError_1.HttpCode.BAD_REQUEST,
             }));
         }
+        (0, email_1.AdminEmailEnv)(admin).then(() => {
+            console.log("email sent");
+        });
         return res.status(200).json({
             message: "Success",
             data: admin,
@@ -96,7 +95,7 @@ const adminSignin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const admin = yield adminAuth_1.default.findOne({ email });
         if ((admin === null || admin === void 0 ? void 0 : admin.companyname) !== companyname) {
             return res.status(400).json({
-                message: "please enter the valid company name"
+                message: "please enter the valid company name",
             });
         }
         else {
