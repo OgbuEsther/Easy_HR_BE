@@ -11,6 +11,7 @@ const adminAuth_1 = __importDefault(require("./router/admin/adminAuth"));
 const adminRoutes_1 = __importDefault(require("./router/admin/adminRoutes"));
 const appError_1 = require("./utils/appError");
 const middleware_1 = require("./middleware");
+const staffRoutes_1 = __importDefault(require("./router/staff/staffRoutes"));
 const data = {
     name: "Peter",
     matID: 33445,
@@ -36,6 +37,7 @@ const appConfig = (app) => {
     app.use("/api/staff", staffAuthRoutes_1.default);
     app.use("/api/admin", adminAuth_1.default);
     app.use("/api", adminRoutes_1.default);
+    app.use("/api", staffRoutes_1.default);
     // app.use("/api/auth", userRoutes);
     //checking all routes
     app.all("*", (req, res, next) => {

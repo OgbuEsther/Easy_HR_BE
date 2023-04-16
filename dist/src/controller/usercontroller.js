@@ -102,12 +102,15 @@ exports.staffSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
         });
     }
 }));
-const staffSignin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.staffSignin = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { companyname, email, password } = req.body;
         const staff = yield staffAuth_1.default.findOne({ email });
         if ((staff === null || staff === void 0 ? void 0 : staff.companyname) !== companyname) {
-            return;
+            next(new appError_1.AppError({
+                message: "wrong request..... you are not under this company ",
+                httpCode: appError_1.HttpCode.BAD_REQUEST,
+            }));
         }
         else {
             const check = yield bcrypt_1.default.compare(password, staff === null || staff === void 0 ? void 0 : staff.password);
@@ -119,9 +122,10 @@ const staffSignin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             }
             else {
                 console.log("bad");
-                return res.status(400).json({
-                    message: "login failed",
-                });
+                next(new appError_1.AppError({
+                    message: "wrong request",
+                    httpCode: appError_1.HttpCode.BAD_REQUEST,
+                }));
             }
         }
         return res.status(200).json({
@@ -135,8 +139,7 @@ const staffSignin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             data: error.message,
         });
     }
-});
-exports.staffSignin = staffSignin;
+}));
 //get all admins
 const getAllStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
