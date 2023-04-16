@@ -20,6 +20,7 @@ export const createClockIn = async (req: Request, res: Response) => {
       const clockInTime = await AttendanceModel.create({
         date: getDate,
         clockIn,
+        clockOut: false,
         message: customMessage,
         time: getTime,
       });
