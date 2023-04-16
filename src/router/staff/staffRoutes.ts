@@ -1,11 +1,15 @@
-// import { Router } from "express";
+import { Router } from "express";
 // import { HousePlan,FeesPlan,travelPlan } from "../../controller/staff/staffDashboard/createPlans";
 
+import { createClockIn, createClockOut } from "../../controller/Attendance/StaffTime";
 
-// const staffRoutes = Router()
+
+const staffRoutes = Router()
 
 // staffRoutes.post("/houseplan/:staffId" , HousePlan)
 // staffRoutes.post("/travel/:staffId" , travelPlan)
 // staffRoutes.post("/schoolplan/:staffId" , FeesPlan)
+staffRoutes.post("/clockin" , createClockIn)
+staffRoutes.post("/clockout" , createClockOut)
 
-// export default staffRoutes
+export default staffRoutes

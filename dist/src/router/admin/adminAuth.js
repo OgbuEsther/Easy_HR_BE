@@ -6,6 +6,6 @@ const userValidation_1 = require("../../middleware/validator/userValidation/user
 const adminAuthRoutes = (0, express_1.Router)();
 adminAuthRoutes.post("/login", userValidation_1.loginValidation, adminController_1.adminSignin);
 adminAuthRoutes.post("/register", userValidation_1.registerValidation, adminController_1.adminSignup);
-// adminAuthRoutes.get("/", getAllAdmin);
-// adminAuthRoutes.get("/:adminId", getOneAdmin);
+adminAuthRoutes.get("/", adminController_1.getAllAdmin);
+adminAuthRoutes.get("/:adminId", adminController_1.getOneAdmin);
 exports.default = adminAuthRoutes;

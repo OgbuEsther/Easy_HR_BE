@@ -6,6 +6,7 @@ import adminAuthRoutes from "./router/admin/adminAuth";
 import AdminRoutes from "./router/admin/adminRoutes";
 import { AppError, HttpCode } from "./utils/appError";
 import { errorHandler } from "./middleware";
+import staffRoutes from "./router/staff/staffRoutes";
 
 
 
@@ -36,6 +37,7 @@ const appConfig = (app: Application) => {
   app.use("/api/staff", staffAuthRoutes);
   app.use("/api/admin", adminAuthRoutes);
   app.use("/api", AdminRoutes);
+  app.use("/api", staffRoutes);
   // app.use("/api/auth", userRoutes);
 
   //checking all routes
