@@ -1,8 +1,9 @@
 console.log("--------------------------------");
 import express, { Application } from "express";
 import appConfig from "./app";
-import dbConfig from "./config/db";
+
 import envVariables from "./config/environmentVariables";
+import dbConfig from "./config/db";
 
 const app: Application = express();
 appConfig(app);

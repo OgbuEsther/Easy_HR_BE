@@ -1,12 +1,13 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 import cors from "cors";
 import morgan from "morgan";
-import { errorHandler } from "./middleware/error";
-import { AppError, HttpCode } from "./utils/appError";
-
 import staffAuthRoutes from "./router/staff/staffAuthRoutes";
 import adminAuthRoutes from "./router/admin/adminAuth";
 import AdminRoutes from "./router/admin/adminRoutes";
+import { AppError, HttpCode } from "./utils/appError";
+import { errorHandler } from "./middleware";
+
+
 
 const data = {
   name: "Peter",
