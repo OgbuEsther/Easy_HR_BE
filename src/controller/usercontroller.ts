@@ -2,6 +2,8 @@
 import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
+
+
 import crypto from "crypto"
 
 import otpgenerator from "otp-generator";
@@ -121,41 +123,53 @@ export const staffSignup = asyncHandler(
   }
 )
 
-export const staffSignin = async (req: Request, res: Response) => {
-  try {
-    const { companyname, email, password } = req.body;
-
-    const staff = await staffAuth.findOne({ email });
-
-    if (staff?.companyname! !== companyname) {
-      return;
-    } else {
-      const check = await bcrypt.compare(password, staff?.password!);
-
-      if (check) {
-        res.status(201).json({
-          message: "welcome",
-          data: staff,
-        });
+export const staffSignin = asyncHandler(
+  async (req: Request, res: Response , next : NextFunction) => {
+    try {
+      const { companyname, email, password } = req.body;
+  
+      const staff = await staffAuth.findOne({ email });
+  
+      if (staff?.companyname! !== companyname) {
+        next(
+          new AppError({
+            message: "wrong request..... you are not under this company ",
+            httpCode: HttpCode.BAD_REQUEST,
+          })
+        )
       } else {
-        console.log("bad");
-        return res.status(400).json({
-          message: "login failed",
-        });
+        const check = await bcrypt.compare(password, staff?.password!);
+  
+        if (check) {
+          res.status(201).json({
+            message: "welcome",
+            data: staff,
+          });
+        } else {
+          console.log("bad");
+        next(
+          new AppError({
+            message: "wrong request",
+            httpCode: HttpCode.BAD_REQUEST,
+          })
+        )
+        }
       }
+  
+      return res.status(200).json({
+        message: "Success , staff is logged in",
+        data: staff,
+      });
+    } catch (error: any) {
+  
+      
+      return res.status(400).json({
+        message: "an error occurred while logging in staff",
+        data: error.message,
+      });
     }
-
-    return res.status(200).json({
-      message: "Success , staff is logged in",
-      data: staff,
-    });
-  } catch (error: any) {
-    return res.status(400).json({
-      message: "an error occurred while logging in staff",
-      data: error.message,
-    });
   }
-};
+)
 
 //get all admins
 export const getAllStaff = async (req: Request, res: Response) => {

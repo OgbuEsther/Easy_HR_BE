@@ -7,11 +7,11 @@ const staffAuthRoutes = Router();
 
 staffAuthRoutes.post("/stafflogin", loginValidation ,  staffSignin);
 staffAuthRoutes.post("/staffregister", registerValidation, staffSignup);
-staffAuthRoutes.get("/allstaff/", getAllStaff);
+staffAuthRoutes.get("/allstaff", getAllStaff);
 staffAuthRoutes.get("/staff/:staffId", getOneStaff);
 staffAuthRoutes.patch("/updateStaff/:staffId", updateStaff);
 staffAuthRoutes.delete("/deactivateStaff/:staffId/:adminId", deactivateStaff);
-staffAuthRoutes.get("/search/" , makeQuery)
+staffAuthRoutes.get("/search" , makeQuery)
 
 
 export default staffAuthRoutes;
