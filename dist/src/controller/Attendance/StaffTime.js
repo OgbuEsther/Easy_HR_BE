@@ -29,6 +29,7 @@ const createClockIn = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             const clockInTime = yield StaffAttenadance_1.default.create({
                 date: getDate,
                 clockIn,
+                clockOut: false,
                 message: customMessage,
                 time: getTime,
             });
