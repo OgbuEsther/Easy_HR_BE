@@ -70,6 +70,11 @@ export const createClockIn = async (req: Request, res: Response) => {
           new mongoose.Types.ObjectId(clockInTime?._id)
         );
         await getStaff?.save();
+
+        await getAdminAttendanceToken?.viewStaffAttendance.push(new mongoose.Types.ObjectId(clockInTime?._id))
+
+        await getAdminAttendanceToken?.save()
+
         return res.status(201).json({
           message: "clockInTime done",
           data: clockInTime,
