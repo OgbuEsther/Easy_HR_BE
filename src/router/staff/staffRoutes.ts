@@ -11,6 +11,6 @@ const staffRoutes = Router()
 // staffRoutes.post("/schoolplan/:staffId" , FeesPlan)
 staffRoutes.post("/clockin/:staffId/:timeId" , createClockIn)
 
-staffRoutes.post("/clockout/:staffId" , createClockOut)
+staffRoutes.post("/clockout/:staffId/:timeId" , createClockOut)
 
 export default staffRoutes
