@@ -13,9 +13,9 @@ export interface adminTransactionProps {
 
 export interface adminAttendance{
   setToken : string;
-  lateness : string;
-  absent : string;
-  
+  viewStaffAttendance :{}[]
+  // lateness : string;
+  // absent : string;
 }
 
 // export interface PayRoll {
