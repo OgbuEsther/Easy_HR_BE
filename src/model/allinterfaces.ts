@@ -14,7 +14,7 @@ export interface adminSignUp extends mongoose.Document {
    walletNumber: number;
    companyCode: string
    SetAttendance : {}[]
-
+   viewStaffAttendance :{}[]
   // ... other fields ...
 }
 

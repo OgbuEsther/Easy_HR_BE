@@ -13,7 +13,7 @@ export interface adminTransactionProps {
 
 export interface adminAttendance{
   setToken : string;
-  viewStaffAttendance :{}[]
+ 
   // lateness : string;
   // absent : string;
 }
