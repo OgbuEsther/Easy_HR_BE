@@ -13,6 +13,8 @@ export interface adminSignUp extends mongoose.Document {
    transactionHistory: {}[];
    walletNumber: number;
    companyCode: string
+   SetAttendance : {}[]
+
   // ... other fields ...
 }
 

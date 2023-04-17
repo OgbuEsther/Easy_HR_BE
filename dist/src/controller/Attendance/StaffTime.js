@@ -12,37 +12,81 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createClockOut = exports.createClockIn = void 0;
+exports.createClockOut = exports.createClockIn = exports.createAttendance = void 0;
 const StaffAttenadance_1 = __importDefault(require("../../model/staff/StaffAttendance/StaffAttenadance"));
 const staffAuth_1 = __importDefault(require("../../model/staff/staffAuth"));
 const mongoose_1 = __importDefault(require("mongoose"));
-//clock in time
-const createClockIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const crypto_1 = __importDefault(require("crypto"));
+const AdminAttendance_1 = __importDefault(require("../../model/admin/adminAttendance/AdminAttendance"));
+const adminAuth_1 = __importDefault(require("../../model/admin/adminAuth"));
+const createAttendance = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const { date, clockIn, message, time } = req.body;
-        const getStaff = yield staffAuth_1.default.findById(req.params.staffId);
-        const getDate = new Date().toLocaleDateString();
-        const getTime = new Date().toLocaleTimeString();
-        const customMessage = `you clocked in at ${getTime} on ${getDate} , make sure to clock out at the right time`;
-        if (getStaff) {
-            const clockInTime = yield StaffAttenadance_1.default.create({
-                date: getDate,
-                clockIn,
-                clockOut: false,
-                message: customMessage,
-                time: getTime,
+        const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
+        if (getAdmin) {
+            const token = yield crypto_1.default.randomBytes(3).toString("hex");
+            const createToken = yield AdminAttendance_1.default.create({
+                setToken: token
             });
-            yield ((_a = getStaff === null || getStaff === void 0 ? void 0 : getStaff.payRoll) === null || _a === void 0 ? void 0 : _a.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
-            yield (getStaff === null || getStaff === void 0 ? void 0 : getStaff.save());
+            yield ((_a = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.SetAttendance) === null || _a === void 0 ? void 0 : _a.push(new mongoose_1.default.Types.ObjectId(createToken === null || createToken === void 0 ? void 0 : createToken._id)));
+            yield (getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save());
             return res.status(201).json({
-                message: "clockInTime done",
-                data: clockInTime,
+                message: "create staff token successfully",
+                data: createToken
             });
         }
         else {
             return res.status(400).json({
-                message: "not a signed in staff",
+                message: "admin not found",
+            });
+        }
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: "an error in creating attendance",
+            data: error
+        });
+    }
+});
+exports.createAttendance = createAttendance;
+//clock in time
+const createClockIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    try {
+        const { date, clockIn, message, time, token } = req.body;
+        const getStaff = yield staffAuth_1.default.findById(req.params.staffId);
+        const getAdminAttendanceToken = yield AdminAttendance_1.default.findById(req.params.timeId);
+        const getDate = new Date().toLocaleDateString();
+        const getTime = new Date().toLocaleTimeString();
+        const customMessage = `you clocked in at ${getTime} on ${getDate} , make sure to clock out at the right time`;
+        if (getStaff) {
+            if ((getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.setToken) === token) {
+                const clockInTime = yield StaffAttenadance_1.default.create({
+                    date: getDate,
+                    clockIn,
+                    clockOut: false,
+                    message: customMessage,
+                    time: getTime,
+                    token
+                });
+                yield ((_b = getStaff === null || getStaff === void 0 ? void 0 : getStaff.Attendance) === null || _b === void 0 ? void 0 : _b.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
+                yield (getStaff === null || getStaff === void 0 ? void 0 : getStaff.save());
+                yield (getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.viewStaffAttendance.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
+                yield (getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.save());
+                return res.status(201).json({
+                    message: "clockInTime done",
+                    data: clockInTime,
+                });
+            }
+            else {
+                return res.status(400).json({
+                    message: "token doesn't match"
+                });
+            }
+        }
+        else {
+            return res.status(400).json({
+                message: "couldn't get staff"
             });
         }
     }
@@ -55,30 +99,42 @@ const createClockIn = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.createClockIn = createClockIn;
 //clock Out time
 const createClockOut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
+    var _c;
     try {
-        const { date, clockOut, message, time } = req.body;
+        const { date, clockOut, message, time, token } = req.body;
         const getDate = new Date().toLocaleDateString();
         const getTime = new Date().toLocaleTimeString();
+        const getAdminAttendanceToken = yield AdminAttendance_1.default.findById(req.params.timeId);
         const customMessage = `you clocked out at ${getTime} on ${getDate}`;
         const getStaff = yield staffAuth_1.default.findById(req.params.staffId);
         if (getStaff) {
-            const clockOutTime = yield StaffAttenadance_1.default.create({
-                date: getDate,
-                clockOut,
-                message: customMessage,
-                time: getTime,
-            });
-            yield ((_b = getStaff === null || getStaff === void 0 ? void 0 : getStaff.payRoll) === null || _b === void 0 ? void 0 : _b.push(new mongoose_1.default.Types.ObjectId(clockOutTime === null || clockOutTime === void 0 ? void 0 : clockOutTime._id)));
-            yield (getStaff === null || getStaff === void 0 ? void 0 : getStaff.save());
-            return res.status(201).json({
-                message: "clockOutTime done",
-                data: clockOutTime,
-            });
+            if ((getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.setToken) === token) {
+                const clockOutTime = yield StaffAttenadance_1.default.create({
+                    date: getDate,
+                    clockOut,
+                    clockIn: false,
+                    message: customMessage,
+                    time: getTime,
+                    token
+                });
+                yield ((_c = getStaff === null || getStaff === void 0 ? void 0 : getStaff.Attendance) === null || _c === void 0 ? void 0 : _c.push(new mongoose_1.default.Types.ObjectId(clockOutTime === null || clockOutTime === void 0 ? void 0 : clockOutTime._id)));
+                yield (getStaff === null || getStaff === void 0 ? void 0 : getStaff.save());
+                yield (getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.viewStaffAttendance.push(new mongoose_1.default.Types.ObjectId(clockOutTime === null || clockOutTime === void 0 ? void 0 : clockOutTime._id)));
+                yield (getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.save());
+                return res.status(201).json({
+                    message: "clockOutTime done",
+                    data: clockOutTime,
+                });
+            }
+            else {
+                return res.status(400).json({
+                    message: "token doesn't match"
+                });
+            }
         }
         else {
             return res.status(400).json({
-                message: "not a signed in staff",
+                message: "couldn't get staff"
             });
         }
     }

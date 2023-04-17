@@ -22,6 +22,9 @@ const AttendanceSchema = new mongoose_1.default.Schema({
     time: {
         type: String
     },
+    token: {
+        type: String
+    },
 });
 const AttendanceModel = mongoose_1.default.model("StaffAttendance", AttendanceSchema);
 exports.default = AttendanceModel;

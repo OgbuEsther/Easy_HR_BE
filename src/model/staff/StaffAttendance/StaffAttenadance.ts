@@ -26,6 +26,9 @@ const AttendanceSchema = new mongoose.Schema<Attendance>({
     time : {
         type : String
     },
+    token : {
+        type : String
+    },
 
 })
 

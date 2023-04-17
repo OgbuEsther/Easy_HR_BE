@@ -11,6 +11,13 @@ export interface adminTransactionProps {
   transactionReference: number;
 }
 
+export interface adminAttendance{
+  setToken : string;
+  viewStaffAttendance :{}[]
+  // lateness : string;
+  // absent : string;
+}
+
 // export interface PayRoll {
 //   grossPay : number;
 //   netPay: number;

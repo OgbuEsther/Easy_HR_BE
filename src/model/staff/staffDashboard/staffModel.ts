@@ -36,4 +36,6 @@ export interface Attendance {
   clockOut : boolean;
   message : string;
   time : string
+  token : string
 }
+
