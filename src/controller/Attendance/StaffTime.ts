@@ -99,36 +99,52 @@ export const createClockIn = async (req: Request, res: Response) => {
 //clock Out time
 export const createClockOut = async (req: Request, res: Response) => {
   try {
-    const { date, clockOut, message, time } = req.body;
+    const { date, clockOut, message, time , token } = req.body;
 
     const getDate = new Date().toLocaleDateString();
 
     const getTime = new Date().toLocaleTimeString();
+
+    
+    const getAdminAttendanceToken = await adminAttendanceModel.findById(req.params.timeId)
 
     const customMessage = `you clocked out at ${getTime} on ${getDate}`;
 
     const getStaff = await staffAuth.findById(req.params.staffId);
 
     if (getStaff) {
-      const clockOutTime = await AttendanceModel.create({
-        date: getDate,
-        clockOut,
-        message: customMessage,
-        time: getTime,
-      });
+      if(getAdminAttendanceToken?.setToken === token ){
+        const clockOutTime = await AttendanceModel.create({
+          date: getDate,
+          clockOut ,
+          clockIn: false,
+          message: customMessage,
+          time: getTime,
+          token
+        });
+  
+        await getStaff?.Attendance?.push(
+          new mongoose.Types.ObjectId(clockOutTime?._id)
+        );
+        await getStaff?.save();
 
-      await getStaff?.Attendance?.push(
-        new mongoose.Types.ObjectId(clockOutTime?._id)
-      );
-      await getStaff?.save();
-      return res.status(201).json({
-        message: "clockOutTime done",
-        data: clockOutTime,
-      });
-    } else {
+        await getAdminAttendanceToken?.viewStaffAttendance.push(new mongoose.Types.ObjectId(clockOutTime?._id))
+
+        await getAdminAttendanceToken?.save()
+
+        return res.status(201).json({
+          message: "clockOutTime done",
+          data: clockOutTime,
+        });
+      }else{
+        return res.status(400).json({
+          message : "token doesn't match"
+        })
+      }
+    }else{
       return res.status(400).json({
-        message: "not a signed in staff",
-      });
+        message : "couldn't get staff"
+      })
     }
   } catch (error) {
     return res.status(400).json({
