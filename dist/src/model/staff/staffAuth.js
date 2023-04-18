@@ -88,10 +88,10 @@ const StaffAuth = new mongoose_1.default.Schema({
         },
     ],
     payRoll: [
-        {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "StaffPayRoll",
-        },
+    // {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "StaffPayRoll",
+    // },
     ],
     Attendance: [
         {

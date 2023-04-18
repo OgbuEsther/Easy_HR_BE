@@ -90,8 +90,15 @@ export const MakeTransfer = async (req: Request, res: Response) => {
 //create staff payroll
 export const createPayRoll = async (req: Request, res: Response) => {
   try {
-    const { walletNumber, grossPay, netPay, taxes, medicals, pension } =
-      req.body;
+    const {
+      walletNumber,
+      grossPay,
+      netPay,
+      taxes,
+      medicals,
+      pension,
+      lectures,
+    } = req.body;
 
     const expenses = taxes + medicals + pension;
 
@@ -123,12 +130,8 @@ export const createPayRoll = async (req: Request, res: Response) => {
           taxes,
           pension,
           medicals,
+          lectures,
         });
-        await getStaff?.payRoll?.push(
-          new mongoose.Types.ObjectId(payroll?._id)
-        );
-
-        await getStaff?.save();
 
         // undating the sender walllet
         await adminWalletModel.findByIdAndUpdate(getUserWallet?._id, {
@@ -219,4 +222,36 @@ export const fundWalletFromBank = async (req: Request, res: Response) => {
   }
 };
 
+//create staff payroll method2
 
+export const PayRoll2 = async (req: Request, res: Response) => {
+  try {
+    const getAdmin = await adminAuth.findById(req.params.adminId);
+
+    const dataFIle = await adminAuth.findByIdAndUpdate(getAdmin?._id, {
+      $push: { payRoll: req.body },
+    });
+
+    const firstObj = dataFIle?.payRoll![0]
+
+    let totalSum = 0
+
+    const keys = Object.keys(firstObj!)
+    for (let i = 0; i < keys.length; i++) {
+      totalSum += firstObj![keys[i]];
+    }
+    console.log("Sum of values in the first object:", totalSum);
+
+    return res.status(201).json({
+      message: "created payroll",
+      data: dataFIle?.payRoll,
+   
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      message: "couldn't create staff payroll",
+      err: error.message,
+      data: error,
+    });
+  }
+};

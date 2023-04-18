@@ -14,7 +14,7 @@ export interface adminSignUp extends mongoose.Document {
    walletNumber: number;
    companyCode: string
    SetAttendance : {}[]
-
+   payRoll : []
   // ... other fields ...
 }
 
@@ -40,6 +40,7 @@ export interface staffSignUp {
   investmentPlan: {}[];
   travelAndTour: {}[];
   other: {}[];
-  payRoll : {}[]
+  // payRoll : {}[]
+  payRoll : []
   Attendance : {}[]
 }

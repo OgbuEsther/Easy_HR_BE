@@ -65,9 +65,12 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
       ref: "Attendance",
     },
   ],
- 
-
-  
+  payRoll: [
+    // {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "StaffPayRoll",
+    // },
+  ],
   },
   { timestamps: true }
 );
