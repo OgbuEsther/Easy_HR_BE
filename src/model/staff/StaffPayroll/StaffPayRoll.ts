@@ -9,19 +9,13 @@ const payRollSchema = new mongoose.Schema<PayRoll>({
         type : Number,
         required : true
     },
+
+    expenses:[],
     
     netPay : {
         type : Number,
     },
-    taxes : {
-        type : Number
-    },
-    pension : {
-        type : Number
-    },
-    medicals : {
-        type : Number
-    },
+  
     
 })
 

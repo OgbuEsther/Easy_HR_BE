@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fundWalletFromBank = exports.createPayRoll = exports.MakeTransfer = void 0;
+exports.PayRoll2 = exports.fundWalletFromBank = exports.createPayRoll = exports.MakeTransfer = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const adminAuth_1 = __importDefault(require("../../model/admin/adminAuth"));
 const adminTransactionHistorys_1 = __importDefault(require("../../model/admin/admindashboard/adminTransactionHistorys"));
@@ -90,9 +90,9 @@ const MakeTransfer = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.MakeTransfer = MakeTransfer;
 //create staff payroll
 const createPayRoll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d, _e;
+    var _c, _d;
     try {
-        const { walletNumber, grossPay, netPay, taxes, medicals, pension } = req.body;
+        const { walletNumber, grossPay, netPay, taxes, medicals, pension, lectures, } = req.body;
         const expenses = taxes + medicals + pension;
         const pay = grossPay - expenses;
         const referenceGeneratedNumber = Math.floor(Math.random() * 67485753) + 243;
@@ -118,9 +118,8 @@ const createPayRoll = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     taxes,
                     pension,
                     medicals,
+                    lectures,
                 });
-                yield ((_c = getStaff === null || getStaff === void 0 ? void 0 : getStaff.payRoll) === null || _c === void 0 ? void 0 : _c.push(new mongoose_1.default.Types.ObjectId(payroll === null || payroll === void 0 ? void 0 : payroll._id)));
-                yield (getStaff === null || getStaff === void 0 ? void 0 : getStaff.save());
                 // undating the sender walllet
                 yield adminWallets_1.default.findByIdAndUpdate(getUserWallet === null || getUserWallet === void 0 ? void 0 : getUserWallet._id, {
                     balance: (getUserWallet === null || getUserWallet === void 0 ? void 0 : getUserWallet.balance) - grossPay,
@@ -133,7 +132,7 @@ const createPayRoll = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     transactionReference: referenceGeneratedNumber,
                     // date: getDate,
                 });
-                (_d = getUser === null || getUser === void 0 ? void 0 : getUser.transactionHistory) === null || _d === void 0 ? void 0 : _d.push(new mongoose_1.default.Types.ObjectId(createHisorySender === null || createHisorySender === void 0 ? void 0 : createHisorySender._id));
+                (_c = getUser === null || getUser === void 0 ? void 0 : getUser.transactionHistory) === null || _c === void 0 ? void 0 : _c.push(new mongoose_1.default.Types.ObjectId(createHisorySender === null || createHisorySender === void 0 ? void 0 : createHisorySender._id));
                 getUser === null || getUser === void 0 ? void 0 : getUser.save();
                 // reciever wallet
                 yield StaffWallet_1.default.findByIdAndUpdate(getStaffWallet === null || getStaffWallet === void 0 ? void 0 : getStaffWallet._id, {
@@ -147,7 +146,7 @@ const createPayRoll = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     receiver: getUser === null || getUser === void 0 ? void 0 : getUser.yourName,
                     transactionReference: referenceGeneratedNumber,
                 });
-                (_e = getStaff === null || getStaff === void 0 ? void 0 : getStaff.transactionHistory) === null || _e === void 0 ? void 0 : _e.push(new mongoose_1.default.Types.ObjectId(createHisoryReciever === null || createHisoryReciever === void 0 ? void 0 : createHisoryReciever._id));
+                (_d = getStaff === null || getStaff === void 0 ? void 0 : getStaff.transactionHistory) === null || _d === void 0 ? void 0 : _d.push(new mongoose_1.default.Types.ObjectId(createHisoryReciever === null || createHisoryReciever === void 0 ? void 0 : createHisoryReciever._id));
                 getStaff === null || getStaff === void 0 ? void 0 : getStaff.save();
                 return res.status(201).json({
                     message: "created staff payroll",
@@ -171,7 +170,7 @@ const createPayRoll = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.createPayRoll = createPayRoll;
 const fundWalletFromBank = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _f;
+    var _e;
     try {
         const getUser = yield adminAuth_1.default.findById(req.params.userId);
         const getWallet = yield adminWallets_1.default.findById(req.params.walletId);
@@ -184,7 +183,7 @@ const fundWalletFromBank = (req, res) => __awaiter(void 0, void 0, void 0, funct
             transactionType: "credit",
             transactionReference: transactinRef,
         });
-        (_f = getUser === null || getUser === void 0 ? void 0 : getUser.transactionHistory) === null || _f === void 0 ? void 0 : _f.push(new mongoose_1.default.Types.ObjectId(createHisorySender === null || createHisorySender === void 0 ? void 0 : createHisorySender._id));
+        (_e = getUser === null || getUser === void 0 ? void 0 : getUser.transactionHistory) === null || _e === void 0 ? void 0 : _e.push(new mongoose_1.default.Types.ObjectId(createHisorySender === null || createHisorySender === void 0 ? void 0 : createHisorySender._id));
         res.status(200).json({
             message: "Wallet updated successfully",
         });
@@ -198,3 +197,31 @@ const fundWalletFromBank = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.fundWalletFromBank = fundWalletFromBank;
+//create staff payroll method2
+const PayRoll2 = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
+        const dataFIle = yield adminAuth_1.default.findByIdAndUpdate(getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id, {
+            $push: { payRoll: req.body },
+        });
+        const firstObj = dataFIle === null || dataFIle === void 0 ? void 0 : dataFIle.payRoll[0];
+        let totalSum = 0;
+        const keys = Object.keys(firstObj);
+        for (let i = 0; i < keys.length; i++) {
+            totalSum += firstObj[keys[i]];
+        }
+        console.log("Sum of values in the first object:", totalSum);
+        return res.status(201).json({
+            message: "created payroll",
+            data: dataFIle === null || dataFIle === void 0 ? void 0 : dataFIle.payRoll,
+        });
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: "couldn't create staff payroll",
+            err: error.message,
+            data: error,
+        });
+    }
+});
+exports.PayRoll2 = PayRoll2;

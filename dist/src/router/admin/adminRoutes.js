@@ -4,7 +4,8 @@ const express_1 = require("express");
 const Admin_1 = require("../../controller/PayRoll/Admin");
 const StaffTime_1 = require("../../controller/Attendance/StaffTime");
 const AdminRoutes = (0, express_1.Router)();
-AdminRoutes.post("/paysalary/:adminId", Admin_1.createPayRoll);
+// AdminRoutes.post("/paysalary/:adminId", createPayRoll)
+AdminRoutes.patch("/createpayroll/:adminId", Admin_1.PayRoll2);
 // AdminRoutes.post("/paysalarywithhouseplan/:adminId", staffWithPlans)
 AdminRoutes.post("/fundwallet/:userId/:walletId", Admin_1.fundWalletFromBank);
 AdminRoutes.post("/createattendance/:adminId", StaffTime_1.createAttendance);

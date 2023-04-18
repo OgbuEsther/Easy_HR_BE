@@ -10,17 +10,9 @@ const payRollSchema = new mongoose_1.default.Schema({
         type: Number,
         required: true
     },
+    expenses: [],
     netPay: {
         type: Number,
-    },
-    taxes: {
-        type: Number
-    },
-    pension: {
-        type: Number
-    },
-    medicals: {
-        type: Number
     },
 });
 const payRollModel = mongoose_1.default.model("StaffPayRoll", payRollSchema);

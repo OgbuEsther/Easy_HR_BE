@@ -22,10 +22,9 @@ export interface staffTransactionProps {
 
 export interface PayRoll {
   grossPay : number;
+     expenses:[]
   netPay: number;
-  taxes:number;
-  pension:number;
-  medicals:number
+ 
 
 }
 
