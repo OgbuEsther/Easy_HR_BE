@@ -232,6 +232,7 @@ export const PayRoll2 = async (req: Request, res: Response) => {
       $push: { payRoll: req.body },
    
     }  , {new:true});
+    dataFIle?.payRoll.sort((a, b) => a - b)
 
     // const firstObj = dataFIle?.payRoll![0]
 
@@ -264,7 +265,8 @@ export const calculatePayRoll = async(req:Request , res:Response)=>{
 
     const getAdmin = await adminAuth.findById(req.params.adminId)
 
-    const getPayRoll = getAdmin?.payRoll[0]
+    const getPayRoll = getAdmin?.payRoll![0]
+
 
     let totalSum = 0
 

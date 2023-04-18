@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PayRoll2 = exports.fundWalletFromBank = exports.createPayRoll = exports.MakeTransfer = void 0;
+exports.calculatePayRoll = exports.PayRoll2 = exports.fundWalletFromBank = exports.createPayRoll = exports.MakeTransfer = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const adminAuth_1 = __importDefault(require("../../model/admin/adminAuth"));
 const adminTransactionHistorys_1 = __importDefault(require("../../model/admin/admindashboard/adminTransactionHistorys"));
@@ -203,14 +203,15 @@ const PayRoll2 = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
         const dataFIle = yield adminAuth_1.default.findByIdAndUpdate(getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id, {
             $push: { payRoll: req.body },
-        });
-        const firstObj = dataFIle === null || dataFIle === void 0 ? void 0 : dataFIle.payRoll[0];
-        let totalSum = 0;
-        const keys = Object.keys(firstObj);
-        for (let i = 0; i < keys.length; i++) {
-            totalSum += firstObj[keys[i]];
-        }
-        console.log("Sum of values in the first object:", totalSum);
+        }, { new: true });
+        dataFIle === null || dataFIle === void 0 ? void 0 : dataFIle.payRoll.sort((a, b) => a - b);
+        // const firstObj = dataFIle?.payRoll![0]
+        // let totalSum = 0
+        // const keys = Object.keys(firstObj!)
+        // for (let i = 0; i < keys.length; i++) {
+        //   totalSum += firstObj![keys[i]];
+        // }
+        // console.log("Sum of values in the first object:", totalSum);
         return res.status(201).json({
             message: "created payroll",
             data: dataFIle === null || dataFIle === void 0 ? void 0 : dataFIle.payRoll,
@@ -225,3 +226,33 @@ const PayRoll2 = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.PayRoll2 = PayRoll2;
+const calculatePayRoll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { grossPay, expenses, netPay } = req.body;
+        const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
+        const getPayRoll = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.payRoll[0];
+        let totalSum = 0;
+        const keys = Object.keys(getPayRoll);
+        for (let i = 0; i < keys.length; i++) {
+            totalSum += getPayRoll[keys[i]];
+        }
+        console.log("Sum of values in the first object:", totalSum);
+        const calculatePayRoll = yield StaffPayRoll_1.default.create({
+            grossPay,
+            expenses: totalSum,
+            netPay: grossPay - totalSum
+        });
+        return res.status(201).json({
+            message: "created payroll",
+            data: calculatePayRoll,
+        });
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: "couldn't calculate staff payroll",
+            err: error.message,
+            data: error,
+        });
+    }
+});
+exports.calculatePayRoll = calculatePayRoll;
