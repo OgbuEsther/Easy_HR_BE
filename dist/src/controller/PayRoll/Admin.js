@@ -92,7 +92,7 @@ exports.MakeTransfer = MakeTransfer;
 const createPayRoll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d;
     try {
-        const { walletNumber, grossPay, netPay, taxes, medicals, pension, lectures } = req.body;
+        const { walletNumber, grossPay, netPay, taxes, medicals, pension, lectures, } = req.body;
         const expenses = taxes + medicals + pension;
         const pay = grossPay - expenses;
         const referenceGeneratedNumber = Math.floor(Math.random() * 67485753) + 243;
@@ -118,7 +118,7 @@ const createPayRoll = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     taxes,
                     pension,
                     medicals,
-                    lectures
+                    lectures,
                 });
                 // undating the sender walllet
                 yield adminWallets_1.default.findByIdAndUpdate(getUserWallet === null || getUserWallet === void 0 ? void 0 : getUserWallet._id, {
@@ -200,16 +200,20 @@ exports.fundWalletFromBank = fundWalletFromBank;
 //create staff payroll method2
 const PayRoll2 = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const {grossPay , fees , medicals } = req.body
         const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
-        const createNew = yield StaffPayRoll_1.default.create(req.body);
-        yield adminAuth_1.default.findByIdAndUpdate(getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id, {
-            $push: { payRoll: createNew === null || createNew === void 0 ? void 0 : createNew._id },
+        const dataFIle = yield adminAuth_1.default.findByIdAndUpdate(getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id, {
+            $push: { payRoll: req.body },
         });
-        // const newData = createNew.payRoll.
+        const firstObj = dataFIle === null || dataFIle === void 0 ? void 0 : dataFIle.payRoll[0];
+        let totalSum = 0;
+        const keys = Object.keys(firstObj);
+        for (let i = 0; i < keys.length; i++) {
+            totalSum += firstObj[keys[i]];
+        }
+        console.log("Sum of values in the first object:", totalSum);
         return res.status(201).json({
             message: "created payroll",
-            data: createNew
+            data: dataFIle === null || dataFIle === void 0 ? void 0 : dataFIle.payRoll,
         });
     }
     catch (error) {
