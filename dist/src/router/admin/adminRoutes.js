@@ -6,6 +6,7 @@ const StaffTime_1 = require("../../controller/Attendance/StaffTime");
 const AdminRoutes = (0, express_1.Router)();
 // AdminRoutes.post("/paysalary/:adminId", createPayRoll)
 AdminRoutes.patch("/createpayroll/:adminId", Admin_1.PayRoll2);
+AdminRoutes.post("/calculatepayroll/:adminId", Admin_1.calculatePayRoll);
 // AdminRoutes.post("/paysalarywithhouseplan/:adminId", staffWithPlans)
 AdminRoutes.post("/fundwallet/:userId/:walletId", Admin_1.fundWalletFromBank);
 AdminRoutes.post("/createattendance/:adminId", StaffTime_1.createAttendance);

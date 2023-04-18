@@ -16,7 +16,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const environmentVariables_1 = __importDefault(require("./environmentVariables"));
 const dbConfig = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const conn = yield mongoose_1.default.connect(environmentVariables_1.default.DB_URI);
+        const conn = yield mongoose_1.default.connect(environmentVariables_1.default.LIVE_URI);
         console.log(`connected to database on port ${conn.connection.host}`);
     }
     catch (error) {
