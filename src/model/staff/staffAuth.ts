@@ -91,10 +91,7 @@ const StaffAuth = new mongoose.Schema<staffSignUp>(
       },
     ],
     payRoll: [
-      // {
-      //   type: mongoose.Schema.Types.ObjectId,
-      //   ref: "StaffPayRoll",
-      // },
+      
     ],
     Attendance: [
       {
@@ -102,6 +99,12 @@ const StaffAuth = new mongoose.Schema<staffSignUp>(
         ref: "StaffAttendance",
       },
     ],
+    mainPayRoll : [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "StaffPayRoll",
+      },
+    ]
   },
   { timestamps: true }
 );
