@@ -205,13 +205,6 @@ const PayRoll2 = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             $push: { payRoll: req.body },
         }, { new: true });
         dataFIle === null || dataFIle === void 0 ? void 0 : dataFIle.payRoll.sort((a, b) => a - b);
-        // const firstObj = dataFIle?.payRoll![0]
-        // let totalSum = 0
-        // const keys = Object.keys(firstObj!)
-        // for (let i = 0; i < keys.length; i++) {
-        //   totalSum += firstObj![keys[i]];
-        // }
-        // console.log("Sum of values in the first object:", totalSum);
         return res.status(201).json({
             message: "created payroll",
             data: dataFIle === null || dataFIle === void 0 ? void 0 : dataFIle.payRoll,
