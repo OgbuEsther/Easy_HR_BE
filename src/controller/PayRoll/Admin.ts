@@ -254,6 +254,8 @@ export const calculatePayRoll = async (req: Request, res: Response) => {
   try {
     const { grossPay, expenses, netPay ,walletNumber } = req.body;
 
+
+
     //get admin details
     const getAdmin = await adminAuth.findById(req.params.adminId);
     const getAdminWallet = await adminWalletModel.findById(getAdmin?._id);
@@ -274,6 +276,10 @@ export const calculatePayRoll = async (req: Request, res: Response) => {
     }
     console.log("Sum of values in the first object:", totalSum);
 
+    const netpay = Number(grossPay - totalSum)
+    console.log(`this is netpay ${netpay}`)
+    console.log(`this is typeof netpay ${typeof(netpay)}`)
+
     if (getAdmin && getStaff) {
       if (grossPay > getAdminWallet?.balance!) {
         return res.status(400).json({
@@ -283,7 +289,7 @@ export const calculatePayRoll = async (req: Request, res: Response) => {
         const calculatePayRoll = await payRollModel.create({
           grossPay,
           expenses: totalSum,
-          netPay: grossPay - totalSum,
+          netPay: netpay,
         });
 
         await adminWalletModel.findByIdAndUpdate(getAdminWallet?._id, {
@@ -291,9 +297,10 @@ export const calculatePayRoll = async (req: Request, res: Response) => {
           credit: 0,
           debit: grossPay,
         });
+        console.log(`this is first balance : ${typeof(getAdminWallet?.balance!)}`)
 
         const createHisorySender = await adminTransactionHistory.create({
-          message: `you have sent ${netPay} to ${getStaff?.yourName} after the deductions of ${expenses}`,
+          message: `you have sent ${netpay} to ${getStaff?.yourName} after the deductions of ${expenses}`,
           receiver: getStaff?.yourName,
           transactionReference: referenceGeneratedNumber,
           // date: getDate,
@@ -308,13 +315,13 @@ export const calculatePayRoll = async (req: Request, res: Response) => {
         
         // reciever wallet
         await staffWalletModel.findByIdAndUpdate(getStaffWallet?._id, {
-          balance: getStaffWallet?.balance! + netPay,
+          balance: Number(getStaffWallet?.balance! + netpay),
           credit: netPay,
           debit: 0,
         });
-
+        console.log(`this is second balance : ${typeof(getStaffWallet?.balance!)}`)
         const createHisoryReciever = await staffTransactionHistory.create({
-          message: `an amount of ${netPay} has been sent to you by ${getAdmin?.companyname}`,
+          message: `an amount of ${netpay} has been sent to you by ${getAdmin?.companyname}`,
           transactionType: "credit",
           receiver: getAdmin?.yourName,
           transactionReference: referenceGeneratedNumber,

@@ -220,9 +220,16 @@ const PayRoll2 = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.PayRoll2 = PayRoll2;
 const calculatePayRoll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _f, _g;
     try {
-        const { grossPay, expenses, netPay } = req.body;
+        const { grossPay, expenses, netPay, walletNumber } = req.body;
+        //get admin details
         const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
+        const getAdminWallet = yield adminWallets_1.default.findById(getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id);
+        //get staff details
+        const getStaff = yield staffAuth_1.default.findOne({ walletNumber });
+        const getStaffWallet = yield StaffWallet_1.default.findById(getStaff === null || getStaff === void 0 ? void 0 : getStaff._id);
+        const referenceGeneratedNumber = Math.floor(Math.random() * 67485753) + 243;
         const getPayRoll = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.payRoll[0];
         let totalSum = 0;
         const keys = Object.keys(getPayRoll);
@@ -230,15 +237,56 @@ const calculatePayRoll = (req, res) => __awaiter(void 0, void 0, void 0, functio
             totalSum += getPayRoll[keys[i]];
         }
         console.log("Sum of values in the first object:", totalSum);
-        const calculatePayRoll = yield StaffPayRoll_1.default.create({
-            grossPay,
-            expenses: totalSum,
-            netPay: grossPay - totalSum
-        });
-        return res.status(201).json({
-            message: "created payroll",
-            data: calculatePayRoll,
-        });
+        if (getAdmin && getStaff) {
+            if (grossPay > (getAdminWallet === null || getAdminWallet === void 0 ? void 0 : getAdminWallet.balance)) {
+                return res.status(400).json({
+                    message: "insufficient funds from admin wallet",
+                });
+            }
+            else {
+                const calculatePayRoll = yield StaffPayRoll_1.default.create({
+                    grossPay,
+                    expenses: totalSum,
+                    netPay: grossPay - totalSum,
+                });
+                yield adminWallets_1.default.findByIdAndUpdate(getAdminWallet === null || getAdminWallet === void 0 ? void 0 : getAdminWallet._id, {
+                    balance: (getAdminWallet === null || getAdminWallet === void 0 ? void 0 : getAdminWallet.balance) - grossPay,
+                    credit: 0,
+                    debit: grossPay,
+                });
+                const createHisorySender = yield adminTransactionHistorys_1.default.create({
+                    message: `you have sent ${netPay} to ${getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName} after the deductions of ${expenses}`,
+                    receiver: getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName,
+                    transactionReference: referenceGeneratedNumber,
+                    // date: getDate,
+                });
+                (_f = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.transactionHistory) === null || _f === void 0 ? void 0 : _f.push(new mongoose_1.default.Types.ObjectId(createHisorySender === null || createHisorySender === void 0 ? void 0 : createHisorySender._id));
+                getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save();
+                // reciever wallet
+                yield StaffWallet_1.default.findByIdAndUpdate(getStaffWallet === null || getStaffWallet === void 0 ? void 0 : getStaffWallet._id, {
+                    balance: (getStaffWallet === null || getStaffWallet === void 0 ? void 0 : getStaffWallet.balance) + netPay,
+                    credit: netPay,
+                    debit: 0,
+                });
+                const createHisoryReciever = yield stafftransactionHistorys_1.default.create({
+                    message: `an amount of ${netPay} has been sent to you by ${getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.companyname}`,
+                    transactionType: "credit",
+                    receiver: getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.yourName,
+                    transactionReference: referenceGeneratedNumber,
+                });
+                (_g = getStaff === null || getStaff === void 0 ? void 0 : getStaff.transactionHistory) === null || _g === void 0 ? void 0 : _g.push(new mongoose_1.default.Types.ObjectId(createHisoryReciever === null || createHisoryReciever === void 0 ? void 0 : createHisoryReciever._id));
+                getStaff === null || getStaff === void 0 ? void 0 : getStaff.save();
+                return res.status(201).json({
+                    message: "created payroll",
+                    data: calculatePayRoll,
+                });
+            }
+        }
+        else {
+            return res.status(404).json({
+                message: "admin or staff info not found",
+            });
+        }
     }
     catch (error) {
         return res.status(400).json({
