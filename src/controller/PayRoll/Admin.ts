@@ -234,15 +234,6 @@ export const PayRoll2 = async (req: Request, res: Response) => {
     }  , {new:true});
     dataFIle?.payRoll.sort((a, b) => a - b)
 
-    // const firstObj = dataFIle?.payRoll![0]
-
-    // let totalSum = 0
-
-    // const keys = Object.keys(firstObj!)
-    // for (let i = 0; i < keys.length; i++) {
-    //   totalSum += firstObj![keys[i]];
-    // }
-    // console.log("Sum of values in the first object:", totalSum);
 
     return res.status(201).json({
       message: "created payroll",
