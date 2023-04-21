@@ -9,6 +9,9 @@ export interface adminTransactionProps {
   receiver: string;
   date: string;
   transactionReference: number;
+  amount: number;
+  expenses: number;
+  
 }
 
 export interface adminAttendance{

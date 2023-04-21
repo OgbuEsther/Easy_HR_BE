@@ -87,18 +87,19 @@ const StaffAuth = new mongoose_1.default.Schema({
             ref: "staffOther",
         },
     ],
-    payRoll: [
-    // {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "StaffPayRoll",
-    // },
-    ],
+    payRoll: [],
     Attendance: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,
             ref: "StaffAttendance",
         },
     ],
+    mainPayRoll: [
+        {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "StaffPayRoll",
+        },
+    ]
 }, { timestamps: true });
 const staffAuth = mongoose_1.default.model("staffAuth", StaffAuth);
 exports.default = staffAuth;

@@ -254,7 +254,8 @@ export const calculatePayRoll = async (req: Request, res: Response) => {
   try {
     const { grossPay, expenses, netPay ,walletNumber } = req.body;
 
-
+    const getDate = new Date().toLocaleDateString();
+    const getTime = new Date().toLocaleTimeString();
 
     //get admin details
     const getAdmin = await adminAuth.findById(req.params.adminId);
@@ -300,10 +301,12 @@ export const calculatePayRoll = async (req: Request, res: Response) => {
         console.log(`this is first balance : ${typeof(getAdminWallet?.balance!)}`)
 
         const createHisorySender = await adminTransactionHistory.create({
-          message: `you have sent ${netpay} to ${getStaff?.yourName} after the deductions of ${expenses}`,
+          message: `you have sent ${netpay} to ${getStaff?.yourName} after the deductions of ${expenses}....this is the grossPay ${grossPay}`,
           receiver: getStaff?.yourName,
           transactionReference: referenceGeneratedNumber,
-          // date: getDate,
+          date : `${getDate}_${getTime}`,
+          amount : netpay,
+          expenses : expenses
         });
     
         getAdmin?.transactionHistory?.push(
@@ -325,6 +328,8 @@ export const calculatePayRoll = async (req: Request, res: Response) => {
           transactionType: "credit",
           receiver: getAdmin?.yourName,
           transactionReference: referenceGeneratedNumber,
+          date : `${getDate}_${getTime}`,
+          amount : netpay
         });
 
         getStaff?.transactionHistory?.push(

@@ -18,6 +18,9 @@ const staffTransactionHistorySchema = new mongoose_1.default.Schema({
     transactionReference: {
         type: Number,
     },
-});
+    amount: {
+        type: Number
+    }
+}, { timestamps: true });
 const staffTransactionHistory = mongoose_1.default.model("staffTransactionHistory", staffTransactionHistorySchema);
 exports.default = staffTransactionHistory;
