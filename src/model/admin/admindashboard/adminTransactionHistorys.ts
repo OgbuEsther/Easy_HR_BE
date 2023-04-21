@@ -19,7 +19,13 @@ const adminTransactionHistorySchema =
     transactionReference: {
       type: Number,
     },
-  });
+    amount: {
+      type : Number
+    },
+    expenses : {
+      type : Number
+    }
+  }, {timestamps : true});
 const adminTransactionHistory = mongoose.model<admin>(
   "adminTransactionHistory",
   adminTransactionHistorySchema

@@ -18,7 +18,10 @@ const staffTransactionHistorySchema =
     transactionReference: {
       type: Number,
     },
-  });
+    amount: {
+      type : Number
+    }
+  }, {timestamps : true});
 const staffTransactionHistory = mongoose.model<staff>(
   "staffTransactionHistory",
   staffTransactionHistorySchema

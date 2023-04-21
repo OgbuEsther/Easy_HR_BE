@@ -62,12 +62,13 @@ const AdminAuth = new mongoose_1.default.Schema({
             ref: "Attendance",
         },
     ],
-    payRoll: [
-    // {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "StaffPayRoll",
-    // },
-    ],
+    payRoll: [],
+    mainPayRoll: [
+        {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "StaffPayRoll",
+        },
+    ]
 }, { timestamps: true });
 const adminAuth = mongoose_1.default.model("adminAuthModel", AdminAuth);
 exports.default = adminAuth;

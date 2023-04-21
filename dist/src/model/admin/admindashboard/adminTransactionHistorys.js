@@ -18,6 +18,12 @@ const adminTransactionHistorySchema = new mongoose_1.default.Schema({
     transactionReference: {
         type: Number,
     },
-});
+    amount: {
+        type: Number
+    },
+    expenses: {
+        type: Number
+    }
+}, { timestamps: true });
 const adminTransactionHistory = mongoose_1.default.model("adminTransactionHistory", adminTransactionHistorySchema);
 exports.default = adminTransactionHistory;

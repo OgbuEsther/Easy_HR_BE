@@ -16,6 +16,8 @@ export interface staffTransactionProps {
   receiver: string;
   date: string;
   transactionReference: number;
+  amount: number;
+
 }
 
 
