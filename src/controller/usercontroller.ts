@@ -199,17 +199,15 @@ export const getOneStaff = async (req: Request, res: Response) => {
         path: "transactionHistory",
       },
       {
-        path: "houseRentPlan",
-      },
-      {
-        path: "schoolFeesPlan",
-      },
-      {
-        path: "travelAndTour",
-      },
-      {
         path: "payRoll",
       },
+      {
+        path: "Attendance",
+      },
+      {
+        path: "mainPayRoll",
+      },
+
     ]);
 
     return res.status(200).json({
