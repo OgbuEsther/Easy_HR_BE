@@ -51,42 +51,42 @@ const StaffAuth = new mongoose_1.default.Schema({
             ref: "staffTransactionHistory",
         },
     ],
-    savingsPlan: [
-        {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "staffSavingsPlan",
-        },
-    ],
-    houseRentPlan: [
-        {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "staffHousePlan",
-        },
-    ],
-    schoolFeesPlan: [
-        {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "staffSchoolFeesPlan",
-        },
-    ],
-    investmentPlan: [
-        {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "staffInvestmentPlan",
-        },
-    ],
-    travelAndTour: [
-        {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "staffTravelAndTour",
-        },
-    ],
-    other: [
-        {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "staffOther",
-        },
-    ],
+    // savingsPlan: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "staffSavingsPlan",
+    //   },
+    // ],
+    // houseRentPlan: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "staffHousePlan",
+    //   },
+    // ],
+    // schoolFeesPlan: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "staffSchoolFeesPlan",
+    //   },
+    // ],
+    // investmentPlan: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "staffInvestmentPlan",
+    //   },
+    // ],
+    // travelAndTour: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "staffTravelAndTour",
+    //   },
+    // ],
+    // other: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "staffOther",
+    //   },
+    // ],
     payRoll: [],
     Attendance: [
         {
