@@ -32,10 +32,11 @@ export const createAttendance = async(req:Request , res:Response)=>{
   
     });
   }
-  } catch (error) {
+  } catch (error:any) {
     return res.status(400).json({
       message: "an error in creating attendance",
-      data : error
+      data : error,
+      error : error.message
     });
   }
 }
