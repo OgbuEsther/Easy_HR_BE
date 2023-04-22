@@ -44,7 +44,8 @@ const createAttendance = (req, res) => __awaiter(void 0, void 0, void 0, functio
     catch (error) {
         return res.status(400).json({
             message: "an error in creating attendance",
-            data: error
+            data: error,
+            error: error.message
         });
     }
 });
