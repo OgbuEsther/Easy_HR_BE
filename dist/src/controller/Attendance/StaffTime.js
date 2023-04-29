@@ -26,7 +26,8 @@ const createAttendance = (req, res) => __awaiter(void 0, void 0, void 0, functio
         if (getAdmin) {
             const token = yield crypto_1.default.randomBytes(3).toString("hex");
             const createToken = yield AdminAttendance_1.default.create({
-                setToken: token
+                setToken: token,
+                _id: getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id
             });
             yield ((_a = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.SetAttendance) === null || _a === void 0 ? void 0 : _a.push(new mongoose_1.default.Types.ObjectId(createToken === null || createToken === void 0 ? void 0 : createToken._id)));
             yield (getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save());
