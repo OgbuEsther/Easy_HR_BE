@@ -15,7 +15,8 @@ export const createAttendance = async(req:Request , res:Response)=>{
     const token = await crypto.randomBytes(3).toString("hex")
 
     const createToken = await adminAttendanceModel.create({
-      setToken :token
+      setToken :token,
+      _id : getAdmin?._id
     })
 
     await getAdmin?.SetAttendance?.push(new mongoose.Types.ObjectId(createToken?._id))
