@@ -176,6 +176,9 @@ const getOneStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             {
                 path: "mainPayRoll",
             },
+            {
+                path: "staffLeave",
+            },
         ]);
         return res.status(200).json({
             message: "gotten one staff",

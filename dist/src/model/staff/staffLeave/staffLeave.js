@@ -5,9 +5,18 @@ const staffSchema = new mongoose_1.Schema({
     title: {
         type: String,
     },
-    days: {
-        type: Number,
+    startDate: {
+        type: String,
     },
+    numberOfDays: {
+        type: Number
+    },
+    remainingDays: {
+        type: Number
+    },
+    reason: {
+        type: String
+    }
 });
 const staffLeaveModel = (0, mongoose_1.model)("staffLeave", staffSchema);
 exports.default = staffLeaveModel;
