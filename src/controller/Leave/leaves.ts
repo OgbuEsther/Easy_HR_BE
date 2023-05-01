@@ -60,21 +60,30 @@ export const applyForLeave = async (req: Request, res: Response) => {
 
     const getStaff = await staffAuth.findById(req.params.staffId);
 
+    const getLeave = await adminLeaveModel.findOne({ title });
+
     if (getStaff) {
-      const apply = await staffLeaveModel.create({
-        title,
-        startDate,
-        numberOfDays,
-        reason,
-      });
+      if (getLeave?.title === title) {
+        const apply = await staffLeaveModel.create({
+          title,
+          startDate,
+          numberOfDays,
+          remainingDays: getLeave?.days! - numberOfDays,
+          reason,
+        });
 
-      getStaff?.staffLeave?.push(new mongoose.Types.ObjectId(apply?._id));
+        getStaff?.staffLeave?.push(new mongoose.Types.ObjectId(apply?._id));
 
-      getStaff?.save();
-      return res.status(201).json({
-        message: "created application successfully",
-        data: apply,
-      });
+        getStaff?.save();
+        return res.status(201).json({
+          message: "created application successfully",
+          data: apply,
+        });
+      } else {
+        return res.status(400).json({
+          message: "leave title doesn't match",
+        });
+      }
     } else {
       return res.status(404).json({
         message:
