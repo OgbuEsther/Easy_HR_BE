@@ -13,6 +13,9 @@ const staffSchema = new Schema<staffLeaveProps>({
  numberOfDays : {
     type : Number
  },
+ remainingDays : {
+    type : Number
+ },
  reason : {
     type : String
  }

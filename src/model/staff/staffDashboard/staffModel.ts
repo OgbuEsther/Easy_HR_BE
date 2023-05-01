@@ -10,8 +10,9 @@ export interface staffLeaveProps{
   title : string;
   startDate : string;
   numberOfDays : number;
+  remainingDays : number;
   reason : string ;
-  
+
 
 
 }
