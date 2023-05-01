@@ -73,6 +73,12 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "StaffPayRoll",
     },
+  ],
+  adminLeave : [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "adminLeave",
+    },
   ]
   },
   { timestamps: true }

@@ -16,6 +16,7 @@ export interface adminSignUp extends mongoose.Document {
    SetAttendance : {}[]
    mainPayRoll : {}[]
    payRoll : []
+   adminLeave: {}[]
   // ... other fields ...
 }
 
@@ -44,4 +45,5 @@ export interface staffSignUp {
   mainPayRoll : {}[]
   payRoll : []
   Attendance : {}[]
+  staffLeave: {}[]
 }

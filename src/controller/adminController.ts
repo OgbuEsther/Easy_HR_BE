@@ -170,6 +170,9 @@ export const getOneAdmin = async (req: Request, res: Response) => {
       {
         path: "transactionHistory",
       },
+      {
+        path: "adminLeave",
+      },
     ]);
 
     return res.status(200).json({

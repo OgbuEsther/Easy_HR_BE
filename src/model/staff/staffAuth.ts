@@ -104,7 +104,14 @@ const StaffAuth = new mongoose.Schema<staffSignUp>(
         type: mongoose.Schema.Types.ObjectId,
         ref: "StaffPayRoll",
       },
-    ]
+    ],
+    staffLeave : [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "staffLeave",
+      },
+    ],
+
   },
   { timestamps: true }
 );

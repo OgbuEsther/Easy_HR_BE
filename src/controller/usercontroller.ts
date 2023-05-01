@@ -207,6 +207,9 @@ export const getOneStaff = async (req: Request, res: Response) => {
       {
         path: "mainPayRoll",
       },
+      {
+        path: "staffLeave",
+      },
 
     ]);
 
