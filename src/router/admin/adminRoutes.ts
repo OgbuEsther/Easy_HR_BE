@@ -2,6 +2,7 @@ import {Router} from "express"
 
 import { calculatePayRoll, createPayRoll , fundWalletFromBank, MakeTransfer, PayRoll2 } from "../../controller/PayRoll/Admin"
 import { createAttendance } from "../../controller/Attendance/StaffTime"
+import { createLeave } from "../../controller/Leave/leaves"
 
 const AdminRoutes = Router()
 
@@ -14,5 +15,10 @@ AdminRoutes.post("/createattendance/:adminId" , createAttendance)
 // AdminRoutes.route("/pay/:adminid").patch(checkPayment);
 // AdminRoutes.route("/pay-out/:staffid").post(checkOutToBank);
 // AdminRoutes.post("/createpayroll/:staffId" ,createPayRoll )
+
+
+//LEAVE !!!!!!
+//CREATE TYPE OF LEAVE 
+AdminRoutes.post("/createleave/:adminId" ,createLeave )
 
 export default AdminRoutes

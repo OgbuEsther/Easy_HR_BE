@@ -14,6 +14,11 @@ export interface adminTransactionProps {
   
 }
 
+export interface adminLeaveProps{
+  title : string;
+  days : number
+}
+
 export interface adminAttendance{
   setToken : string;
   viewStaffAttendance :{}[]

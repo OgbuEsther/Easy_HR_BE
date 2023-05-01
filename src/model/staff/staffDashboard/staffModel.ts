@@ -5,6 +5,12 @@ export interface staffWalletProps {
   debit: number;
 }
 
+
+export interface staffLeaveProps{
+  title : string;
+  days : number
+}
+
 export interface plans {
   percentageRate : number;
   totalBal : number
