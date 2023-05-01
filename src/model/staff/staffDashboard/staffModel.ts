@@ -8,7 +8,12 @@ export interface staffWalletProps {
 
 export interface staffLeaveProps{
   title : string;
-  days : number
+  startDate : string;
+  numberOfDays : number;
+  reason : string ;
+  
+
+
 }
 
 export interface plans {

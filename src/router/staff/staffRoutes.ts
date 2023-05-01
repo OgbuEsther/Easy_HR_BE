@@ -2,6 +2,7 @@ import { Router } from "express";
 // import { HousePlan,FeesPlan,travelPlan } from "../../controller/staff/staffDashboard/createPlans";
 
 import { createAttendance, createClockIn, createClockOut } from "../../controller/Attendance/StaffTime";
+import { applyForLeave } from "../../controller/Leave/leaves";
 
 
 const staffRoutes = Router()
@@ -12,5 +13,9 @@ const staffRoutes = Router()
 staffRoutes.post("/clockin/:staffId/:timeId" , createClockIn)
 
 staffRoutes.post("/clockout/:staffId/:timeId" , createClockOut)
+
+//LEAVE 
+//APPLICATION FOR LEAVE 
+staffRoutes.post("/applyforleave/:staffId" ,applyForLeave )
 
 export default staffRoutes
