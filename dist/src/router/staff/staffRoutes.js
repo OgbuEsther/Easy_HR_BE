@@ -8,8 +8,8 @@ const staffRoutes = (0, express_1.Router)();
 // staffRoutes.post("/houseplan/:staffId" , HousePlan)
 // staffRoutes.post("/travel/:staffId" , travelPlan)
 // staffRoutes.post("/schoolplan/:staffId" , FeesPlan)
-staffRoutes.post("/clockin/:staffId/:timeId", StaffTime_1.createClockIn);
-staffRoutes.post("/clockout/:staffId/:timeId", StaffTime_1.createClockOut);
+staffRoutes.post("/clockin/:staffId", StaffTime_1.createClockIn);
+staffRoutes.post("/clockout/:staffId", StaffTime_1.createClockOut);
 //LEAVE 
 //APPLICATION FOR LEAVE 
 staffRoutes.post("/applyforleave/:staffId", leaves_1.applyForLeave);

@@ -1,20 +1,16 @@
 export interface staffWalletProps {
   balance: number;
-
   credit: number;
   debit: number;
 }
 
 
 export interface staffLeaveProps{
-  title : string;
-  startDate : string;
-  numberOfDays : number;
-  remainingDays : number;
-  reason : string ;
-
-
-
+  title :string;
+  startDate :string;
+  numberOfDays :number;
+  remainingDays :number;
+  reason : string;
 }
 
 export interface plans {
