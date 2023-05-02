@@ -27,7 +27,7 @@ const createAttendance = (req, res) => __awaiter(void 0, void 0, void 0, functio
             const token = yield crypto_1.default.randomBytes(3).toString("hex");
             const createToken = yield AdminAttendance_1.default.create({
                 setToken: token,
-                _id: getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id
+                // _id : getAdmin?._id
             });
             yield ((_a = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.SetAttendance) === null || _a === void 0 ? void 0 : _a.push(new mongoose_1.default.Types.ObjectId(createToken === null || createToken === void 0 ? void 0 : createToken._id)));
             yield (getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save());
@@ -55,21 +55,21 @@ exports.createAttendance = createAttendance;
 const createClockIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     try {
-        const { date, clockIn, message, time, token } = req.body;
+        const { date, clockIn, message, time, setToken } = req.body;
         const getStaff = yield staffAuth_1.default.findById(req.params.staffId);
-        const getAdminAttendanceToken = yield AdminAttendance_1.default.findById(req.params.timeId);
+        const getAdminAttendanceToken = yield AdminAttendance_1.default.findOne({ setToken });
         const getDate = new Date().toLocaleDateString();
         const getTime = new Date().toLocaleTimeString();
         const customMessage = `you clocked in at ${getTime} on ${getDate} , make sure to clock out at the right time`;
         if (getStaff) {
-            if ((getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.setToken) === token) {
+            if ((getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.setToken) === setToken) {
                 const clockInTime = yield StaffAttenadance_1.default.create({
                     date: getDate,
                     clockIn,
                     clockOut: false,
                     message: customMessage,
                     time: getTime,
-                    token
+                    token: setToken,
                 });
                 yield ((_b = getStaff === null || getStaff === void 0 ? void 0 : getStaff.Attendance) === null || _b === void 0 ? void 0 : _b.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
                 yield (getStaff === null || getStaff === void 0 ? void 0 : getStaff.save());
@@ -103,21 +103,21 @@ exports.createClockIn = createClockIn;
 const createClockOut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c;
     try {
-        const { date, clockOut, message, time, token } = req.body;
+        const { date, clockOut, message, time, setToken } = req.body;
         const getDate = new Date().toLocaleDateString();
         const getTime = new Date().toLocaleTimeString();
-        const getAdminAttendanceToken = yield AdminAttendance_1.default.findById(req.params.timeId);
+        const getAdminAttendanceToken = yield AdminAttendance_1.default.findOne({ setToken });
         const customMessage = `you clocked out at ${getTime} on ${getDate}`;
         const getStaff = yield staffAuth_1.default.findById(req.params.staffId);
         if (getStaff) {
-            if ((getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.setToken) === token) {
+            if ((getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.setToken) === setToken) {
                 const clockOutTime = yield StaffAttenadance_1.default.create({
                     date: getDate,
                     clockOut,
                     clockIn: false,
                     message: customMessage,
                     time: getTime,
-                    token
+                    token: setToken
                 });
                 yield ((_c = getStaff === null || getStaff === void 0 ? void 0 : getStaff.Attendance) === null || _c === void 0 ? void 0 : _c.push(new mongoose_1.default.Types.ObjectId(clockOutTime === null || clockOutTime === void 0 ? void 0 : clockOutTime._id)));
                 yield (getStaff === null || getStaff === void 0 ? void 0 : getStaff.save());

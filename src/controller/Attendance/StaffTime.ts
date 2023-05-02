@@ -16,7 +16,7 @@ export const createAttendance = async(req:Request , res:Response)=>{
 
     const createToken = await adminAttendanceModel.create({
       setToken :token,
-      _id : getAdmin?._id
+      // _id : getAdmin?._id
     })
 
     await getAdmin?.SetAttendance?.push(new mongoose.Types.ObjectId(createToken?._id))
@@ -45,11 +45,13 @@ export const createAttendance = async(req:Request , res:Response)=>{
 //clock in time
 export const createClockIn = async (req: Request, res: Response) => {
   try {
-    const { date, clockIn, message, time , token } = req.body;
+    const { date, clockIn, message, time , setToken } = req.body;
 
     const getStaff = await staffAuth.findById(req.params.staffId);
 
-    const getAdminAttendanceToken = await adminAttendanceModel.findById(req.params.timeId)
+    const getAdminAttendanceToken = await adminAttendanceModel.findOne(
+      {setToken}
+    )
 
     const getDate = new Date().toLocaleDateString();
 
@@ -58,14 +60,14 @@ export const createClockIn = async (req: Request, res: Response) => {
     const customMessage = `you clocked in at ${getTime} on ${getDate} , make sure to clock out at the right time`;
 
     if(getStaff){
-      if(getAdminAttendanceToken?.setToken === token ){
+      if(getAdminAttendanceToken?.setToken === setToken ){
         const clockInTime = await AttendanceModel.create({
           date: getDate,
           clockIn,
           clockOut: false,
           message: customMessage,
           time: getTime,
-          token
+          token :setToken,
         });
   
         await getStaff?.Attendance?.push(
@@ -101,28 +103,28 @@ export const createClockIn = async (req: Request, res: Response) => {
 //clock Out time
 export const createClockOut = async (req: Request, res: Response) => {
   try {
-    const { date, clockOut, message, time , token } = req.body;
+    const { date, clockOut, message, time , setToken } = req.body;
 
     const getDate = new Date().toLocaleDateString();
 
     const getTime = new Date().toLocaleTimeString();
 
     
-    const getAdminAttendanceToken = await adminAttendanceModel.findById(req.params.timeId)
+    const getAdminAttendanceToken = await adminAttendanceModel.findOne({setToken})
 
     const customMessage = `you clocked out at ${getTime} on ${getDate}`;
 
     const getStaff = await staffAuth.findById(req.params.staffId);
 
     if (getStaff) {
-      if(getAdminAttendanceToken?.setToken === token ){
+      if(getAdminAttendanceToken?.setToken === setToken ){
         const clockOutTime = await AttendanceModel.create({
           date: getDate,
           clockOut ,
           clockIn: false,
           message: customMessage,
           time: getTime,
-          token
+          token :setToken
         });
   
         await getStaff?.Attendance?.push(
