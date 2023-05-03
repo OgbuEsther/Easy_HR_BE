@@ -11,10 +11,13 @@ export const createLeave = async (req: Request, res: Response) => {
   try {
     const getAdmin = await adminAuth.findById(req.params.adminId);
 
-    const { title, days } = req.body;
 
+   
+
+    const { title, days } = req.body;
+    const getLeave = await adminLeaveModel.findOne({title})
     if (getAdmin) {
-      if (title) {
+      if (getLeave?.title === title) {
         return res.status(400).json({
           message:
             "this is a bad request , leave already exists , no need of creating two leaves with the same name",
