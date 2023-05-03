@@ -24,8 +24,9 @@ const createLeave = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
         const { title, days } = req.body;
+        const getLeave = yield adminLeave_1.default.findOne({ title });
         if (getAdmin) {
-            if (title) {
+            if ((getLeave === null || getLeave === void 0 ? void 0 : getLeave.title) === title) {
                 return res.status(400).json({
                     message: "this is a bad request , leave already exists , no need of creating two leaves with the same name",
                 });
