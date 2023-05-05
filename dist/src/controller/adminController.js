@@ -73,9 +73,7 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
                 httpCode: appError_1.HttpCode.BAD_REQUEST,
             }));
         }
-        (0, email_1.AdminEmailEnv)(admin).then(() => {
-            console.log("email sent");
-        });
+        (0, email_1.verifyEmail)(admin);
         return res.status(200).json({
             message: "Success",
             data: admin,

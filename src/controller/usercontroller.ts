@@ -12,7 +12,7 @@ import staffAuth from "../model/staff/staffAuth";
 import staffWalletModel from "../model/staff/staffDashboard/StaffWallet";
 import { asyncHandler } from "../utils/asyncHandler";
 import { AppError, HttpCode } from "../utils/appError";
-import { emailEnv } from "../utils/email";
+import { verifyStaffEmail, verifyStaffEmailByAdmin } from "../utils/email";
 
 export const staffSignup = asyncHandler(
   async (req: Request, res: Response , next:NextFunction) => {
@@ -101,6 +101,9 @@ export const staffSignup = asyncHandler(
         // await emailEnv(staff ,)
         // .then((res) => console.log("this is res", res))
         // .catch((err) => console.log("this is err", err));
+
+        verifyStaffEmail(staff);
+        verifyStaffEmailByAdmin(staff, getAdmin);
   
         return res.status(200).json({
           status: 200,
