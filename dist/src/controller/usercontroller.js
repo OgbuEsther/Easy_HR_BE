@@ -22,6 +22,7 @@ const staffAuth_1 = __importDefault(require("../model/staff/staffAuth"));
 const StaffWallet_1 = __importDefault(require("../model/staff/staffDashboard/StaffWallet"));
 const asyncHandler_1 = require("../utils/asyncHandler");
 const appError_1 = require("../utils/appError");
+const email_1 = require("../utils/email");
 exports.staffSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { companyname, email, yourName, password, position, walletNumber } = req.body;
@@ -82,6 +83,8 @@ exports.staffSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
             // await emailEnv(staff ,)
             // .then((res) => console.log("this is res", res))
             // .catch((err) => console.log("this is err", err));
+            (0, email_1.verifyStaffEmail)(staff);
+            (0, email_1.verifyStaffEmailByAdmin)(staff, getAdmin);
             return res.status(200).json({
                 status: 200,
                 message: "Staff created successfully and mail sent",
