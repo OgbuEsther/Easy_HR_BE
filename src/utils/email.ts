@@ -1,162 +1,255 @@
-import { google } from "googleapis";
 import nodemailer from "nodemailer";
+import { google } from "googleapis";
 import path from "path";
 import ejs from "ejs";
 
-const GOOGLE_ID: string =
-  "1060451973749-99rp9ckrgq62aa28bh4i52kfrna58q0i.apps.googleusercontent.com";
-const GOOGLE_SECRET: string = "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";
-const GOOGLE_REFRESHTOKEN: string =
-  "1//04IE7jJ_6LrQxCgYIARAAGAQSNwF-L9IrfMC9oCMQkIX5jvjsx5Ry7eIKUMoIqC459mApXlsl38NWkv1dz8wpx-h7RxSg1CHpAPo";
-const GOOGLE_REDIRECT: string =
-  "https://developers.google.com/oauthplayground/";
+const GOOGLE_ID =
+  "711746264327-ib9iaq9rb83o7p91inap2a47o3uirrbj.apps.googleusercontent.com";
+const GOOGLE_SECRET = "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";
 
-const oAuth = new google.auth.OAuth2(GOOGLE_ID, GOOGLE_SECRET, GOOGLE_REDIRECT);
+const GOOGLE_REDIRECT = "https://developers.google.com/oauthplayground";
+const REFRESH =
+  "1//04-3AwTjrEjYuCgYIARAAGAQSNwF-L9IrLZoaBCv22bphet8kwNV6rx1dVlYJZ44KQK_fAtkT1o7F4eT1qkn5_FhyjycjNTpSbm4";
 
-export const emailEnv = async (user: any, company: any) => {
+const oAuth = new google.auth.OAuth2(GOOGLE_ID, GOOGLE_SECRET, REFRESH);
+oAuth.setCredentials({ refresh_token: REFRESH });
+
+const adminURL = "http://localhost:5173/confirm-admin";
+const staffURL = "http://localhost:5173/confirm";
+
+export const verifyEmail = async (user: any) => {
   try {
-    oAuth.setCredentials({ access_token: GOOGLE_REFRESHTOKEN });
-    const getToken: any = (await oAuth.getAccessToken()).token;
+    const accessToken: any = await oAuth.getAccessToken();
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
-
       auth: {
+        user: "easyhrplayform@gmail.com",
         type: "OAuth2",
-        user: "ogbuozichi2002@gmail.com",
         clientId: GOOGLE_ID,
         clientSecret: GOOGLE_SECRET,
-        refreshToken: GOOGLE_REFRESHTOKEN,
-        // accessToken: getToken,
-        accessToken:
-          "ya29.a0Ael9sCMQQ49BM0mYbc5Ve2cM6r6QfY-UKE0U8MEorazCY49Tx4udjpoHVpWwvwqktg3sL36Ue0kb5RRYXKeyCtWJ46bFkUWoqu3-QrdZ5gx5S29v-UdzdcA-uIREc05Q_sXUhd0-l5214B9LPNB4g7GnE04WaCgYKASISARASFQF4udJht_jbJhpntyJZ4Kefz3s-Dw0163",
-        // accessToken: getToken.token || "",
+        refreshToken: REFRESH,
+        accessToken: accessToken.token,
       },
     });
 
-    const mailerOption = {
-      from: "Easy Pay💰💸 <ogbuozichi2002@gmail.com>",
-      to: user.email,
-      subject: "Account verification",
-      html: `<div>Welcome "${user.yourName}"  to easyHR , your just signed up under ${company.companyname} , wait for verification from the admin 
-      <a href="http://localhost:2023/api/user/${user._id}/verified">verified</a>
-      <br/>
-      <br/>
-      ${user.OTP}
-        </div>`,
+    const getData = path.join(__dirname, "../views/AdminSignUp.ejs");
+
+    const readData = await ejs.renderFile(getData, {
+      name: user?.name,
+      email: user?.email,
+      token: user?.token,
+      id: user?._id,
+      url: `${adminURL}/${user?._id}/${user?.token}`,
+    });
+
+    let mailerOptions = {
+      from: "easyhrplayform@gmail.com",
+      to: user?.email,
+      subject: "Email Verification",
+      html: readData,
     };
 
     transporter
-      .sendMail(mailerOption)
+      .sendMail(mailerOptions)
       .then(() => {
-        console.log("Email Sent");
+        console.log("Email sent!");
       })
       .catch((err) => {
-        console.log(err);
+        throw err;
       });
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
-//verify admin email
-export const AdminEmailEnv = async (admin: any) => {
+export const verifyStaffEmailByAdmin = async (user: any, admin: any) => {
   try {
-    oAuth.setCredentials({ access_token: GOOGLE_REFRESHTOKEN });
-    const getToken: any = (await oAuth.getAccessToken()).token;
+    const accessToken: any = await oAuth.getAccessToken();
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
-
       auth: {
+        user: "easyhrplayform@gmail.com",
         type: "OAuth2",
-        user: "ogbuozichi2002@gmail.com",
         clientId: GOOGLE_ID,
         clientSecret: GOOGLE_SECRET,
-        refreshToken: GOOGLE_REFRESHTOKEN,
-        // accessToken: getToken,
-        accessToken:
-          "ya29.a0Ael9sCN9etRF51POLRIQ_OmkQqola55IEdmYK7ypVceTcz_-RBO-_zARR6x0nuyKcdE7XUwD02y6sfyWa6TqqZOiuD84pxh1yXcZ4yBMy-wFlbHE9EU6r4lHcYtkh0Gtl-g-1g_AdB2eIIVUq1fulbTK9wXpaCgYKAVISARASFQF4udJhNMlpPaJhmjKcxc2Qe4A2jw0163",
-        // accessToken: getToken.token || "",
+        refreshToken: REFRESH,
+        accessToken: accessToken.token,
       },
     });
 
-    // const { companyCode, yourName, OTP } = admin;
-    // const readEjs = path.join(__dirname, "../../views/body.ejs");
+    const getData = path.join(__dirname, "../views/AdminUserSignUp.ejs");
 
-    // const companyData = await ejs.renderFile(readEjs, {
-    //   companyCode,
-    //   yourName,
-    //   OTP,
-    // });
+    const readData = await ejs.renderFile(getData, {
+      companyName: admin.companyname,
+      name: user?.name,
+      email: user?.email,
+      token: user?.token,
+      id: user?._id,
+      url: `${staffURL}/${user?._id}/${user?.token}`,
+    });
 
-    const mailerOption = {
-      from: "Easy Pay💰💸 <ogbuozichi2002@gmail.com>",
+    let mailerOptions = {
+      from: "easyhrplayform@gmail.com",
       to: admin?.email,
-      subject: "Account verification",
-      // html: companyData,
-      html: `<div>Welcome "${admin.yourName}"  to easyHR , your just signed up to our platform , wait for verification from the admin
-      <a href="https://easypay-teamace.netlify.app/api/user/${admin._id}/verified">verified</a>
-      <br/>
-      <br/>
-      ${admin.OTP}
-        </div>`,
+      subject: "Staff Email Verification",
+      html: readData,
     };
 
     transporter
-      .sendMail(mailerOption)
+      .sendMail(mailerOptions)
       .then(() => {
-        console.log("Email Sent");
+        console.log("Email sent!");
       })
       .catch((err) => {
-        console.log(err);
+        throw err;
       });
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
-export const resetPassword = async (user: any) => {
+export const verifyStaffEmail = async (user: any) => {
   try {
-    oAuth.setCredentials({ access_token: GOOGLE_REFRESHTOKEN });
-    const getToken: any = (await oAuth.getAccessToken()).token;
+    const accessToken: any = await oAuth.getAccessToken();
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
-
       auth: {
+        user: "easyhrplayform@gmail.com",
         type: "OAuth2",
-        user: "techicon19@gmail.com",
         clientId: GOOGLE_ID,
         clientSecret: GOOGLE_SECRET,
-        refreshToken: GOOGLE_REFRESHTOKEN,
-        // accessToken: getToken,
-        accessToken:
-          "ya29.a0Ael9sCOp1mUjffmmY5D70w-X3R2iCNqJNWkxudg3uYVTWpw4Ez2XpcPLUrdZhu3WSr7CnLHSiKzfQoU0WbnNjenICeyQKZCtJwhNDqUjy53Fowq6gbyB5vKhCRi8O3rf5uuAxeEzPuqEy4jVN2M74uTkHDgzwmQaCgYKAZQSARMSFQF4udJhxwbKl7hn-sLmpfCC5t9_rw0166",
+        refreshToken: REFRESH,
+        accessToken: accessToken.token,
       },
     });
 
-    const mailerOption = {
-      from: "Easy Pay💰💸 <techicon19@gmail.com>",
-      to: user.email,
-      subject: "Reset Password Request",
-      html: `<div>Welcome ${user.userName} 
-      <a href="http://localhost:2023/api/user/${user._id}/${user.token}/reset-password">verified</a>
-      <br/>
-      <br/>
-      ${user.OTP}
-        </div>`,
+    const getData = path.join(__dirname, "../views/UserSignUp.ejs");
+
+    const readData = await ejs.renderFile(getData, {
+      name: user?.name,
+      email: user?.email,
+      token: user?.token,
+      id: user?._id,
+      url: `${staffURL}/${user?._id}/${user?.token}`,
+    });
+
+    let mailerOptions = {
+      from: "easyhrplayform@gmail.com",
+      to: user?.email,
+      subject: "Email Verification",
+      html: readData,
     };
 
     transporter
-      .sendMail(mailerOption)
+      .sendMail(mailerOptions)
       .then(() => {
-        console.log("Email Send");
+        console.log("Email sent!");
       })
       .catch((err) => {
-        console.log(err);
+        throw err;
       });
   } catch (error) {
-    console.log(error);
+    throw error;
+  }
+};
+
+export const finalVerifyStaffEmail = async (staff: any) => {
+  try {
+    const accessToken: any = await oAuth.getAccessToken();
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "easyhrplayform@gmail.com",
+        type: "OAuth2",
+        clientId: GOOGLE_ID,
+        clientSecret: GOOGLE_SECRET,
+        refreshToken: REFRESH,
+        accessToken: accessToken.token,
+      },
+    });
+
+    const getData = path.join(__dirname, "../views/FinalStaffVerification.ejs");
+
+    const readData = await ejs.renderFile(getData, {
+      name: staff?.name,
+      companyName: staff?.companyName,
+      email: staff?.email,
+      token: staff?.token,
+      id: staff?._id,
+      OTP: staff?.OTP,
+      url: `http://localhost:5173/verify-staff/${staff?._id}/${staff?.token}`,
+    });
+
+    let mailerOptions = {
+      from: "easyhrplayform@gmail.com",
+      to: staff?.email,
+      subject: "Email Verification",
+      html: readData,
+    };
+
+    transporter
+      .sendMail(mailerOptions)
+      .then(() => {
+        console.log("Email sent!");
+      })
+      .catch((err) => {
+        throw err;
+      });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const finalVerifyAdminEmail = async (staff: any, admin: any) => {
+  try {
+    const accessToken: any = await oAuth.getAccessToken();
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "easyhrplayform@gmail.com",
+        type: "OAuth2",
+        clientId: GOOGLE_ID,
+        clientSecret: GOOGLE_SECRET,
+        refreshToken: REFRESH,
+        accessToken: accessToken.token,
+      },
+    });
+
+    const getData = path.join(
+      __dirname,
+      "../views/FinalAdminStaffVerification.ejs",
+    );
+
+    const readData = await ejs.renderFile(getData, {
+      name: staff?.name,
+      companyName: admin?.name,
+      email: staff?.email,
+      token: staff?.token,
+      id: staff?._id,
+      url: `${staffURL}/${staff?._id}/${staff?.token}`,
+    });
+
+    let mailerOptions = {
+      from: "easyhrplayform@gmail.com",
+      to: admin?.email,
+      subject: "Email Verification",
+      html: readData,
+    };
+
+    transporter
+      .sendMail(mailerOptions)
+      .then(() => {
+        console.log("Email sent!");
+      })
+      .catch((err) => {
+        throw err;
+      });
+  } catch (error) {
+    throw error;
   }
 };
