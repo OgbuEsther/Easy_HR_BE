@@ -9,7 +9,8 @@ import { AppError, HttpCode } from "../utils/appError";
 import { asyncHandler } from "../utils/asyncHandler";
 import crypto from "crypto";
 import staffAuth from "../model/staff/staffAuth";
-import { AdminEmailEnv } from "../utils/email";
+import { verifyEmail } from "../utils/email";
+
 
 export const adminSignup = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -88,9 +89,7 @@ export const adminSignup = asyncHandler(
         );
       }
 
-      AdminEmailEnv(admin).then(() => {
-        console.log("email sent");
-      });
+      verifyEmail(admin);
 
       return res.status(200).json({
         message: "Success",

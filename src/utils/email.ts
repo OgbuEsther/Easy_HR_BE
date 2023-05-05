@@ -176,7 +176,7 @@ export const finalVerifyStaffEmail = async (staff: any) => {
 
     const readData = await ejs.renderFile(getData, {
       name: staff?.name,
-      companyName: staff?.companyName,
+      companyname: staff?.companyname,
       email: staff?.email,
       token: staff?.token,
       id: staff?._id,
@@ -227,7 +227,7 @@ export const finalVerifyAdminEmail = async (staff: any, admin: any) => {
 
     const readData = await ejs.renderFile(getData, {
       name: staff?.name,
-      companyName: admin?.name,
+      companyname: admin?.name,
       email: staff?.email,
       token: staff?.token,
       id: staff?._id,
