@@ -189,66 +189,47 @@ export const getOneAdmin = async (req: Request, res: Response) => {
 
 //verify account via mail
 
-// export const verifyUser = async (req: Request, res: Response) => {
-//   try {
-//     const { email, password, companyname , OTP } = req.body;
+export const verifyUser = async (req: Request, res: Response) => {
+  try {
 
-//     const admin = await adminAuth.findById(req.params.adminId);
 
-//     if (admin?.OTP === OTP) {
-//       if (admin?.token !== "") {
-//         if(admin?.companyname! !== companyname){
-//           return res.status(400).json({
-//             message : "please enter the valid company name"
-//           });
+    const admin = await adminAuth.findById(req.params.adminId);
 
-//         }else{
-//           const check = await bcrypt.compare(password, admin?.password!);
-//           if (check) {
+    if (admin?.OTP !== "") {
+      if (admin?.token !== "") {
+  
+          
 
-//             await adminAuth.findByIdAndUpdate(
-//               admin?._id,
-//               {
-//                 token: "",
-//                 verified: true,
-//               },
-//               { new: true }
-//             );
+            await adminAuth.findByIdAndUpdate(
+              admin?._id,
+              {
+                token: "",
+                verified: true,
+              },
+              { new: true }
+            );
 
-//             return res.status(201).json({
-//               message: "Account has been verified, you can now signin",
-//               //   data: user,
-//             });
-//             res.status(201).json({
-//               message: "welcome",
-//               data: admin,
-//             });
-
-//           } else {
-//             console.log("bad");
-//             return res.status(400).json({
-//               message: "verification  failed",
-//             });
-//           }
-//         }
-
-//       } else {
-//         return res.status(400).json({
-//           message: "you have inputed a wrong otp",
-//         });
-//       }
-//     } else {
-//       return res.status(400).json({
-//         message: "you didn't meet the set credentials",
-//       });
-//     }
-//   } catch (error) {
-//     return res.status(404).json({
-//       message: "error",
-//       data: error,
-//     });
-//   }
-// };
+            return res.status(201).json({
+              data: admin,
+            });
+  
+      } else {
+        return res.status(400).json({
+          message: "you have inputed a wrong otp",
+        });
+      }
+    } else {
+      return res.status(400).json({
+        message: "you didn't meet the set credentials",
+      });
+    }
+  } catch (error) {
+    return res.status(404).json({
+      message: "error",
+      data: error,
+    });
+  }
+};
 
 //make search
 

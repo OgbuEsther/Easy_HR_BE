@@ -8,4 +8,5 @@ adminAuthRoutes.post("/login", userValidation_1.loginValidation, adminController
 adminAuthRoutes.post("/register", userValidation_1.registerValidation, adminController_1.adminSignup);
 adminAuthRoutes.get("/", adminController_1.getAllAdmin);
 adminAuthRoutes.get("/:adminId", adminController_1.getOneAdmin);
+adminAuthRoutes.get("/:adminId/verify", adminController_1.verifyUser);
 exports.default = adminAuthRoutes;
