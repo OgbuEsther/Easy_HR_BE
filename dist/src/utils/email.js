@@ -45,7 +45,7 @@ const verifyEmail = (user) => __awaiter(void 0, void 0, void 0, function* () {
             email: user === null || user === void 0 ? void 0 : user.email,
             token: user === null || user === void 0 ? void 0 : user.token,
             id: user === null || user === void 0 ? void 0 : user._id,
-            url: `${adminURL}/${user === null || user === void 0 ? void 0 : user._id}/verify`,
+            url: `${adminURL}/api/admin/${user === null || user === void 0 ? void 0 : user._id}/verify`,
         });
         let mailerOptions = {
             from: "easyhrplayform@gmail.com",
@@ -88,7 +88,7 @@ const verifyStaffEmailByAdmin = (user, admin) => __awaiter(void 0, void 0, void 
             email: user === null || user === void 0 ? void 0 : user.email,
             token: user === null || user === void 0 ? void 0 : user.token,
             id: user === null || user === void 0 ? void 0 : user._id,
-            url: `${staffURL}/${user === null || user === void 0 ? void 0 : user._id}/${user === null || user === void 0 ? void 0 : user.token}/verification`,
+            url: `${staffURL}/api/staff${user === null || user === void 0 ? void 0 : user._id}/verification`,
         });
         let mailerOptions = {
             from: "easyhrplayform@gmail.com",
