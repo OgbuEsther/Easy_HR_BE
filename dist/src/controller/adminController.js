@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeQuery = exports.getOneAdmin = exports.getAllAdmin = exports.adminSignin = exports.adminSignup = void 0;
+exports.makeQuery = exports.verifyUser = exports.getOneAdmin = exports.getAllAdmin = exports.adminSignin = exports.adminSignup = void 0;
 const adminAuth_1 = __importDefault(require("../model/admin/adminAuth"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -170,59 +170,39 @@ const getOneAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getOneAdmin = getOneAdmin;
 //verify account via mail
-// export const verifyUser = async (req: Request, res: Response) => {
-//   try {
-//     const { email, password, companyname , OTP } = req.body;
-//     const admin = await adminAuth.findById(req.params.adminId);
-//     if (admin?.OTP === OTP) {
-//       if (admin?.token !== "") {
-//         if(admin?.companyname! !== companyname){
-//           return res.status(400).json({
-//             message : "please enter the valid company name"
-//           });
-//         }else{
-//           const check = await bcrypt.compare(password, admin?.password!);
-//           if (check) {
-//             await adminAuth.findByIdAndUpdate(
-//               admin?._id,
-//               {
-//                 token: "",
-//                 verified: true,
-//               },
-//               { new: true }
-//             );
-//             return res.status(201).json({
-//               message: "Account has been verified, you can now signin",
-//               //   data: user,
-//             });
-//             res.status(201).json({
-//               message: "welcome",
-//               data: admin,
-//             });
-//           } else {
-//             console.log("bad");
-//             return res.status(400).json({
-//               message: "verification  failed",
-//             });
-//           }
-//         }
-//       } else {
-//         return res.status(400).json({
-//           message: "you have inputed a wrong otp",
-//         });
-//       }
-//     } else {
-//       return res.status(400).json({
-//         message: "you didn't meet the set credentials",
-//       });
-//     }
-//   } catch (error) {
-//     return res.status(404).json({
-//       message: "error",
-//       data: error,
-//     });
-//   }
-// };
+const verifyUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const admin = yield adminAuth_1.default.findById(req.params.adminId);
+        if ((admin === null || admin === void 0 ? void 0 : admin.OTP) !== "") {
+            if ((admin === null || admin === void 0 ? void 0 : admin.token) !== "") {
+                yield adminAuth_1.default.findByIdAndUpdate(admin === null || admin === void 0 ? void 0 : admin._id, {
+                    token: "",
+                    verified: true,
+                }, { new: true });
+                return res.status(201).json({
+                    data: admin,
+                });
+            }
+            else {
+                return res.status(400).json({
+                    message: "you have inputed a wrong otp",
+                });
+            }
+        }
+        else {
+            return res.status(400).json({
+                message: "you didn't meet the set credentials",
+            });
+        }
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: "error",
+            data: error,
+        });
+    }
+});
+exports.verifyUser = verifyUser;
 //make search
 const makeQuery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

@@ -45,7 +45,7 @@ const verifyEmail = (user) => __awaiter(void 0, void 0, void 0, function* () {
             email: user === null || user === void 0 ? void 0 : user.email,
             token: user === null || user === void 0 ? void 0 : user.token,
             id: user === null || user === void 0 ? void 0 : user._id,
-            url: `${adminURL}/verify`,
+            url: `${adminURL}/${user === null || user === void 0 ? void 0 : user._id}/verify`,
         });
         let mailerOptions = {
             from: "easyhrplayform@gmail.com",
