@@ -174,6 +174,7 @@ export const staffSignin = asyncHandler(
   }
 )
 
+
 //get all admins
 export const getAllStaff = async (req: Request, res: Response) => {
   try {
@@ -294,7 +295,7 @@ export const verifyUser = async (req: Request, res: Response) => {
   try {
     const { email, password, companyname , OTP } = req.body;
 
-    const staff = await staffAuth.findById(req.params.adminId);
+    const staff = await staffAuth.findById(req.params.staffId);
 
     if (staff?.OTP === OTP) {
       if (staff?.token !== "") {

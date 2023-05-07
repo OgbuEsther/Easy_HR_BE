@@ -245,7 +245,7 @@ exports.deactivateStaff = deactivateStaff;
 const verifyUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password, companyname, OTP } = req.body;
-        const staff = yield staffAuth_1.default.findById(req.params.adminId);
+        const staff = yield staffAuth_1.default.findById(req.params.staffId);
         if ((staff === null || staff === void 0 ? void 0 : staff.OTP) === OTP) {
             if ((staff === null || staff === void 0 ? void 0 : staff.token) !== "") {
                 if ((staff === null || staff === void 0 ? void 0 : staff.companyname) !== companyname) {

@@ -14,8 +14,8 @@ const REFRESH =
 const oAuth = new google.auth.OAuth2(GOOGLE_ID, GOOGLE_SECRET, REFRESH);
 oAuth.setCredentials({ refresh_token: REFRESH });
 
-const adminURL = "https://easy-hr.netlify.app/sign-up-admin";
-const staffURL = "https://easy-hr.netlify.app/verification";
+const adminURL = "https://easy-hr.netlify.app";
+const staffURL = "https://easy-hr.netlify.app";
 
 
 export const verifyEmail = async (user: any) => {
@@ -41,7 +41,7 @@ export const verifyEmail = async (user: any) => {
       email: user?.email,
       token: user?.token,
       id: user?._id,
-      url: `${adminURL}/${user?._id}/${user?.token}`,
+      url: `${adminURL}/${user?.id}/${user?.token}/verify`,
     });
 
     let mailerOptions = {
@@ -88,7 +88,7 @@ export const verifyStaffEmailByAdmin = async (user: any, admin: any) => {
       email: user?.email,
       token: user?.token,
       id: user?._id,
-      url: `${staffURL}/${user?._id}/${user?.token}`,
+      url: `${staffURL}/${user?._id}/${user?.token}/verification`,
     });
 
     let mailerOptions = {
@@ -134,7 +134,7 @@ export const verifyStaffEmail = async (user: any) => {
       email: user?.email,
       token: user?.token,
       id: user?._id,
-      url: `${staffURL}/${user?._id}/${user?.token}`,
+      url: `${staffURL}/${user?._id}/${user?.token}/verify`,
     });
 
     let mailerOptions = {
