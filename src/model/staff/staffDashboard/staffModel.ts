@@ -48,3 +48,7 @@ export interface Attendance {
   token : string
 }
 
+
+export interface staffPerformanceProps {
+  
+}
