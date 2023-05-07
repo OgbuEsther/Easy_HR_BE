@@ -41,7 +41,7 @@ export const verifyEmail = async (user: any) => {
       email: user?.email,
       token: user?.token,
       id: user?._id,
-      url: `${adminURL}/${user?.id}/sign-in-admin`,
+      url: `${adminURL}/verify`,
     });
 
     let mailerOptions = {
