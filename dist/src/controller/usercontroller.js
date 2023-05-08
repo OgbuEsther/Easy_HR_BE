@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyUser = exports.deactivateStaff = exports.updateStaff = exports.getOneStaff = exports.getAllStaff = exports.staffSignin = exports.staffSignup = void 0;
+exports.VerifiedStaffFinally = exports.verifiedStaff = exports.verifyUser = exports.deactivateStaff = exports.updateStaff = exports.getOneStaff = exports.getAllStaff = exports.staffSignin = exports.staffSignup = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const crypto_1 = __importDefault(require("crypto"));
@@ -296,6 +296,7 @@ exports.verifyUser = verifyUser;
 const verifiedStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield staffAuth_1.default.findById(req.params.staffId);
+        console.log(`this is user OTP ${user === null || user === void 0 ? void 0 : user.OTP}`);
         const company = yield adminAuth_1.default.findOne({ name: user === null || user === void 0 ? void 0 : user.companyname });
         const codedNumb = crypto_1.default.randomBytes(2).toString("hex");
         if (user) {
@@ -327,6 +328,7 @@ const verifiedStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
 });
+exports.verifiedStaff = verifiedStaff;
 const VerifiedStaffFinally = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -351,7 +353,7 @@ const VerifiedStaffFinally = (req, res) => __awaiter(void 0, void 0, void 0, fun
         }
         else if (response === "No") {
             if (getUser) {
-                const staff = yield staffAuth_1.default.findById(req.params.id);
+                const staff = yield staffAuth_1.default.findById(req.params.staffId);
                 const name = staff === null || staff === void 0 ? void 0 : staff.companyname;
                 const company = yield adminAuth_1.default.findOne({ name });
                 (_a = company === null || company === void 0 ? void 0 : company.viewUser) === null || _a === void 0 ? void 0 : _a.pull(new mongoose_1.default.Types.ObjectId(staff === null || staff === void 0 ? void 0 : staff._id));
@@ -369,6 +371,7 @@ const VerifiedStaffFinally = (req, res) => __awaiter(void 0, void 0, void 0, fun
         return;
     }
 });
+exports.VerifiedStaffFinally = VerifiedStaffFinally;
 /**const staffMonthlySalary = [
   {
     name: "Peter",

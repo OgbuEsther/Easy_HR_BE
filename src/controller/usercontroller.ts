@@ -355,6 +355,7 @@ export const verifyUser = async (req: Request, res: Response) => {
 export const verifiedStaff = async (req:Request, res:Response) => {
   try {
     const user = await staffAuth.findById(req.params.staffId);
+    console.log(`this is user OTP ${user?.OTP}`)
 
    
     const company = await adminAuth.findOne({ name: user?.companyname! });
@@ -423,7 +424,7 @@ export const VerifiedStaffFinally = async (req:Request, res:Response) => {
       }
     } else if (response === "No") {
       if (getUser) {
-        const staff = await staffAuth.findById(req.params.id);
+        const staff = await staffAuth.findById(req.params.staffId);
 
         const name = staff?.companyname;
         const company = await adminAuth.findOne({ name });

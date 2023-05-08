@@ -11,6 +11,7 @@ staffAuthRoutes.get("/allstaff", usercontroller_1.getAllStaff);
 staffAuthRoutes.get("/staff/:staffId", usercontroller_1.getOneStaff);
 staffAuthRoutes.patch("/updateStaff/:staffId", usercontroller_1.updateStaff);
 staffAuthRoutes.delete("/deactivateStaff/:staffId/:adminId", usercontroller_1.deactivateStaff);
-staffAuthRoutes.post("/:staffId/verification", usercontroller_1.verifyUser);
+staffAuthRoutes.get("/:staffId/verification", usercontroller_1.verifiedStaff);
+staffAuthRoutes.post("/:staffId/verifystaff", usercontroller_1.VerifiedStaffFinally);
 staffAuthRoutes.get("/search", adminController_1.makeQuery);
 exports.default = staffAuthRoutes;
