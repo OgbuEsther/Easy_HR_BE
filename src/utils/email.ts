@@ -37,7 +37,7 @@ export const verifyEmail = async (user: any) => {
     const getData = path.join(__dirname, "../views/AdminSignUp.ejs");
 
     const readData = await ejs.renderFile(getData, {
-      name: user?.name,
+      name: user?.YourName,
       email: user?.email,
       token: user?.token,
       id: user?._id,
@@ -84,7 +84,7 @@ export const verifyStaffEmailByAdmin = async (user: any, admin: any) => {
 
     const readData = await ejs.renderFile(getData, {
       companyName: admin.companyname,
-      name: user?.name,
+      name: user?.YourName,
       email: user?.email,
       token: user?.token,
       id: user?._id,
@@ -130,7 +130,7 @@ export const verifyStaffEmail = async (user: any) => {
     const getData = path.join(__dirname, "../views/UserSignUp.ejs");
 
     const readData = await ejs.renderFile(getData, {
-      name: user?.name,
+      name: user?.YourName,
       email: user?.email,
       token: user?.token,
       id: user?._id,
@@ -176,7 +176,7 @@ export const finalVerifyStaffEmail = async (staff: any) => {
     const getData = path.join(__dirname, "../views/FinalStaffVerification.ejs");
 
     const readData = await ejs.renderFile(getData, {
-      name: staff?.name,
+      name: staff?.YourName,
       companyname: staff?.companyname,
       email: staff?.email,
       token: staff?.token,
@@ -227,8 +227,8 @@ export const finalVerifyAdminEmail = async (staff: any, admin: any) => {
     );
 
     const readData = await ejs.renderFile(getData, {
-      name: staff?.name,
-      companyname: admin?.name,
+      name: staff?.YourName,
+      companyname: admin?.YourName,
       email: staff?.email,
       token: staff?.token,
       id: staff?._id,
