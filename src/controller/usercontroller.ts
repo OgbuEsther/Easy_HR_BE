@@ -352,7 +352,7 @@ export const verifyUser = async (req: Request, res: Response) => {
 };
 
 
-const verifiedStaff = async (req:Request, res:Response) => {
+export const verifiedStaff = async (req:Request, res:Response) => {
   try {
     const user = await staffAuth.findById(req.params.staffId);
 
@@ -393,7 +393,7 @@ const verifiedStaff = async (req:Request, res:Response) => {
 };
 
 
-const VerifiedStaffFinally = async (req:Request, res:Response) => {
+export const VerifiedStaffFinally = async (req:Request, res:Response) => {
   try {
     const { response } = req.body;
 

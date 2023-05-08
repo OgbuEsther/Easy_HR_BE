@@ -293,6 +293,82 @@ const verifyUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.verifyUser = verifyUser;
+const verifiedStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield staffAuth_1.default.findById(req.params.staffId);
+        const company = yield adminAuth_1.default.findOne({ name: user === null || user === void 0 ? void 0 : user.companyname });
+        const codedNumb = crypto_1.default.randomBytes(2).toString("hex");
+        if (user) {
+            if (user.token !== "") {
+                const userData = yield staffAuth_1.default.findByIdAndUpdate(user._id, {
+                    staffToken: codedNumb,
+                }, { new: true });
+                (0, email_1.finalVerifyStaffEmail)(user);
+                return res.status(200).json({
+                    message: `Admin has recieved your request`,
+                    // data: userData,
+                });
+            }
+            else {
+                return res.status(404).json({
+                    message: `Error`,
+                });
+            }
+        }
+        else {
+            return res.json({
+                message: `Error getting User`,
+            });
+        }
+    }
+    catch (err) {
+        return res.status(404).json({
+            message: err.message,
+        });
+    }
+});
+const VerifiedStaffFinally = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const { response } = req.body;
+        const getUser = yield staffAuth_1.default.findById(req.params.staffId);
+        const company = yield adminAuth_1.default.findOne({ name: getUser === null || getUser === void 0 ? void 0 : getUser.companyname });
+        if (response === "Yes") {
+            if (getUser) {
+                yield staffAuth_1.default.findByIdAndUpdate(req.params.id, {
+                    token: "",
+                    verified: true,
+                }, { new: true });
+                (0, email_1.finalVerifyAdminEmail)(getUser, company);
+                res.status(201).json({ message: "Sent..." });
+                res.end();
+            }
+            else {
+                return res.status(404).json({
+                    message: "user doesn't exist",
+                });
+            }
+        }
+        else if (response === "No") {
+            if (getUser) {
+                const staff = yield staffAuth_1.default.findById(req.params.id);
+                const name = staff === null || staff === void 0 ? void 0 : staff.companyname;
+                const company = yield adminAuth_1.default.findOne({ name });
+                (_a = company === null || company === void 0 ? void 0 : company.viewUser) === null || _a === void 0 ? void 0 : _a.pull(new mongoose_1.default.Types.ObjectId(staff === null || staff === void 0 ? void 0 : staff._id));
+                company === null || company === void 0 ? void 0 : company.save();
+                yield staffAuth_1.default.findByIdAndDelete(req.params.id);
+                return res.status(201).json({ message: "staff has been deleted" });
+            }
+        }
+        else {
+            return res.json({ message: "You can't be accepted" });
+        }
+        res.end();
+    }
+    catch (err) {
+        return;
+    }
+});
 /**const staffMonthlySalary = [
   {
     name: "Peter",
