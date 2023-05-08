@@ -9,6 +9,9 @@ const StaffAuth = new mongoose.Schema<staffSignUp>(
     companyCode: {
       type: String,
     },
+    staffToken: {
+      type: String,
+    },
     yourName: {
       type: String,
       required: [true, "please enter your name"],
