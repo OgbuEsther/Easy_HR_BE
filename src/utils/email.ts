@@ -134,7 +134,7 @@ export const verifyStaffEmail = async (user: any) => {
       email: user?.email,
       token: user?.token,
       id: user?._id,
-      url: `${staffURL}/${user?._id}/${user?.token}/verify`,
+      url: `${staffURL}/${user?._id}/verifystaff`,
     });
 
     let mailerOptions = {
@@ -182,7 +182,7 @@ export const finalVerifyStaffEmail = async (staff: any) => {
       token: staff?.token,
       id: staff?._id,
       staffToken: staff?.staffToken,
-      url: `http://localhost:3000/verify/${staff?._id}/${staff?.token}`,
+      url: `http://localhost:3000/verify/${staff?._id}`,
     });
 
     let mailerOptions = {
@@ -232,7 +232,7 @@ export const finalVerifyAdminEmail = async (staff: any, admin: any) => {
       email: staff?.email,
       token: staff?.token,
       id: staff?._id,
-      url: `${staffURL}/${staff?._id}/${staff?.token}`,
+      url: `${staffURL}/${staff?._id}`,
     });
 
     let mailerOptions = {
