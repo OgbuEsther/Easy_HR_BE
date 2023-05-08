@@ -23,6 +23,7 @@ export interface adminSignUp extends mongoose.Document {
 
 export interface staffSignUp {
   yourName: string;
+  staffToken: string;
   email: string;
   password: string;
   plans:boolean;

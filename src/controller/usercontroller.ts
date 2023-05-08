@@ -12,7 +12,7 @@ import staffAuth from "../model/staff/staffAuth";
 import staffWalletModel from "../model/staff/staffDashboard/StaffWallet";
 import { asyncHandler } from "../utils/asyncHandler";
 import { AppError, HttpCode } from "../utils/appError";
-import { verifyStaffEmail, verifyStaffEmailByAdmin } from "../utils/email";
+import { finalVerifyAdminEmail, finalVerifyStaffEmail, verifyStaffEmail, verifyStaffEmailByAdmin } from "../utils/email";
 
 export const staffSignup = asyncHandler(
   async (req: Request, res: Response , next:NextFunction) => {
@@ -348,6 +348,99 @@ export const verifyUser = async (req: Request, res: Response) => {
       message: "error",
       data: error,
     });
+  }
+};
+
+
+const verifiedStaff = async (req:Request, res:Response) => {
+  try {
+    const user = await staffAuth.findById(req.params.staffId);
+
+   
+    const company = await adminAuth.findOne({ name: user?.companyname! });
+    const codedNumb = crypto.randomBytes(2).toString("hex");
+    if (user) {
+      if (user.token !== "") {
+        const userData = await staffAuth.findByIdAndUpdate(
+          user._id,
+          {
+            staffToken: codedNumb,
+          },
+          { new: true }
+        );
+
+        finalVerifyStaffEmail(user);
+
+        return res.status(200).json({
+          message: `Admin has recieved your request`,
+          // data: userData,
+        });
+      } else {
+        return res.status(404).json({
+          message: `Error`,
+        });
+      }
+    } else {
+      return res.json({
+        message: `Error getting User`,
+      });
+    }
+  } catch (err:any) {
+    return res.status(404).json({
+      message: err.message,
+    });
+  }
+};
+
+
+const VerifiedStaffFinally = async (req:Request, res:Response) => {
+  try {
+    const { response } = req.body;
+
+    const getUser = await staffAuth.findById(req.params.staffId);
+    const company = await adminAuth.findOne({ name: getUser?.companyname! });
+
+    if (response === "Yes") {
+      if (getUser) {
+        await staffAuth.findByIdAndUpdate(
+          req.params.id,
+          {
+            token: "",
+           
+            verified: true,
+          },
+          { new: true }
+        );
+
+        finalVerifyAdminEmail(getUser, company);
+
+        res.status(201).json({ message: "Sent..." });
+        res.end();
+      } else {
+        return res.status(404).json({
+          message: "user doesn't exist",
+        });
+      }
+    } else if (response === "No") {
+      if (getUser) {
+        const staff = await staffAuth.findById(req.params.id);
+
+        const name = staff?.companyname;
+        const company = await adminAuth.findOne({ name });
+
+        company?.viewUser?.pull(new mongoose.Types.ObjectId(staff?._id));
+        company?.save();
+
+        await staffAuth.findByIdAndDelete(req.params.id);
+        return res.status(201).json({ message: "staff has been deleted" });
+      }
+    } else {
+      return res.json({ message: "You can't be accepted" });
+    }
+
+    res.end();
+  } catch (err) {
+    return;
   }
 };
 
