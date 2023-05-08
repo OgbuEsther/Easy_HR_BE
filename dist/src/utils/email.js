@@ -173,7 +173,7 @@ const finalVerifyStaffEmail = (staff) => __awaiter(void 0, void 0, void 0, funct
             email: staff === null || staff === void 0 ? void 0 : staff.email,
             token: staff === null || staff === void 0 ? void 0 : staff.token,
             id: staff === null || staff === void 0 ? void 0 : staff._id,
-            OTP: staff === null || staff === void 0 ? void 0 : staff.OTP,
+            staffToken: staff === null || staff === void 0 ? void 0 : staff.staffToken,
             url: `http://localhost:3000/verify/${staff === null || staff === void 0 ? void 0 : staff._id}/${staff === null || staff === void 0 ? void 0 : staff.token}`,
         });
         let mailerOptions = {

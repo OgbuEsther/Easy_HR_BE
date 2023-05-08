@@ -56,6 +56,7 @@ exports.staffSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
             amount: 0,
             token,
             OTP,
+            staffToken: "",
         });
         if (!staff) {
             next(new appError_1.AppError({

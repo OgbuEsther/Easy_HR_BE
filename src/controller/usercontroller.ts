@@ -59,6 +59,7 @@ export const staffSignup = asyncHandler(
         amount: 0,
         token,
         OTP,
+        staffToken : "",
       });
 
       if (!staff) {
