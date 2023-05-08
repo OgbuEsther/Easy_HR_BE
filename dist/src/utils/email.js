@@ -130,7 +130,7 @@ const verifyStaffEmail = (user) => __awaiter(void 0, void 0, void 0, function* (
             email: user === null || user === void 0 ? void 0 : user.email,
             token: user === null || user === void 0 ? void 0 : user.token,
             id: user === null || user === void 0 ? void 0 : user._id,
-            url: `${staffURL}/${user === null || user === void 0 ? void 0 : user._id}/${user === null || user === void 0 ? void 0 : user.token}/verify`,
+            url: `${staffURL}/${user === null || user === void 0 ? void 0 : user._id}/verifystaff`,
         });
         let mailerOptions = {
             from: "easyhrplayform@gmail.com",
@@ -174,7 +174,7 @@ const finalVerifyStaffEmail = (staff) => __awaiter(void 0, void 0, void 0, funct
             token: staff === null || staff === void 0 ? void 0 : staff.token,
             id: staff === null || staff === void 0 ? void 0 : staff._id,
             staffToken: staff === null || staff === void 0 ? void 0 : staff.staffToken,
-            url: `http://localhost:3000/verify/${staff === null || staff === void 0 ? void 0 : staff._id}/${staff === null || staff === void 0 ? void 0 : staff.token}`,
+            url: `http://localhost:3000/verify/${staff === null || staff === void 0 ? void 0 : staff._id}`,
         });
         let mailerOptions = {
             from: "easyhrplayform@gmail.com",
@@ -217,7 +217,7 @@ const finalVerifyAdminEmail = (staff, admin) => __awaiter(void 0, void 0, void 0
             email: staff === null || staff === void 0 ? void 0 : staff.email,
             token: staff === null || staff === void 0 ? void 0 : staff.token,
             id: staff === null || staff === void 0 ? void 0 : staff._id,
-            url: `${staffURL}/${staff === null || staff === void 0 ? void 0 : staff._id}/${staff === null || staff === void 0 ? void 0 : staff.token}`,
+            url: `${staffURL}/${staff === null || staff === void 0 ? void 0 : staff._id}`,
         });
         let mailerOptions = {
             from: "easyhrplayform@gmail.com",
