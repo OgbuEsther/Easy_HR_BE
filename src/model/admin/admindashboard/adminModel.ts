@@ -37,6 +37,7 @@ export interface milestoneGenerator {
 export interface rateMe {
   adminScore : number;
   staffScore : number
+  date : string
 }
 
 // export interface PayRoll {

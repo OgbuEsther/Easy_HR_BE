@@ -9,6 +9,9 @@ const rateSchema = new mongoose.Schema<rateMe>({
     adminScore :{
         type : Number
     },
+    date : {
+type : String
+    },
     staffScore :{
         type :Number
     }

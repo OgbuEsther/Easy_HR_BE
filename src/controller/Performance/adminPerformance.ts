@@ -90,8 +90,27 @@ export const enterStaffScore = async(req:Request , res:Response) =>{
         const {staffScore} = req.body
         const createStaffScore = await rateModel.create({
             adminScore : 0,
-            staffScore
+            staffScore,
+            // date : Date.getDate()
         })
+
+        function getDaysInMonth(year:any, month:any) {
+            return new Date(year, month, 0).getDate();
+          }
+          
+          const date = new Date();
+          const currentYear = date.getFullYear();
+          const currentMonth = date.getMonth() + 1; // 👈️ months are 0-based
+          
+          // 👇️ Current Month
+          const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth);
+          console.log(daysInCurrentMonth)
+
+          const getCurrentDate = new Date().toLocaleDateString();
+
+          console.log(getCurrentDate)
+
+       
 
         return res.status(201).json({
             message : "entered score sucessfully",
