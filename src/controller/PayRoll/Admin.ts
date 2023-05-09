@@ -10,6 +10,7 @@ import payRollModel from "../../model/staff/StaffPayroll/StaffPayRoll";
 
 //admin transfer from wallet to staff wallet for staffs with no plans
 
+
 export const MakeTransfer = async (req: Request, res: Response) => {
   try {
     const { walletNumber, amount, grossPay, netPay, taxes, medicals, pension } =
