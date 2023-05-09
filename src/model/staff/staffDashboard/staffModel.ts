@@ -50,5 +50,5 @@ export interface Attendance {
 
 
 export interface staffPerformanceProps {
-  
+  ratings : number
 }

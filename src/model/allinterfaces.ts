@@ -20,6 +20,7 @@ export interface adminSignUp extends mongoose.Document {
    adminPerformance: {}[]
    viewStaffHistory :{}[]
    viewAbsentStaff :mongoose.Types.Array<mongoose.Types.ObjectId>;
+   createPerformanceMilestone : []
   // ... other fields ...
 }
 
@@ -51,4 +52,5 @@ export interface staffSignUp {
   Attendance : {}[]
   staffLeave: {}[]
   staffPerformance: {}[]
+  
 }
