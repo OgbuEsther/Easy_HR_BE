@@ -3,7 +3,7 @@ import {Router} from "express"
 import { calculatePayRoll, createPayRoll , fundWalletFromBank, MakeTransfer, PayRoll2 } from "../../controller/PayRoll/Admin"
 import { createAttendance } from "../../controller/Attendance/StaffTime"
 import { createLeave } from "../../controller/Leave/leaves"
-import { PerformanceMilestone } from "../../controller/Performance/adminPerformance"
+import { createMileStone, enterAdminScore, enterStaffScore, PerformanceMilestone } from "../../controller/Performance/adminPerformance"
 
 const AdminRoutes = Router()
 
@@ -22,8 +22,11 @@ AdminRoutes.post("/createattendance/:adminId" , createAttendance)
 //CREATE TYPE OF LEAVE 
 AdminRoutes.post("/createleave/:adminId" ,createLeave )
 
+
 //createPerformanceMilestone
 
-AdminRoutes.patch("/createperformancemilestone/:adminId" ,PerformanceMilestone )
+AdminRoutes.patch("/createperformancemilestone/:adminId" ,createMileStone )
+AdminRoutes.post("/createstaffscore" ,enterStaffScore )
+AdminRoutes.patch("/createadminscore/:rateId" ,enterAdminScore )
 
 export default AdminRoutes
