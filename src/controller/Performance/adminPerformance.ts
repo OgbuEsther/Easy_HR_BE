@@ -70,13 +70,15 @@ export const createMileStone = async (req: Request, res: Response) => {
     // 👇️ Current Month
     const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth);
     console.log(daysInCurrentMonth);
-
+  
     //get actual date
     const getCurrentDate = new Date().toLocaleDateString().split("")[2];
 
     const getvalue:number = parseInt(getCurrentDate);
+    console.log(getvalue);
 
-    if (getvalue >= 1 && getvalue >= 4) {
+
+    if (getvalue >= 1 && getvalue === 4) {
       const getAdmin = await adminAuth.findById(req.params.adminId);
 
       const milestone = await mileStoneModel.create({
