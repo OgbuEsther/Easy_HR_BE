@@ -78,6 +78,7 @@ const createClockIn = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 yield (getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.viewStaffAttendance.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
                 yield (getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.save());
                 yield ((_c = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewStaffHistory) === null || _c === void 0 ? void 0 : _c.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
+                getAdmin.viewStaffHistory.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id));
                 yield (getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save());
                 yield ((_d = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewAbsentStaff) === null || _d === void 0 ? void 0 : _d.pull(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
                 yield (getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save());

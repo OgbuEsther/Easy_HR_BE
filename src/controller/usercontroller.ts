@@ -209,9 +209,6 @@ export const getOneStaff = async (req: Request, res: Response) => {
         path: "transactionHistory",
       },
       {
-        path: "payRoll",
-      },
-      {
         path: "Attendance",
       },
       {
