@@ -17,7 +17,7 @@ export const PerformanceMilestone = async (req: Request, res: Response) => {
   
       return res.status(201).json({ 
         message: "created Performance Milestone",
-        data: dataFIle?.payRoll,
+        data: dataFIle?.createPerformanceMilestone,
       });
     } catch (error: any) {
       return res.status(400).json({

@@ -63,6 +63,7 @@ const AdminAuth = new mongoose_1.default.Schema({
         },
     ],
     payRoll: [],
+    createPerformanceMilestone: [],
     mainPayRoll: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,
