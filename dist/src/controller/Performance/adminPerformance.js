@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.enterAdminScore = exports.enterStaffScore = exports.createMileStone = exports.PerformanceMilestone = void 0;
 const adminAuth_1 = __importDefault(require("../../model/admin/adminAuth"));
 const adminPerfomanceModel_1 = __importDefault(require("../../model/admin/adminPerformance/adminPerfomanceModel"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const Rate_1 = __importDefault(require("../../model/admin/adminPerformance/Rate"));
 const PerformanceMilestone = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -64,16 +63,38 @@ exports.PerformanceMilestone = PerformanceMilestone;
 const createMileStone = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { mileStone } = req.body;
-        const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
-        const milestone = yield adminPerfomanceModel_1.default.create({
-            mileStone,
-        });
-        yield (getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.createPerformanceMilestone.push(new mongoose_1.default.Types.ObjectId(milestone === null || milestone === void 0 ? void 0 : milestone._id)));
-        yield (getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save());
-        return res.status(200).json({
-            message: "milestone created",
-            data: milestone,
-        });
+        function getDaysInMonth(year, month) {
+            return new Date(year, month, 0).getDate();
+        }
+        const date = new Date();
+        const currentYear = date.getFullYear();
+        const currentMonth = date.getMonth() + 1; // 👈️ months are 0-based
+        // 👇️ Current Month
+        const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth);
+        console.log(daysInCurrentMonth);
+        //get actual date
+        const getCurrentDate = new Date().toLocaleDateString().split("")[2];
+        const getvalue = parseInt(getCurrentDate);
+        console.log(getvalue);
+        if (getvalue >= 1 && getvalue === 4) {
+            const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
+            const milestone = yield adminPerfomanceModel_1.default.create({
+                mileStone,
+            });
+            //   await getAdmin?.createPerformanceMilestone.push(
+            //     new mongoose.Types.ObjectId(milestone?._id)
+            //   );
+            //   await getAdmin?.save();
+            return res.status(200).json({
+                message: "milestone created",
+                data: milestone,
+            });
+        }
+        else {
+            return res.status(400).json({
+                message: "it's past creation time ",
+            });
+        }
     }
     catch (error) {
         return res.status(400).json({
@@ -89,18 +110,19 @@ const enterStaffScore = (req, res) => __awaiter(void 0, void 0, void 0, function
         const { staffScore } = req.body;
         const createStaffScore = yield Rate_1.default.create({
             adminScore: 0,
-            staffScore
+            staffScore,
+            // date : Date.getDate()
         });
         return res.status(201).json({
             message: "entered score sucessfully",
-            data: createStaffScore
+            data: createStaffScore,
         });
     }
     catch (error) {
         return res.status(400).json({
             message: "failed to enter score",
             data: error,
-            err: error.message
+            err: error.message,
         });
     }
 });
@@ -110,18 +132,18 @@ const enterAdminScore = (req, res) => __awaiter(void 0, void 0, void 0, function
         const { adminScore } = req.body;
         const getRateModel = yield Rate_1.default.findById(req.params.rateId);
         const updateScore = yield Rate_1.default.findByIdAndUpdate(getRateModel === null || getRateModel === void 0 ? void 0 : getRateModel._id, {
-            adminScore
+            adminScore,
         }, { new: true });
         return res.status(201).json({
             message: "entered score sucessfully",
-            data: updateScore
+            data: updateScore,
         });
     }
     catch (error) {
         return res.status(400).json({
             message: "failed to enter score",
             data: error,
-            err: error.message
+            err: error.message,
         });
     }
 });
