@@ -28,6 +28,17 @@ export interface adminAttendance{
   // absent : string;
 }
 
+export interface milestoneGenerator {
+  ratings : {}[]
+  mileStone : string
+}
+
+
+export interface rateMe {
+  adminScore : number;
+  staffScore : number
+}
+
 // export interface PayRoll {
 //   grossPay : number;
 //   netPay: number;
