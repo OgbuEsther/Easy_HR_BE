@@ -36,3 +36,4 @@ export interface adminAttendance{
 //   medicals:number
 
 // }
+
