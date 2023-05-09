@@ -22,6 +22,8 @@ export interface adminLeaveProps{
 export interface adminAttendance{
   setToken : string;
   viewStaffAttendance :{}[]
+ 
+
   // lateness : string;
   // absent : string;
 }

@@ -10,9 +10,9 @@ const staffRoutes = Router()
 // staffRoutes.post("/houseplan/:staffId" , HousePlan)
 // staffRoutes.post("/travel/:staffId" , travelPlan)
 // staffRoutes.post("/schoolplan/:staffId" , FeesPlan)
-staffRoutes.post("/clockin/:staffId" , createClockIn)
+staffRoutes.post("/clockin/:staffId/:adminId" , createClockIn)
 
-staffRoutes.post("/clockout/:staffId" , createClockOut)
+staffRoutes.post("/clockout/:staffId/:adminId" , createClockOut)
 
 //LEAVE 
 //APPLICATION FOR LEAVE 

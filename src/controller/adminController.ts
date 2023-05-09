@@ -172,6 +172,19 @@ export const getOneAdmin = async (req: Request, res: Response) => {
       {
         path: "adminLeave",
       },
+      {
+        path: "mainPayRoll",
+      },
+      {
+        path: "SetAttendance",
+      },
+      {
+        path: "viewStaffHistory",
+      },
+      {
+        path: "viewAbsentStaff",
+      },
+     
     ]);
 
     return res.status(200).json({

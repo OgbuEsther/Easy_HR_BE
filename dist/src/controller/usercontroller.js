@@ -65,6 +65,7 @@ exports.staffSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
             }));
         }
         if ((getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.companyname) === (staff === null || staff === void 0 ? void 0 : staff.companyname)) {
+            getAdmin.viewAbsentStaff.push(new mongoose_1.default.Types.ObjectId(staff === null || staff === void 0 ? void 0 : staff._id));
             getAdmin.viewUser.push(new mongoose_1.default.Types.ObjectId(staff === null || staff === void 0 ? void 0 : staff._id));
             getAdmin.save();
             const createWallet = yield StaffWallet_1.default.create({
@@ -170,9 +171,6 @@ const getOneStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             },
             {
                 path: "transactionHistory",
-            },
-            {
-                path: "payRoll",
             },
             {
                 path: "Attendance",

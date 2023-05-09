@@ -18,6 +18,8 @@ export interface adminSignUp extends mongoose.Document {
    payRoll : []
    adminLeave: {}[]
    adminPerformance: {}[]
+   viewStaffHistory :{}[]
+   viewAbsentStaff :mongoose.Types.Array<mongoose.Types.ObjectId>;
   // ... other fields ...
 }
 

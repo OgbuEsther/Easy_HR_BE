@@ -74,6 +74,11 @@ export const staffSignup = asyncHandler(
 
   
       if (getAdmin?.companyname === staff?.companyname) {
+
+      
+        getAdmin.viewAbsentStaff.push(new mongoose.Types.ObjectId(staff?._id))
+      
+
         getAdmin.viewUser.push(new mongoose.Types.ObjectId(staff?._id));
         getAdmin.save();
   
@@ -202,9 +207,6 @@ export const getOneStaff = async (req: Request, res: Response) => {
       },
       {
         path: "transactionHistory",
-      },
-      {
-        path: "payRoll",
       },
       {
         path: "Attendance",
