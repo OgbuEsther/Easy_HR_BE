@@ -1,124 +1,37 @@
+
 import mongoose from "mongoose";
 
-import { staffSignUp } from "../../allinterfaces";
+import { Attendance } from "../staffDashboard";
 
-interface SAuth extends staffSignUp, mongoose.Document {}
 
-const StaffAuth = new mongoose.Schema<staffSignUp>(
-  {
-    companyCode: {
-      type: String,
+interface IAttend extends Attendance , mongoose.Document{}
+
+
+const AttendanceSchema = new mongoose.Schema<Attendance>({
+    date : {
+        type : String
     },
-    staffToken: {
-      type: String,
+    
+    clockIn : {
+        type : Boolean,
+        default : false
     },
-    yourName: {
-      type: String,
-      required: [true, "please enter your name"],
+    clockOut : {
+        type : Boolean,
+        default : false
     },
-    plans: {
-      type: Boolean,
+    message : {
+        type : String
     },
-    amount: {
-      type: Number,
+    time : {
+        type : String
+    },
+    token : {
+        type : String
     },
 
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      min: 6,
-    },
-    companyname: {
-      type: String,
-    },
-    position: {
-      type: String,
-    },
-    walletNumber: {
-      type: Number,
-    },
-    wallet: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "staffWallet",
-      },
-    ],
-    transactionHistory: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "staffTransactionHistory",
-      },
-    ],
-    // savingsPlan: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "staffSavingsPlan",
-    //   },
-    // ],
-    // houseRentPlan: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "staffHousePlan",
-    //   },
-    // ],
-    // schoolFeesPlan: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "staffSchoolFeesPlan",
-    //   },
-    // ],
+})
 
-    // investmentPlan: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "staffInvestmentPlan",
-    //   },
-    // ],
-    // travelAndTour: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "staffTravelAndTour",
-    //   },
-    // ],
-    // other: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "staffOther",
-    //   },
-    // ],
-    payRoll: [
-      
-    ],
-    Attendance: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "StaffAttendance",
-      },
-    ],
-    mainPayRoll : [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "StaffPayRoll",
-      },
-    ],
-    staffLeave : [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "staffLeave",
-      },
-    ],
+const StaffAttendanceHistory = mongoose.model<IAttend>("StaffAttendanceHistory" , AttendanceSchema)
 
-  },
-  { timestamps: true }
-);
-
-const viewStaffHistory = mongoose.model<SAuth>("StaffAttendanceHistory", StaffAuth);
-
-export default viewStaffHistory;
+export default StaffAttendanceHistory

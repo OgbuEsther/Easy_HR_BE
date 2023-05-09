@@ -75,9 +75,7 @@ export const staffSignup = asyncHandler(
   
       if (getAdmin?.companyname === staff?.companyname) {
 
-        getAdmin.viewStaffHistory.push(new mongoose.Types.ObjectId(staff?._id))
-       
-
+      
         getAdmin.viewAbsentStaff.push(new mongoose.Types.ObjectId(staff?._id))
       
 

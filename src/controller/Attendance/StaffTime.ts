@@ -86,6 +86,10 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
 
         await getAdmin?.viewStaffHistory?.push(new mongoose.Types.ObjectId(clockInTime?._id))
 
+        getAdmin.viewStaffHistory.push(new mongoose.Types.ObjectId(clockInTime?._id))
+       
+
+
 
         await getAdmin?.save()
 
