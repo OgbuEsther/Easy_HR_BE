@@ -57,11 +57,12 @@ const createClockIn = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const { date, clockIn, message, time, setToken } = req.body;
         const getStaff = yield staffAuth_1.default.findById(req.params.staffId);
+        const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
         const getAdminAttendanceToken = yield AdminAttendance_1.default.findOne({ setToken });
         const getDate = new Date().toLocaleDateString();
         const getTime = new Date().toLocaleTimeString();
         const customMessage = `you clocked in at ${getTime} on ${getDate} , make sure to clock out at the right time`;
-        if (getStaff) {
+        if (getStaff && getAdmin) {
             if ((getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.setToken) === setToken) {
                 const clockInTime = yield StaffAttenadance_1.default.create({
                     date: getDate,
@@ -88,7 +89,7 @@ const createClockIn = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }
         else {
             return res.status(400).json({
-                message: "couldn't get staff"
+                message: "couldn't get staff or admin"
             });
         }
     }
@@ -109,7 +110,8 @@ const createClockOut = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const getAdminAttendanceToken = yield AdminAttendance_1.default.findOne({ setToken });
         const customMessage = `you clocked out at ${getTime} on ${getDate}`;
         const getStaff = yield staffAuth_1.default.findById(req.params.staffId);
-        if (getStaff) {
+        const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
+        if (getStaff && getAdmin) {
             if ((getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.setToken) === setToken) {
                 const clockOutTime = yield StaffAttenadance_1.default.create({
                     date: getDate,
