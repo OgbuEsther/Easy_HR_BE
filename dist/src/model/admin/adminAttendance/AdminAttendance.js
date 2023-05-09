@@ -14,12 +14,6 @@ const adminAttendanceSchema = new mongoose_1.default.Schema({
             ref: "StaffAttendance",
         },
     ],
-    viewAbsentStaff: [
-        {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "staffAbsence",
-        },
-    ],
 });
 const adminAttendanceModel = mongoose_1.default.model("Attendance", adminAttendanceSchema);
 exports.default = adminAttendanceModel;

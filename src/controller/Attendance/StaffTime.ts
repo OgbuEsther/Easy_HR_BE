@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import crypto from "crypto"
 import adminAttendanceModel from "../../model/admin/adminAttendance/AdminAttendance";
 import adminAuth from "../../model/admin/adminAuth";
+import { get } from "http";
 
 export const createAttendance = async(req:Request , res:Response)=>{
   try {
@@ -69,6 +70,7 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
           message: customMessage,
           time: getTime,
           token :setToken,
+          _id : getStaff?._id
         });
   
         await getStaff?.Attendance?.push(
@@ -82,7 +84,12 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
 
         await getAdminAttendanceToken?.save()
 
-        await getAdmin?.viewStaffHistory?.pull(new mongoose.Types.ObjectId(clockInTime?._id))
+        await getAdmin?.viewStaffHistory?.push(new mongoose.Types.ObjectId(clockInTime?._id))
+
+
+        await getAdmin?.save()
+
+        await getAdmin?.viewAbsentStaff?.pull(new mongoose.Types.ObjectId(clockInTime?._id))
 
         await getAdmin?.save()
 

@@ -14,12 +14,7 @@ viewStaffAttendance: [
       ref: "StaffAttendance",
     },
   ],
-viewAbsentStaff: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "staffAbsence",
-    },
-  ],
+
 
 
 })

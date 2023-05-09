@@ -86,6 +86,12 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
       ref: "StaffAttendanceHistory",
     },
   ],
+  viewAbsentStaff: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "staffAbsence",
+    },
+  ],
   },
   { timestamps: true }
 );
