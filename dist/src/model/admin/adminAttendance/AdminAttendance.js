@@ -8,12 +8,6 @@ const adminAttendanceSchema = new mongoose_1.default.Schema({
     setToken: {
         type: String,
     },
-    viewStaffAttendance: [
-        {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "StaffAttendance",
-        },
-    ],
 });
 const adminAttendanceModel = mongoose_1.default.model("Attendance", adminAttendanceSchema);
 exports.default = adminAttendanceModel;
