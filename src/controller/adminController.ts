@@ -1,6 +1,6 @@
 import adminAuth from "../model/admin/adminAuth";
 import mongoose from "mongoose";
-import { NextFunction, Request, Response } from "express";
+import express,{ NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 
 import otpgenerator from "otp-generator";
@@ -10,11 +10,37 @@ import { asyncHandler } from "../utils/asyncHandler";
 import crypto from "crypto";
 import staffAuth from "../model/staff/staffAuth";
 import { verifyEmail } from "../utils/email";
+import ip from "ip";
+import axios from "axios";
+import { SuperfaceClient } from "@superfaceai/one-sdk";
+const app = express();
+app.set("trust proxy", true);
+
+
+const sdk = new SuperfaceClient();
 
 
 export const adminSignup = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction, ip: any) => {
     try {
+      const profile = await sdk.getProfile("address/ip-geolocation@1.0.1");
+
+      // Use the profile
+      const result = await profile.getUseCase("IpGeolocation").perform(
+        {
+          //   ipAddress: "102.88.34.40",
+          ipAddress: ip,
+        },
+        {
+          provider: "ipdata",
+          security: {
+            apikey: {
+              apikey: "41b7b0ed377c175c4b32091abd68d049f5b6b748b2bee4789a161d93",
+            },
+          },
+        },
+      );
+      const data = result.unwrap();
       const {
         companyname,
         email,
@@ -23,6 +49,7 @@ export const adminSignup = asyncHandler(
         walletNumber,
         token,
         OTP,
+       
       } = req.body;
 
       const genToken = crypto.randomBytes(32).toString("hex");
@@ -57,6 +84,8 @@ export const adminSignup = asyncHandler(
         walletNumber: generateNumber,
         token: genToken,
         OTP: genOTP,
+        latitude : data?.latitude,
+        longitude : data?.longitude
       });
 
       if (!admin) {
@@ -75,6 +104,8 @@ export const adminSignup = asyncHandler(
         credit: 0,
         debit: 0,
       });
+    
+
 
       admin?.wallet.push(new mongoose.Types.ObjectId(createWallet?._id));
 
@@ -90,19 +121,30 @@ export const adminSignup = asyncHandler(
       }
 
       verifyEmail(admin);
-
-      return res.status(200).json({
-        message: "Success",
-        data: admin,
+     
+  
+  return res.status(200).json({
+    message: "Success",
+    data: admin,
+    result:  data
       });
     } catch (error: any) {
       return res.status(400).json({
         message: "an error occurred while creating admin",
-        data: error.message,
+        data: error,
+        err : error.message
       });
     }
   }
 );
+
+export const getIpAddress = async(req:Request , res:Response)=>{
+  try {
+    let dataIP: any;
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 //sign in
 export const adminSignin = async (req: Request, res: Response) => {

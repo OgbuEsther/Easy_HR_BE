@@ -45,7 +45,10 @@ export interface Attendance {
   clockOut : boolean;
   message : string;
   time : string
+  latitude : string
   token : string
+  longitude : string
+ 
   nameOfStaff : string
 }
 

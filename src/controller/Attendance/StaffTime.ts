@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import express,{ NextFunction, Request, Response } from "express";
 import AttendanceModel from "../../model/staff/StaffAttendance/StaffAttenadance";
 import staffAuth from "../../model/staff/staffAuth";
 import mongoose from "mongoose";
@@ -7,6 +7,15 @@ import adminAttendanceModel from "../../model/admin/adminAttendance/AdminAttenda
 import adminAuth from "../../model/admin/adminAuth";
 import { get } from "http";
 import LateAttendanceModel from "../../model/staff/StaffAttendance/StaffLateNess";
+import ip from "ip";
+import axios from "axios";
+import { SuperfaceClient } from "@superfaceai/one-sdk";
+const app = express();
+app.set("trust proxy", true);
+
+
+const sdk = new SuperfaceClient();
+
 
 export const createAttendance = async(req:Request , res:Response)=>{
   try {
@@ -49,8 +58,30 @@ export const createAttendance = async(req:Request , res:Response)=>{
 }
 
 //clock in time
-export const createClockIn = async (req: Request, res: Response) => {
+export const createClockIn = async (req: Request, res: Response ,ip:any  ) => {
   try {
+
+    
+
+    const profile = await sdk.getProfile("address/ip-geolocation@1.0.1");
+
+    // Use the profile
+    const result = await profile.getUseCase("IpGeolocation").perform(
+      {
+        //   ipAddress: "102.88.34.40",
+        ipAddress : ip,
+      },
+      {
+        provider: "ipdata",
+        security: {
+          apikey: {
+            apikey: "41b7b0ed377c175c4b32091abd68d049f5b6b748b2bee4789a161d93",
+          },
+        },
+      },
+    );
+    const data = result.unwrap();
+
     const { date, clockIn, message, time , setToken } = req.body;
 
     const getStaff = await staffAuth.findById(req.params.staffId);
@@ -65,48 +96,57 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
 
     const customMessage = `you clocked in at ${getTime} on ${getDate} , make sure to clock out at the right time`;
 
-    
+    const getLatitude:string = data?.latitude
+    const getLongitude:string = data?.longitude
 
     if(getStaff && getAdmin){
 
 
       if(getAdminAttendanceToken?.setToken === setToken ){
         if(getAdmin?.expectedClockIn! <= getTime){
-         const clockInTime = await AttendanceModel.create({
-            date: getDate,
-            clockIn,
-            clockOut: false,
-            message: customMessage,
-            time: getTime,
-            token :setToken,
-            nameOfStaff : getStaff?.yourName
-          });
+          if(getAdmin?.latitude && getAdmin?.longitude === getLatitude && getLongitude){
+            const clockInTime = await AttendanceModel.create({
+              date: getDate,
+              clockIn,
+              clockOut: false,
+              message: customMessage,
+              time: getTime,
+              token :setToken,
+              nameOfStaff : getStaff?.yourName
+            });
+      
+            await getStaff?.Attendance?.push(
+              new mongoose.Types.ObjectId(clockInTime?._id)
+            );
+            await getStaff?.save();
     
-          await getStaff?.Attendance?.push(
-            new mongoose.Types.ObjectId(clockInTime?._id)
-          );
-          await getStaff?.save();
+            
+    
+            await getAdmin?.viewStaffAttendance.push(new mongoose.Types.ObjectId(clockInTime?._id))
+    
+            await getAdminAttendanceToken?.save()
+    
+            await getAdmin?.viewStaffHistory?.push(new mongoose.Types.ObjectId(clockInTime?._id))
+    
+            getAdmin.viewStaffHistory.push(new mongoose.Types.ObjectId(clockInTime?._id))
   
-          
-  
-          await getAdmin?.viewStaffAttendance.push(new mongoose.Types.ObjectId(clockInTime?._id))
-  
-          await getAdminAttendanceToken?.save()
-  
-          await getAdmin?.viewStaffHistory?.push(new mongoose.Types.ObjectId(clockInTime?._id))
-  
-          getAdmin.viewStaffHistory.push(new mongoose.Types.ObjectId(clockInTime?._id))
+            await getAdmin?.save()
+    
+            await getAdmin?.viewAbsentStaff?.pull(new mongoose.Types.ObjectId(clockInTime?._id))
+    
+            await getAdmin?.save()
+    
+            return res.status(201).json({
+              message: "clockInTime done",
+              data: clockInTime,
+            });
+          }else{
+            return res.status(400).json({
+              message :"you are not within the office premises"
 
-          await getAdmin?.save()
-  
-          await getAdmin?.viewAbsentStaff?.pull(new mongoose.Types.ObjectId(clockInTime?._id))
-  
-          await getAdmin?.save()
-  
-          return res.status(201).json({
-            message: "clockInTime done",
-            data: clockInTime,
-          });
+            })
+          }
+         
         }else{
           const clockInTime = await LateAttendanceModel.create({
             date: getDate,

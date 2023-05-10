@@ -8,10 +8,6 @@ const adminAttendanceSchema = new mongoose.Schema<adminAttendance>({
 setToken : {
     type : String,
 },
-
-
-
-
 })
 
 const adminAttendanceModel = mongoose.model<admin>("Attendance" ,adminAttendanceSchema )

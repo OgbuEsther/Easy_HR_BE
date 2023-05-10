@@ -9,6 +9,14 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
       type : String,
     
     },
+    latitude : {
+      type : String,
+    
+    },
+    longitude : {
+      type : String,
+    
+    },
     expectedClockIn : {
       type : String
     },
