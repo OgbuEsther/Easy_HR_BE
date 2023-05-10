@@ -9,6 +9,12 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
       type : String,
     
     },
+    expectedClockIn : {
+      type : String
+    },
+    expectedClockOut : {
+      type : String
+    },
     companyname: {
       type: String,
       unique:true

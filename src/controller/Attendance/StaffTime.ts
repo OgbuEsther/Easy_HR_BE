@@ -11,12 +11,15 @@ export const createAttendance = async(req:Request , res:Response)=>{
   try {
    
     const getAdmin = await adminAuth.findById(req.params.adminId)
+    
+    const getTime = new Date().toLocaleTimeString();
 
   if(getAdmin){
     const token = await crypto.randomBytes(3).toString("hex")
 
     const createToken = await adminAttendanceModel.create({
       setToken :token,
+     
       // _id : getAdmin?._id
     })
 

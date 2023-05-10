@@ -78,14 +78,14 @@ export const createMileStone = async (req: Request, res: Response) => {
     console.log(getvalue);
 
 
-    // if (getvalue >= 1 && getvalue === 4) {
+    if (getvalue >= 1 && getvalue === 10) {
       const getAdmin = await adminAuth.findById(req.params.adminId);
 
       const milestone = await mileStoneModel.create({
         mileStone,
       });
 
-      await getAdmin?.createPerformanceMilestone?.push(
+      await getAdmin?.PerformanceMilestone?.push(
         new mongoose.Types.ObjectId(milestone?._id)
       );
 
@@ -95,11 +95,11 @@ export const createMileStone = async (req: Request, res: Response) => {
         message: "milestone created",
         data: milestone,
       });
-    // } else {
-    //   return res.status(400).json({
-    //     message: "it's past creation time ",
-    //   });
-    // }
+    } else {
+      return res.status(400).json({
+        message: "it's past creation time ",
+      });
+    }
   } catch (error: any) {
     return res.status(400).json({
       message: "milestone not created",

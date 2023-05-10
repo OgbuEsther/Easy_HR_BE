@@ -23,6 +23,7 @@ const createAttendance = (req, res) => __awaiter(void 0, void 0, void 0, functio
     var _a;
     try {
         const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
+        const getTime = new Date().toLocaleTimeString();
         if (getAdmin) {
             const token = yield crypto_1.default.randomBytes(3).toString("hex");
             const createToken = yield AdminAttendance_1.default.create({

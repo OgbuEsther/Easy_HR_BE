@@ -8,6 +8,12 @@ const AdminAuth = new mongoose_1.default.Schema({
     companyCode: {
         type: String,
     },
+    expectedClockIn: {
+        type: String
+    },
+    expectedClockOut: {
+        type: String
+    },
     companyname: {
         type: String,
         unique: true
