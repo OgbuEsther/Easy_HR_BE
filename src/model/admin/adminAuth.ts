@@ -105,13 +105,13 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
   viewStaffHistory: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "StaffAttendanceHistory",
+      ref: "StaffAttendance",
     },
   ],
   viewAbsentStaff: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "staffAbsence",
+      ref: "staffAuth",
     },
   ],
   viewLateStaff: [

@@ -32,6 +32,6 @@ const AttendanceSchema = new mongoose.Schema<Attendance>({
 
 })
 
-const StaffAttendanceHistory = mongoose.model<IAttend>("StaffAttendanceHistory" , AttendanceSchema)
+const StaffAttendanceHistory = mongoose.model<IAttend>("StaffAttendance" , AttendanceSchema)
 
 export default StaffAttendanceHistory

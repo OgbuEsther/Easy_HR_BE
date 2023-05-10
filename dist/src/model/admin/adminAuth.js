@@ -96,13 +96,13 @@ const AdminAuth = new mongoose_1.default.Schema({
     viewStaffHistory: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "StaffAttendanceHistory",
+            ref: "StaffAttendance",
         },
     ],
     viewAbsentStaff: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "staffAbsence",
+            ref: "staffAuth",
         },
     ],
     viewLateStaff: [

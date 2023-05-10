@@ -26,5 +26,5 @@ const AttendanceSchema = new mongoose_1.default.Schema({
         type: String
     },
 });
-const StaffAttendanceHistory = mongoose_1.default.model("StaffAttendanceHistory", AttendanceSchema);
+const StaffAttendanceHistory = mongoose_1.default.model("StaffAttendance", AttendanceSchema);
 exports.default = StaffAttendanceHistory;
