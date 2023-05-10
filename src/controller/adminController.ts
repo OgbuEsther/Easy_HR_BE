@@ -185,6 +185,10 @@ export const getOneAdmin = async (req: Request, res: Response) => {
         path: "viewAbsentStaff",
       },
      
+      {
+        path: "viewLateStaff",
+      },
+     
     ]);
 
     return res.status(200).json({
