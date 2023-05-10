@@ -227,11 +227,15 @@ export const getOneAdmin = async (req: Request, res: Response) => {
         path: "viewAbsentStaff",
       },
      
+     
       {
         path: "viewLateStaff",
       },
       {
         path: "viewStaffAttendance",
+      },
+      {
+        path: "PerformanceMilestone",
       },
      
     ]);
