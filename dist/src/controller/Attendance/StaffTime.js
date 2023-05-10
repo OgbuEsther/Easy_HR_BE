@@ -19,6 +19,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const crypto_1 = __importDefault(require("crypto"));
 const AdminAttendance_1 = __importDefault(require("../../model/admin/adminAttendance/AdminAttendance"));
 const adminAuth_1 = __importDefault(require("../../model/admin/adminAuth"));
+const StaffLateNess_1 = __importDefault(require("../../model/staff/StaffAttendance/StaffLateNess"));
 const createAttendance = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -90,7 +91,7 @@ const createClockIn = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     });
                 }
                 else {
-                    const clockInTime = yield StaffAttenadance_1.default.create({
+                    const clockInTime = yield StaffLateNess_1.default.create({
                         date: getDate,
                         clockIn,
                         clockOut: false,

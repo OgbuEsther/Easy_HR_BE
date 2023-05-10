@@ -166,6 +166,9 @@ const getOneAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             {
                 path: "viewAbsentStaff",
             },
+            {
+                path: "viewLateStaff",
+            },
         ]);
         return res.status(200).json({
             message: "get one admin",

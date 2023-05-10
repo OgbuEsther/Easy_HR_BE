@@ -6,6 +6,7 @@ import crypto from "crypto"
 import adminAttendanceModel from "../../model/admin/adminAttendance/AdminAttendance";
 import adminAuth from "../../model/admin/adminAuth";
 import { get } from "http";
+import LateAttendanceModel from "../../model/staff/StaffAttendance/StaffLateNess";
 
 export const createAttendance = async(req:Request , res:Response)=>{
   try {
@@ -88,7 +89,7 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
   
           
   
-          await getAdminAttendanceToken?.viewStaffAttendance.push(new mongoose.Types.ObjectId(clockInTime?._id))
+          await getAdmin?.viewStaffAttendance.push(new mongoose.Types.ObjectId(clockInTime?._id))
   
           await getAdminAttendanceToken?.save()
   
@@ -107,7 +108,7 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
             data: clockInTime,
           });
         }else{
-          const clockInTime = await AttendanceModel.create({
+          const clockInTime = await LateAttendanceModel.create({
             date: getDate,
             clockIn,
             clockOut: false,
