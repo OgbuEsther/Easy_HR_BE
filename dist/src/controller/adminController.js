@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeQuery = exports.verifyUser = exports.getOneAdmin = exports.getAllAdmin = exports.adminSignin = exports.adminSignup = void 0;
+exports.makeQuery = exports.updateStaff = exports.verifyUser = exports.getOneAdmin = exports.getAllAdmin = exports.adminSignin = exports.adminSignup = void 0;
 const adminAuth_1 = __importDefault(require("../model/admin/adminAuth"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -215,6 +215,34 @@ const verifyUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.verifyUser = verifyUser;
+//account settings
+const updateStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { expectedClockIn, expectedClockOut, companyname, email, yourName } = req.body;
+        const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
+        // const getStaffDetails = await staffAuth.findById(req.params.staffId);
+        if (getAdmin) {
+            const update = yield staffAuth_1.default.findByIdAndUpdate(getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id, { expectedClockIn, expectedClockOut, companyname, email, yourName }, { new: true });
+            return res.status(201).json({
+                message: "updated admin details successfully",
+                data: update
+            });
+        }
+        else {
+            return res.status(400).json({
+                message: "admin not found",
+            });
+        }
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: "couldn't update admin",
+            data: error,
+            error: error.message
+        });
+    }
+});
+exports.updateStaff = updateStaff;
 //make search
 const makeQuery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

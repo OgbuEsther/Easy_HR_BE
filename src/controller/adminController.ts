@@ -244,6 +244,46 @@ export const verifyUser = async (req: Request, res: Response) => {
   }
 };
 
+
+//account settings
+
+export const updateStaff = async (req: Request, res: Response) => {
+  try {
+    const { expectedClockIn , expectedClockOut,companyname ,email ,yourName } = req.body;
+
+    const getAdmin = await adminAuth.findById(req.params.adminId)
+
+    // const getStaffDetails = await staffAuth.findById(req.params.staffId);
+
+    if(getAdmin){
+      const update = await staffAuth.findByIdAndUpdate(
+        getAdmin?._id,
+        { expectedClockIn , expectedClockOut,companyname ,email ,yourName },
+        { new: true }
+      );
+  
+  
+      return res.status(201).json({
+        message : "updated admin details successfully",
+        data : update
+      })
+    }else{
+      return res.status(400).json({
+        message : "admin not found",
+      
+      })
+    }
+
+    
+  } catch (error:any) {
+    return res.status(400).json({
+      message: "couldn't update admin",
+      data : error,
+      error : error.message
+    });
+  }
+};
+
 //make search
 
 export const makeQuery = async (

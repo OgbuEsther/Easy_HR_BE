@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 export interface adminSignUp extends mongoose.Document {
   viewUser: mongoose.Types.Array<mongoose.Types.ObjectId>;
   OTP : string;
+  expectedClockIn : string;
+  expectedClockOut : string;
   verified : boolean;
   token : string
    companyname: string;
