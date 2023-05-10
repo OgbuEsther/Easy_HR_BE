@@ -5,6 +5,8 @@ export interface adminSignUp extends mongoose.Document {
   OTP : string;
   expectedClockIn : string;
   expectedClockOut : string;
+  latitude : string;
+  longitude : string;
   verified : boolean;
   token : string
    companyname: string;

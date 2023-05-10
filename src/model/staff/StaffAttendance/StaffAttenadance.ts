@@ -29,6 +29,12 @@ const AttendanceSchema = new mongoose.Schema<Attendance>({
     token : {
         type : String
     },
+    // latitude : {
+    //     type : String
+    // },
+    // longitude : {
+    //     type : String
+    // },
     nameOfStaff : {
         type : String
     },

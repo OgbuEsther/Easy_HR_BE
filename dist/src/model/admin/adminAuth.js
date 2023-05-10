@@ -8,6 +8,12 @@ const AdminAuth = new mongoose_1.default.Schema({
     companyCode: {
         type: String,
     },
+    latitude: {
+        type: String,
+    },
+    longitude: {
+        type: String,
+    },
     expectedClockIn: {
         type: String
     },

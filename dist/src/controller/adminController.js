@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeQuery = exports.updateAdmin = exports.verifyUser = exports.getOneAdmin = exports.getAllAdmin = exports.adminSignin = exports.adminSignup = void 0;
+exports.makeQuery = exports.updateAdmin = exports.verifyUser = exports.getOneAdmin = exports.getAllAdmin = exports.adminSignin = exports.getIpAddress = exports.adminSignup = void 0;
 const adminAuth_1 = __importDefault(require("../model/admin/adminAuth"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const express_1 = __importDefault(require("express"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const otp_generator_1 = __importDefault(require("otp-generator"));
 const adminWallets_1 = __importDefault(require("../model/admin/admindashboard/adminWallets"));
@@ -23,8 +24,26 @@ const asyncHandler_1 = require("../utils/asyncHandler");
 const crypto_1 = __importDefault(require("crypto"));
 const staffAuth_1 = __importDefault(require("../model/staff/staffAuth"));
 const email_1 = require("../utils/email");
-exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const one_sdk_1 = require("@superfaceai/one-sdk");
+const app = (0, express_1.default)();
+app.set("trust proxy", true);
+const sdk = new one_sdk_1.SuperfaceClient();
+exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const profile = yield sdk.getProfile("address/ip-geolocation@1.0.1");
+        // Use the profile
+        const result = yield profile.getUseCase("IpGeolocation").perform({
+            //   ipAddress: "102.88.34.40",
+            ipAddress: ip,
+        }, {
+            provider: "ipdata",
+            security: {
+                apikey: {
+                    apikey: "41b7b0ed377c175c4b32091abd68d049f5b6b748b2bee4789a161d93",
+                },
+            },
+        });
+        const data = result.unwrap();
         const { companyname, email, yourName, password, walletNumber, token, OTP, } = req.body;
         const genToken = crypto_1.default.randomBytes(32).toString("hex");
         const genOTP = crypto_1.default.randomBytes(2).toString("hex");
@@ -52,6 +71,8 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
             walletNumber: generateNumber,
             token: genToken,
             OTP: genOTP,
+            latitude: data === null || data === void 0 ? void 0 : data.latitude,
+            longitude: data === null || data === void 0 ? void 0 : data.longitude
         });
         if (!admin) {
             next(new appError_1.AppError({
@@ -77,15 +98,26 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
         return res.status(200).json({
             message: "Success",
             data: admin,
+            result: data
         });
     }
     catch (error) {
         return res.status(400).json({
             message: "an error occurred while creating admin",
-            data: error.message,
+            data: error,
+            err: error.message
         });
     }
 }));
+const getIpAddress = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let dataIP;
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+exports.getIpAddress = getIpAddress;
 //sign in
 const adminSignin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
