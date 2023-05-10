@@ -247,7 +247,7 @@ export const verifyUser = async (req: Request, res: Response) => {
 
 //account settings
 
-export const updateStaff = async (req: Request, res: Response) => {
+export const updateAdmin = async (req: Request, res: Response) => {
   try {
     const { expectedClockIn , expectedClockOut,companyname ,email ,yourName } = req.body;
 
