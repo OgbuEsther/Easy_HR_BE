@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.enterAdminScore = exports.enterStaffScore = exports.createMileStone = exports.PerformanceMilestone = void 0;
 const adminAuth_1 = __importDefault(require("../../model/admin/adminAuth"));
 const adminPerfomanceModel_1 = __importDefault(require("../../model/admin/adminPerformance/adminPerfomanceModel"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const Rate_1 = __importDefault(require("../../model/admin/adminPerformance/Rate"));
 const PerformanceMilestone = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -61,6 +62,7 @@ const PerformanceMilestone = (req, res) => __awaiter(void 0, void 0, void 0, fun
 });
 exports.PerformanceMilestone = PerformanceMilestone;
 const createMileStone = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         const { mileStone } = req.body;
         function getDaysInMonth(year, month) {
@@ -76,25 +78,22 @@ const createMileStone = (req, res) => __awaiter(void 0, void 0, void 0, function
         const getCurrentDate = new Date().toLocaleDateString().split("")[2];
         const getvalue = parseInt(getCurrentDate);
         console.log(getvalue);
-        if (getvalue >= 1 && getvalue === 4) {
-            const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
-            const milestone = yield adminPerfomanceModel_1.default.create({
-                mileStone,
-            });
-            //   await getAdmin?.createPerformanceMilestone.push(
-            //     new mongoose.Types.ObjectId(milestone?._id)
-            //   );
-            //   await getAdmin?.save();
-            return res.status(200).json({
-                message: "milestone created",
-                data: milestone,
-            });
-        }
-        else {
-            return res.status(400).json({
-                message: "it's past creation time ",
-            });
-        }
+        // if (getvalue >= 1 && getvalue === 4) {
+        const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
+        const milestone = yield adminPerfomanceModel_1.default.create({
+            mileStone,
+        });
+        yield ((_a = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.createPerformanceMilestone) === null || _a === void 0 ? void 0 : _a.push(new mongoose_1.default.Types.ObjectId(milestone === null || milestone === void 0 ? void 0 : milestone._id)));
+        yield (getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save());
+        return res.status(200).json({
+            message: "milestone created",
+            data: milestone,
+        });
+        // } else {
+        //   return res.status(400).json({
+        //     message: "it's past creation time ",
+        //   });
+        // }
     }
     catch (error) {
         return res.status(400).json({

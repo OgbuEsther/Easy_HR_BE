@@ -25,7 +25,7 @@ AdminRoutes.post("/createleave/:adminId" ,createLeave )
 
 //createPerformanceMilestone
 
-AdminRoutes.patch("/createperformancemilestone/:adminId" ,createMileStone )
+AdminRoutes.post("/createperformancemilestone/:adminId" ,createMileStone )
 AdminRoutes.post("/createstaffscore" ,enterStaffScore )
 AdminRoutes.patch("/createadminscore/:rateId" ,enterAdminScore )
 

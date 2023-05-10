@@ -68,10 +68,11 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
   payRoll: [
     
   ],
-  createPerformanceMilestone: [
+
+  PerformanceMilestone: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "MileStone",
+      ref: "mileStones",
     },
     
   ],
