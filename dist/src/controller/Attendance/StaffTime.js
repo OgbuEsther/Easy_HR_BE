@@ -71,7 +71,7 @@ const createClockIn = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     message: customMessage,
                     time: getTime,
                     token: setToken,
-                    _id: getStaff === null || getStaff === void 0 ? void 0 : getStaff._id
+                    nameOfStaff: getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName
                 });
                 yield ((_b = getStaff === null || getStaff === void 0 ? void 0 : getStaff.Attendance) === null || _b === void 0 ? void 0 : _b.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
                 yield (getStaff === null || getStaff === void 0 ? void 0 : getStaff.save());
@@ -102,6 +102,8 @@ const createClockIn = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     catch (error) {
         return res.status(400).json({
             message: "staff couldn't clocked in",
+            data: error,
+            err: error === null || error === void 0 ? void 0 : error.message
         });
     }
 });
@@ -125,7 +127,8 @@ const createClockOut = (req, res) => __awaiter(void 0, void 0, void 0, function*
                     clockIn: false,
                     message: customMessage,
                     time: getTime,
-                    token: setToken
+                    token: setToken,
+                    nameOfStaff: getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName
                 });
                 yield ((_e = getStaff === null || getStaff === void 0 ? void 0 : getStaff.Attendance) === null || _e === void 0 ? void 0 : _e.push(new mongoose_1.default.Types.ObjectId(clockOutTime === null || clockOutTime === void 0 ? void 0 : clockOutTime._id)));
                 yield (getStaff === null || getStaff === void 0 ? void 0 : getStaff.save());
@@ -151,6 +154,8 @@ const createClockOut = (req, res) => __awaiter(void 0, void 0, void 0, function*
     catch (error) {
         return res.status(400).json({
             message: "staff couldn't clocked out",
+            data: error,
+            err: error === null || error === void 0 ? void 0 : error.message
         });
     }
 });

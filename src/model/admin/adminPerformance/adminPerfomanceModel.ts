@@ -15,6 +15,6 @@ const milestoneSchema = new mongoose.Schema({
   ],
 });
 
-const mileStoneModel = mongoose.model("MileStone", milestoneSchema);
+const mileStoneModel = mongoose.model<milestone>("mileStones", milestoneSchema);
 
 export default mileStoneModel;

@@ -70,7 +70,7 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
           message: customMessage,
           time: getTime,
           token :setToken,
-          _id : getStaff?._id
+          nameOfStaff : getStaff?.yourName
         });
   
         await getStaff?.Attendance?.push(
@@ -111,9 +111,12 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
         message : "couldn't get staff or admin"
       })
     }
-  } catch (error) {
+  } catch (error:any) {
     return res.status(400).json({
       message: "staff couldn't clocked in",
+      data : error,
+      err : error?.message
+      
     });
   }
 };
@@ -143,7 +146,8 @@ export const createClockOut = async (req: Request, res: Response) => {
           clockIn: false,
           message: customMessage,
           time: getTime,
-          token :setToken
+          token :setToken,
+          nameOfStaff : getStaff?.yourName
         });
   
 
@@ -170,9 +174,11 @@ export const createClockOut = async (req: Request, res: Response) => {
         message : "couldn't get staff"
       })
     }
-  } catch (error) {
+  } catch (error:any) {
     return res.status(400).json({
       message: "staff couldn't clocked out",
+      data : error,
+      err : error?.message
     });
   }
 };

@@ -46,6 +46,7 @@ export interface Attendance {
   message : string;
   time : string
   token : string
+  nameOfStaff : string
 }
 
 
