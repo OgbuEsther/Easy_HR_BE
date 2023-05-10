@@ -105,6 +105,12 @@ const AdminAuth = new mongoose_1.default.Schema({
             ref: "viewLateStaff",
         },
     ],
+    viewStaffAttendance: [
+        {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "StaffAttendance",
+        },
+    ],
 }, { timestamps: true });
 const adminAuth = mongoose_1.default.model("adminAuthModel", AdminAuth);
 exports.default = adminAuth;
