@@ -130,7 +130,7 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
     
             getAdmin.viewStaffHistory.push(new mongoose.Types.ObjectId(clockInTime?._id))
   
-            await getAdmin?.save()
+          
     
             await getAdmin?.viewAbsentStaff?.pull(new mongoose.Types.ObjectId(clockInTime?._id))
     
