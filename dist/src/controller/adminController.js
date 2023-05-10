@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeQuery = exports.updateStaff = exports.verifyUser = exports.getOneAdmin = exports.getAllAdmin = exports.adminSignin = exports.adminSignup = void 0;
+exports.makeQuery = exports.updateAdmin = exports.verifyUser = exports.getOneAdmin = exports.getAllAdmin = exports.adminSignin = exports.adminSignup = void 0;
 const adminAuth_1 = __importDefault(require("../model/admin/adminAuth"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -216,7 +216,7 @@ const verifyUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.verifyUser = verifyUser;
 //account settings
-const updateStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { expectedClockIn, expectedClockOut, companyname, email, yourName } = req.body;
         const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
@@ -242,7 +242,7 @@ const updateStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
 });
-exports.updateStaff = updateStaff;
+exports.updateAdmin = updateAdmin;
 //make search
 const makeQuery = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

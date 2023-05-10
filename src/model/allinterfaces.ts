@@ -24,6 +24,7 @@ export interface adminSignUp extends mongoose.Document {
    viewAbsentStaff :mongoose.Types.Array<mongoose.Types.ObjectId>;
   
    PerformanceMilestone :{}[]
+   viewLateStaff :{}[]
   // ... other fields ...
 }
 

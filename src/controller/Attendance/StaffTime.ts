@@ -64,46 +64,66 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
 
     const customMessage = `you clocked in at ${getTime} on ${getDate} , make sure to clock out at the right time`;
 
+    
+
     if(getStaff && getAdmin){
+
+
       if(getAdminAttendanceToken?.setToken === setToken ){
-        const clockInTime = await AttendanceModel.create({
-          date: getDate,
-          clockIn,
-          clockOut: false,
-          message: customMessage,
-          time: getTime,
-          token :setToken,
-          nameOfStaff : getStaff?.yourName
-        });
+        if(getAdmin?.expectedClockIn! <= getTime){
+         const clockInTime = await AttendanceModel.create({
+            date: getDate,
+            clockIn,
+            clockOut: false,
+            message: customMessage,
+            time: getTime,
+            token :setToken,
+            nameOfStaff : getStaff?.yourName
+          });
+    
+          await getStaff?.Attendance?.push(
+            new mongoose.Types.ObjectId(clockInTime?._id)
+          );
+          await getStaff?.save();
   
-        await getStaff?.Attendance?.push(
-          new mongoose.Types.ObjectId(clockInTime?._id)
-        );
-        await getStaff?.save();
+          
+  
+          await getAdminAttendanceToken?.viewStaffAttendance.push(new mongoose.Types.ObjectId(clockInTime?._id))
+  
+          await getAdminAttendanceToken?.save()
+  
+          await getAdmin?.viewStaffHistory?.push(new mongoose.Types.ObjectId(clockInTime?._id))
+  
+          getAdmin.viewStaffHistory.push(new mongoose.Types.ObjectId(clockInTime?._id))
+
+          await getAdmin?.save()
+  
+          await getAdmin?.viewAbsentStaff?.pull(new mongoose.Types.ObjectId(clockInTime?._id))
+  
+          await getAdmin?.save()
+  
+          return res.status(201).json({
+            message: "clockInTime done",
+            data: clockInTime,
+          });
+        }else{
+          const clockInTime = await AttendanceModel.create({
+            date: getDate,
+            clockIn,
+            clockOut: false,
+            message: customMessage,
+            time: getTime,
+            token :setToken,
+            nameOfStaff : getStaff?.yourName
+          });
+          getAdmin?.viewLateStaff?.push(new mongoose.Types.ObjectId(clockInTime?._id))
+          return res.status(400).json({
+            message : "you are late  "
+
+          })
+        }
 
         
-
-        await getAdminAttendanceToken?.viewStaffAttendance.push(new mongoose.Types.ObjectId(clockInTime?._id))
-
-        await getAdminAttendanceToken?.save()
-
-        await getAdmin?.viewStaffHistory?.push(new mongoose.Types.ObjectId(clockInTime?._id))
-
-        getAdmin.viewStaffHistory.push(new mongoose.Types.ObjectId(clockInTime?._id))
-       
-
-
-
-        await getAdmin?.save()
-
-        await getAdmin?.viewAbsentStaff?.pull(new mongoose.Types.ObjectId(clockInTime?._id))
-
-        await getAdmin?.save()
-
-        return res.status(201).json({
-          message: "clockInTime done",
-          data: clockInTime,
-        });
       }else{
         return res.status(400).json({
           message : "token doesn't match"
