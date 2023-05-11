@@ -117,6 +117,24 @@ const AdminAuth = new mongoose_1.default.Schema({
             ref: "StaffAttendance",
         },
     ],
+    viewAppliedLeave: [
+        {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "viewAppliedLeave",
+        },
+    ],
+    // viewApprovedLeave: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "viewApprovedLeave",
+    //   },
+    // ],
+    // viewRejectedLeave: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "viewRejectedLeave",
+    //   },
+    // ],
 }, { timestamps: true });
 const adminAuth = mongoose_1.default.model("adminAuthModel", AdminAuth);
 exports.default = adminAuth;

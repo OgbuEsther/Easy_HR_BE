@@ -201,6 +201,9 @@ const getOneAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 path: "viewAbsentStaff",
             },
             {
+                path: "viewAppliedLeave",
+            },
+            {
                 path: "viewLateStaff",
             },
             {

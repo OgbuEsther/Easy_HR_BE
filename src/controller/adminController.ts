@@ -228,6 +228,9 @@ export const getOneAdmin = async (req: Request, res: Response) => {
       {
         path: "viewAbsentStaff",
       },
+      {
+        path: "viewAppliedLeave",
+      },
      
      
       {

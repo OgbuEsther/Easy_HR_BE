@@ -11,6 +11,7 @@ export interface staffLeaveProps{
   numberOfDays :number;
   remainingDays :number;
   reason : string;
+  approved : boolean;
 }
 
 export interface plans {

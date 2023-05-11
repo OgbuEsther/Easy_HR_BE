@@ -195,7 +195,7 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
           });
           getAdmin?.viewLateStaff?.push(new mongoose.Types.ObjectId(clockInTime?._id))
           return res.status(200).json({
-            message : "you are late  "
+            message : "you are late"
 
           })
         }else{
