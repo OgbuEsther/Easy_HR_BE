@@ -25,6 +25,6 @@ const staffSchema = new Schema<staffLeaveProps>({
  }
 } , {timestamps:true});
 
-const appliedLeave = model<staffLeave>("viewAppliedLeave", staffSchema);
+const appliedLeave = model<staffLeave>("staffLeave", staffSchema);
 
 export default appliedLeave;
