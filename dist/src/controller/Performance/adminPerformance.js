@@ -84,7 +84,7 @@ const createMileStone = (req, res) => __awaiter(void 0, void 0, void 0, function
         const getvalue = parseInt(getCurrentDate);
         console.log(getvalue);
         console.log("getvalue", getvalue);
-        if (getvalue <= 10) {
+        if (getvalue <= 17) {
             const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
             const milestone = yield adminPerfomanceModel_1.default.create({
                 mileStone,

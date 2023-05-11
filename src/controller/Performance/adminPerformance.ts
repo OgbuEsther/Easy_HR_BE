@@ -87,7 +87,7 @@ export const createMileStone = async (req: Request, res: Response) => {
 
     console.log("getvalue" , getvalue)
 
-    if (getvalue <= 10) {
+    if (getvalue <= 17) {
       const getAdmin = await adminAuth.findById(req.params.adminId);
 
       const milestone = await mileStoneModel.create({

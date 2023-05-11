@@ -16,6 +16,35 @@ app.set("trust proxy", true);
 
 const sdk = new SuperfaceClient();
 
+async function run(ip: any) {
+  // Load the profile
+  const profile = await sdk.getProfile("address/ip-geolocation@1.0.1");
+
+  // Use the profile
+  const result = await profile.getUseCase("IpGeolocation").perform(
+    {
+      //   ipAddress: "102.88.34.40",
+      ipAddress: ip,
+    },
+    {
+      provider: "ipdata",
+      security: {
+        apikey: {
+          apikey: "41b7b0ed377c175c4b32091abd68d049f5b6b748b2bee4789a161d93",
+        },
+      },
+    },
+  );
+
+  // Handle the result
+  try {
+    const data = result.unwrap();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 
 export const createAttendance = async(req:Request , res:Response)=>{
   try {
@@ -63,24 +92,6 @@ export const createClockIn = async (req: Request, res: Response ,ip:any  ) => {
 
     
 
-    const profile = await sdk.getProfile("address/ip-geolocation@1.0.1");
-
-    // Use the profile
-    const result = await profile.getUseCase("IpGeolocation").perform(
-      {
-        //   ipAddress: "102.88.34.40",
-        ipAddress : ip,
-      },
-      {
-        provider: "ipdata",
-        security: {
-          apikey: {
-            apikey: "41b7b0ed377c175c4b32091abd68d049f5b6b748b2bee4789a161d93",
-          },
-        },
-      },
-    );
-    const data = result.unwrap();
 
     const { date, clockIn, message, time , setToken } = req.body;
 
@@ -89,6 +100,23 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
     const getAdminAttendanceToken = await adminAttendanceModel.findOne(
       {setToken}
     )
+    
+    let dataIP: any;
+
+    await axios.get("https://api.ipify.org/").then((res: any) => {
+      dataIP = res.data;
+    });
+
+    let realData: any = await run(dataIP);
+
+    console.log(realData?.latitude);
+    console.log(realData?.longitude);
+
+    console.log(getAdmin?.latitude);
+    console.log(getAdmin?.longitude);
+
+    console.log(parseFloat(getAdmin?.latitude!));
+    console.log(parseFloat(getAdmin?.longitude!));
 
     const getDate = new Date().toLocaleDateString();
 
@@ -96,15 +124,18 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
 
     const customMessage = `you clocked in at ${getTime} on ${getDate} , make sure to clock out at the right time`;
 
-    const getLatitude:string = data?.latitude
-    const getLongitude:string = data?.longitude
+    
+   
 
     if(getStaff && getAdmin){
 
 
       if(getAdminAttendanceToken?.setToken === setToken ){
         if(getAdmin?.expectedClockIn! <= getTime){
-          if(getAdmin?.latitude && getAdmin?.longitude === getLatitude && getLongitude){
+          if (
+            realData?.latitude === parseFloat(getAdmin?.latitude!) &&
+            realData?.longitude === parseFloat(getAdmin?.longitude!)
+          ) {
             const clockInTime = await AttendanceModel.create({
               date: getDate,
               clockIn,
