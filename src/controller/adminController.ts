@@ -67,7 +67,7 @@ export const adminSignup = asyncHandler(
       const hash = await bcrypt.hash(password, salt);
 
       const dater = Date.now();
-
+const defaultTime = "07:30:00 PM"
       const generateNumber = Math.floor(Math.random() * 78) + dater;
       const genCode = otpgenerator.generate(6, {
         upperCaseAlphabets: false,
@@ -84,8 +84,10 @@ export const adminSignup = asyncHandler(
         walletNumber: generateNumber,
         token: genToken,
         OTP: genOTP,
+        expectedClockIn: defaultTime,
         latitude : data?.latitude,
-        longitude : data?.longitude
+        longitude : data?.longitude,
+        
       });
 
       if (!admin) {
@@ -309,7 +311,7 @@ export const updateAdmin = async (req: Request, res: Response) => {
     // const getStaffDetails = await staffAuth.findById(req.params.staffId);
 
     if(getAdmin){
-      const update = await staffAuth.findByIdAndUpdate(
+      const update = await adminAuth.findByIdAndUpdate(
         getAdmin?._id,
         { expectedClockIn , expectedClockOut,companyname ,email ,yourName },
         { new: true }

@@ -9,5 +9,5 @@ adminAuthRoutes.post("/register", userValidation_1.registerValidation, adminCont
 adminAuthRoutes.get("/", adminController_1.getAllAdmin);
 adminAuthRoutes.get("/:adminId", adminController_1.getOneAdmin);
 adminAuthRoutes.get("/:adminId/verify", adminController_1.verifyUser);
-adminAuthRoutes.get("/:adminId/updateadmin", adminController_1.updateAdmin);
+adminAuthRoutes.patch("/updateadmin/:adminId", adminController_1.updateAdmin);
 exports.default = adminAuthRoutes;
