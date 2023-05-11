@@ -20,6 +20,6 @@ AdminRoutes.post("/createattendance/:adminId", StaffTime_1.createAttendance);
 AdminRoutes.post("/createleave/:adminId", leaves_1.createLeave);
 //createPerformanceMilestone
 AdminRoutes.post("/createperformancemilestone/:adminId", adminPerformance_1.createMileStone);
-AdminRoutes.post("/createstaffscore", adminPerformance_1.enterStaffScore);
+AdminRoutes.post("/createstaffscore/:MileStoneId", adminPerformance_1.enterStaffScore);
 AdminRoutes.patch("/createadminscore/:rateId", adminPerformance_1.enterAdminScore);
 exports.default = AdminRoutes;

@@ -20,6 +20,8 @@ const Rate_1 = __importDefault(require("../../model/admin/adminPerformance/Rate"
 const GradeD_1 = __importDefault(require("../../model/admin/adminPerformance/grades/GradeD"));
 const GradesC_1 = __importDefault(require("../../model/admin/adminPerformance/grades/GradesC"));
 const GradeB_1 = __importDefault(require("../../model/admin/adminPerformance/grades/GradeB"));
+const staffAuth_1 = __importDefault(require("../../model/staff/staffAuth"));
+const GradeA_1 = __importDefault(require("../../model/admin/adminPerformance/grades/GradeA"));
 const PerformanceMilestone = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
@@ -78,10 +80,11 @@ const createMileStone = (req, res) => __awaiter(void 0, void 0, void 0, function
         const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth);
         console.log(daysInCurrentMonth);
         //get actual date
-        const getCurrentDate = new Date().toLocaleDateString().split("")[2];
+        const getCurrentDate = new Date().toLocaleDateString().split("/")[1];
         const getvalue = parseInt(getCurrentDate);
         console.log(getvalue);
-        if (getvalue >= 1 && getvalue === 10) {
+        console.log("getvalue", getvalue);
+        if (getvalue <= 10) {
             const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
             const milestone = yield adminPerfomanceModel_1.default.create({
                 mileStone,
@@ -111,16 +114,24 @@ exports.createMileStone = createMileStone;
 const enterStaffScore = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { staffScore } = req.body;
-        const createStaffScore = yield Rate_1.default.create({
-            adminScore: 0,
-            staffScore,
-            adminGrade: 0,
-            // date : Date.getDate()
-        });
-        return res.status(201).json({
-            message: "entered score sucessfully",
-            data: createStaffScore,
-        });
+        const findMileStone = yield adminPerfomanceModel_1.default.findById(req.params.MileStoneId);
+        if (findMileStone) {
+            const createStaffScore = yield Rate_1.default.create({
+                adminScore: 0,
+                staffScore,
+                adminGrade: 0,
+                // date : Date.getDate()
+            });
+            return res.status(201).json({
+                message: "entered score sucessfully",
+                data: createStaffScore,
+            });
+        }
+        else {
+            return res.status(400).json({
+                message: "milestone has not been created yet .....be patient"
+            });
+        }
     }
     catch (error) {
         return res.status(400).json({
@@ -135,6 +146,7 @@ const enterAdminScore = (req, res) => __awaiter(void 0, void 0, void 0, function
     var _b, _c, _d, _e;
     try {
         const { adminScore } = req.body;
+        const findStaff = yield staffAuth_1.default.findById(req.params.staffId);
         const getRateModel = yield Rate_1.default.findById(req.params.rateId);
         const updateScore = yield Rate_1.default.findByIdAndUpdate(getRateModel === null || getRateModel === void 0 ? void 0 : getRateModel._id, {
             adminScore,
@@ -149,7 +161,8 @@ const enterAdminScore = (req, res) => __awaiter(void 0, void 0, void 0, function
             yield (getRateModel === null || getRateModel === void 0 ? void 0 : getRateModel.save());
             return res.status(201).json({
                 message: ` Your grade for this month is ${getGrade === null || getGrade === void 0 ? void 0 : getGrade.grade} `,
-                data: getGrade
+                data: getGrade,
+                updateScore
             });
             //from 26-50
         }
@@ -162,7 +175,8 @@ const enterAdminScore = (req, res) => __awaiter(void 0, void 0, void 0, function
             yield (getRateModel === null || getRateModel === void 0 ? void 0 : getRateModel.save());
             return res.status(201).json({
                 message: ` Your grade for this month is ${getGrade === null || getGrade === void 0 ? void 0 : getGrade.grade} `,
-                data: getGrade
+                data: getGrade,
+                updateScore
             });
             //from 51 -75
         }
@@ -179,7 +193,7 @@ const enterAdminScore = (req, res) => __awaiter(void 0, void 0, void 0, function
             });
         }
         else {
-            const getGrade = yield gradeAModel.create({
+            const getGrade = yield GradeA_1.default.create({
                 grade: "VERY GOOD",
                 score: getRateModel === null || getRateModel === void 0 ? void 0 : getRateModel.adminScore
             });
@@ -187,13 +201,10 @@ const enterAdminScore = (req, res) => __awaiter(void 0, void 0, void 0, function
             yield (getRateModel === null || getRateModel === void 0 ? void 0 : getRateModel.save());
             return res.status(201).json({
                 message: ` Your grade for this month is ${getGrade === null || getGrade === void 0 ? void 0 : getGrade.grade} `,
-                data: getGrade
+                data: getGrade,
+                updateScore
             });
         }
-        return res.status(201).json({
-            message: "entered score sucessfully",
-            data: updateScore,
-        });
     }
     catch (error) {
         return res.status(400).json({

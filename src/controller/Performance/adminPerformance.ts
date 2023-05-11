@@ -64,6 +64,7 @@ export const createMileStone = async (req: Request, res: Response) => {
   try {
     const { mileStone } = req.body;
 
+
     function getDaysInMonth(year: any, month: any) {
       return new Date(year, month, 0).getDate();
     }
@@ -77,12 +78,16 @@ export const createMileStone = async (req: Request, res: Response) => {
     console.log(daysInCurrentMonth);
 
     //get actual date
-    const getCurrentDate = new Date().toLocaleDateString().split("")[2];
+    const getCurrentDate = new Date().toLocaleDateString().split("/")[1]
+
+    
 
     const getvalue: number = parseInt(getCurrentDate);
     console.log(getvalue);
 
-    if (getvalue >= 1 && getvalue === 10) {
+    console.log("getvalue" , getvalue)
+
+    if (getvalue <= 10) {
       const getAdmin = await adminAuth.findById(req.params.adminId);
 
       const milestone = await mileStoneModel.create({
@@ -116,17 +121,26 @@ export const createMileStone = async (req: Request, res: Response) => {
 export const enterStaffScore = async (req: Request, res: Response) => {
   try {
     const { staffScore } = req.body;
-    const createStaffScore = await rateModel.create({
-      adminScore: 0,
-      staffScore,
-      adminGrade: 0,
-      // date : Date.getDate()
-    });
 
-    return res.status(201).json({
-      message: "entered score sucessfully",
-      data: createStaffScore,
-    });
+    const findMileStone = await mileStoneModel.findById(req.params.MileStoneId)
+    if(findMileStone){
+      const createStaffScore = await rateModel.create({
+        adminScore: 0,
+        staffScore,
+        adminGrade: 0,
+        // date : Date.getDate()
+      });
+  
+      return res.status(201).json({
+        message: "entered score sucessfully",
+        data: createStaffScore,
+      });
+    }else{
+      return res.status(400).json({
+        message : "milestone has not been created yet .....be patient"
+      })
+    }
+    
   } catch (error: any) {
     return res.status(400).json({
       message: "failed to enter score",
@@ -162,7 +176,8 @@ export const enterAdminScore = async (req: Request, res: Response) => {
 
       return res.status(201).json({
         message :` Your grade for this month is ${getGrade?.grade} `,
-        data : getGrade
+        data : getGrade,
+        updateScore
       })
 
       //from 26-50
@@ -176,7 +191,8 @@ export const enterAdminScore = async (req: Request, res: Response) => {
 
       return res.status(201).json({
         message :` Your grade for this month is ${getGrade?.grade} `,
-        data : getGrade
+        data : getGrade,
+        updateScore
       })
 
       //from 51 -75
@@ -202,14 +218,12 @@ export const enterAdminScore = async (req: Request, res: Response) => {
 
       return res.status(201).json({
         message :` Your grade for this month is ${getGrade?.grade} `,
-        data : getGrade
+        data : getGrade,
+        updateScore
       })
     }
 
-    return res.status(201).json({
-      message: "entered score sucessfully",
-      data: updateScore,
-    });
+   
   } catch (error: any) {
     return res.status(400).json({
       message: "failed to enter score",
