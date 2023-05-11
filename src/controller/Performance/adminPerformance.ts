@@ -3,6 +3,9 @@ import { Request, Response } from "express";
 import mileStoneModel from "../../model/admin/adminPerformance/adminPerfomanceModel";
 import mongoose from "mongoose";
 import rateModel from "../../model/admin/adminPerformance/Rate";
+import gradeDModel from "../../model/admin/adminPerformance/grades/GradeD";
+import gradeCModel from "../../model/admin/adminPerformance/grades/GradesC";
+import gradeBModel from "../../model/admin/adminPerformance/grades/GradeB";
 
 export const PerformanceMilestone = async (req: Request, res: Response) => {
   try {
@@ -70,13 +73,12 @@ export const createMileStone = async (req: Request, res: Response) => {
     // 👇️ Current Month
     const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth);
     console.log(daysInCurrentMonth);
-  
+
     //get actual date
     const getCurrentDate = new Date().toLocaleDateString().split("")[2];
 
-    const getvalue:number = parseInt(getCurrentDate);
+    const getvalue: number = parseInt(getCurrentDate);
     console.log(getvalue);
-
 
     if (getvalue >= 1 && getvalue === 10) {
       const getAdmin = await adminAuth.findById(req.params.adminId);
@@ -115,7 +117,7 @@ export const enterStaffScore = async (req: Request, res: Response) => {
     const createStaffScore = await rateModel.create({
       adminScore: 0,
       staffScore,
-      adminGrade : 0
+      adminGrade: 0,
       // date : Date.getDate()
     });
 
@@ -134,20 +136,71 @@ export const enterStaffScore = async (req: Request, res: Response) => {
 
 export const enterAdminScore = async (req: Request, res: Response) => {
   try {
-    const { adminScore ,adminGrade } = req.body;
+    const { adminScore } = req.body;
     const getRateModel = await rateModel.findById(req.params.rateId);
 
     const updateScore = await rateModel.findByIdAndUpdate(
       getRateModel?._id,
       {
         adminScore,
-       
       },
       { new: true }
     );
 
-    if(getRateModel?.adminScore! >= 1 && getRateModel?.adminScore! <= 25){
 
+    //from 1-26
+    if (getRateModel?.adminScore! >= 1 && getRateModel?.adminScore! <= 25) {
+      const getGrade = await gradeDModel.create({
+        grade: "VERY POOR",
+        score : getRateModel?.adminScore
+      });
+      await getRateModel?.gradeD?.push(new mongoose.Types.ObjectId(getGrade?._id))
+      await getRateModel?.save()
+
+      return res.status(201).json({
+        message :` Your grade for this month is ${getGrade?.grade} `,
+        data : getGrade
+      })
+
+      //from 26-50
+    }else if(getRateModel?.adminScore! >= 26 && getRateModel?.adminScore! <=50){
+      const getGrade = await gradeCModel.create({
+        grade: "POOR",
+        score : getRateModel?.adminScore
+      });
+      await getRateModel?.gradeC?.push(new mongoose.Types.ObjectId(getGrade?._id))
+      await getRateModel?.save()
+
+      return res.status(201).json({
+        message :` Your grade for this month is ${getGrade?.grade} `,
+        data : getGrade
+      })
+
+      //from 51 -75
+    }else if(getRateModel?.adminScore! >= 51 && getRateModel?.adminScore! <=75){
+      const getGrade = await gradeBModel.create({
+        grade: "GOOD",
+        score : getRateModel?.adminScore
+      });
+      await getRateModel?.gradeB?.push(new mongoose.Types.ObjectId(getGrade?._id))
+      await getRateModel?.save()
+
+      return res.status(201).json({
+        message :` Your grade for this month is ${getGrade?.grade} `,
+        data : getGrade
+      })
+    }else{
+      const getGrade = await gradeAModel.create({
+        grade: "VERY GOOD",
+        score : getRateModel?.adminScore
+      });
+      await getRateModel?.gradeA?.push(new mongoose.Types.ObjectId(getGrade?._id))
+      await getRateModel?.save()
+
+      return res.status(201).json({
+        message :` Your grade for this month is ${getGrade?.grade} `,
+        data : getGrade
+      })
     }
 
     return res.status(201).json({
