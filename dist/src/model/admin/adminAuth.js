@@ -117,10 +117,10 @@ const AdminAuth = new mongoose_1.default.Schema({
             ref: "StaffAttendance",
         },
     ],
-    viewAppliedLeave: [
+    staffLeave: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "viewAppliedLeave",
+            ref: "staffLeave",
         },
     ],
     // viewApprovedLeave: [
