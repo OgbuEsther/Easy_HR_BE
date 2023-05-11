@@ -11,3 +11,4 @@ adminAuthRoutes.get("/:adminId", getOneAdmin);
 adminAuthRoutes.get("/:adminId/verify", verifyUser);
 adminAuthRoutes.get("/:adminId/updateadmin", updateAdmin);
 export default adminAuthRoutes;
+
