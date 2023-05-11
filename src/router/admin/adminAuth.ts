@@ -9,6 +9,6 @@ adminAuthRoutes.post("/register",registerValidation, adminSignup);
 adminAuthRoutes.get("/", getAllAdmin);
 adminAuthRoutes.get("/:adminId", getOneAdmin);
 adminAuthRoutes.get("/:adminId/verify", verifyUser);
-adminAuthRoutes.get("/:adminId/updateadmin", updateAdmin);
+adminAuthRoutes.patch("/updateadmin/:adminId", updateAdmin);
 export default adminAuthRoutes;
 

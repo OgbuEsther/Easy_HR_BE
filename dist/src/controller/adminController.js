@@ -55,6 +55,7 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => _
         const salt = yield bcrypt_1.default.genSalt(10);
         const hash = yield bcrypt_1.default.hash(password, salt);
         const dater = Date.now();
+        const defaultTime = "07:30:00 PM";
         const generateNumber = Math.floor(Math.random() * 78) + dater;
         const genCode = otp_generator_1.default.generate(6, {
             upperCaseAlphabets: false,
@@ -71,8 +72,9 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => _
             walletNumber: generateNumber,
             token: genToken,
             OTP: genOTP,
+            expectedClockIn: defaultTime,
             latitude: data === null || data === void 0 ? void 0 : data.latitude,
-            longitude: data === null || data === void 0 ? void 0 : data.longitude
+            longitude: data === null || data === void 0 ? void 0 : data.longitude,
         });
         if (!admin) {
             next(new appError_1.AppError({
@@ -263,7 +265,7 @@ const updateAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
         // const getStaffDetails = await staffAuth.findById(req.params.staffId);
         if (getAdmin) {
-            const update = yield staffAuth_1.default.findByIdAndUpdate(getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id, { expectedClockIn, expectedClockOut, companyname, email, yourName }, { new: true });
+            const update = yield adminAuth_1.default.findByIdAndUpdate(getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id, { expectedClockIn, expectedClockOut, companyname, email, yourName }, { new: true });
             return res.status(201).json({
                 message: "updated admin details successfully",
                 data: update
