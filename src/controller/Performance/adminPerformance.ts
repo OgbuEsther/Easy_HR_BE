@@ -6,6 +6,8 @@ import rateModel from "../../model/admin/adminPerformance/Rate";
 import gradeDModel from "../../model/admin/adminPerformance/grades/GradeD";
 import gradeCModel from "../../model/admin/adminPerformance/grades/GradesC";
 import gradeBModel from "../../model/admin/adminPerformance/grades/GradeB";
+import staffAuth from "../../model/staff/staffAuth";
+import gradeAModel from "../../model/admin/adminPerformance/grades/GradeA";
 
 export const PerformanceMilestone = async (req: Request, res: Response) => {
   try {
@@ -137,6 +139,7 @@ export const enterStaffScore = async (req: Request, res: Response) => {
 export const enterAdminScore = async (req: Request, res: Response) => {
   try {
     const { adminScore } = req.body;
+    const findStaff = await staffAuth.findById(req.params.staffId)
     const getRateModel = await rateModel.findById(req.params.rateId);
 
     const updateScore = await rateModel.findByIdAndUpdate(

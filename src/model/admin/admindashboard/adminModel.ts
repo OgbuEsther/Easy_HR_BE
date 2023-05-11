@@ -37,7 +37,8 @@ export interface milestoneGenerator {
 export interface rateMe {
   adminScore : number;
   staffScore : number
-  date : string
+  date : string;
+  yourName : string
   gradeA :{}[]
   gradeB :{}[]
   gradeC :{}[]

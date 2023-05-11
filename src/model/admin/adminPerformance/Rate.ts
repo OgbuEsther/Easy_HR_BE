@@ -10,6 +10,9 @@ const rateSchema = new mongoose.Schema<rateMe>({
   date: {
     type: String,
   },
+  yourName: {
+    type: String,
+  },
   staffScore: {
     type: Number,
   },
