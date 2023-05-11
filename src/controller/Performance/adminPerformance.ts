@@ -115,6 +115,7 @@ export const enterStaffScore = async (req: Request, res: Response) => {
     const createStaffScore = await rateModel.create({
       adminScore: 0,
       staffScore,
+      adminGrade : 0
       // date : Date.getDate()
     });
 
@@ -133,16 +134,21 @@ export const enterStaffScore = async (req: Request, res: Response) => {
 
 export const enterAdminScore = async (req: Request, res: Response) => {
   try {
-    const { adminScore } = req.body;
+    const { adminScore ,adminGrade } = req.body;
     const getRateModel = await rateModel.findById(req.params.rateId);
 
     const updateScore = await rateModel.findByIdAndUpdate(
       getRateModel?._id,
       {
         adminScore,
+       
       },
       { new: true }
     );
+
+    if(getRateModel?.adminScore! >= 1 && getRateModel?.adminScore! <= 25){
+
+    }
 
     return res.status(201).json({
       message: "entered score sucessfully",

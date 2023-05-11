@@ -38,6 +38,16 @@ export interface rateMe {
   adminScore : number;
   staffScore : number
   date : string
+  gradeA :{}[]
+  gradeB :{}[]
+  gradeC :{}[]
+  gradeD :{}[]
+
+}
+
+export interface grades {
+  score : number,
+  grade : string
 }
 
 // export interface PayRoll {
