@@ -125,7 +125,12 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
     const customMessage = `you clocked in at ${getTime} on ${getDate} , make sure to clock out at the right time`;
 
     
-   
+   console.log("this is parseFloat(getAdmin?.expectedClockIn! ) " ,parseFloat(getAdmin?.expectedClockIn! ))
+
+   console.log("this is parseFloat(getTime)" ,parseFloat(getTime))
+   console.log("this is (getAdmin?.expectedClockIn! ) " ,getAdmin?.expectedClockIn! )
+
+   console.log("this is (getTime)" ,getTime)
 
     if(getStaff && getAdmin){
 
@@ -178,7 +183,7 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
             })
           }
          
-        }else{
+        }else if(getAdmin?.expectedClockIn! >= getTime){
           const clockInTime = await LateAttendanceModel.create({
             date: getDate,
             clockIn,
@@ -189,9 +194,13 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
             nameOfStaff : getStaff?.yourName
           });
           getAdmin?.viewLateStaff?.push(new mongoose.Types.ObjectId(clockInTime?._id))
-          return res.status(400).json({
+          return res.status(200).json({
             message : "you are late  "
 
+          })
+        }else{
+          return res.status(400).json({
+            message : "you didn't punch in today"
           })
         }
 

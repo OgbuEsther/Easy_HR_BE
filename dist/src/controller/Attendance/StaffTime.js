@@ -107,6 +107,10 @@ const createClockIn = (req, res, ip) => __awaiter(void 0, void 0, void 0, functi
         const getDate = new Date().toLocaleDateString();
         const getTime = new Date().toLocaleTimeString();
         const customMessage = `you clocked in at ${getTime} on ${getDate} , make sure to clock out at the right time`;
+        console.log("this is parseFloat(getAdmin?.expectedClockIn! ) ", parseFloat(getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.expectedClockIn));
+        console.log("this is parseFloat(getTime)", parseFloat(getTime));
+        console.log("this is (getAdmin?.expectedClockIn! ) ", getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.expectedClockIn);
+        console.log("this is (getTime)", getTime);
         if (getStaff && getAdmin) {
             if ((getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.setToken) === setToken) {
                 if ((getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.expectedClockIn) <= getTime) {
@@ -140,7 +144,7 @@ const createClockIn = (req, res, ip) => __awaiter(void 0, void 0, void 0, functi
                         });
                     }
                 }
-                else {
+                else if ((getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.expectedClockIn) >= getTime) {
                     const clockInTime = yield StaffLateNess_1.default.create({
                         date: getDate,
                         clockIn,
@@ -151,8 +155,13 @@ const createClockIn = (req, res, ip) => __awaiter(void 0, void 0, void 0, functi
                         nameOfStaff: getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName
                     });
                     (_e = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewLateStaff) === null || _e === void 0 ? void 0 : _e.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id));
-                    return res.status(400).json({
+                    return res.status(200).json({
                         message: "you are late  "
+                    });
+                }
+                else {
+                    return res.status(400).json({
+                        message: "you didn't punch in today"
                     });
                 }
             }
