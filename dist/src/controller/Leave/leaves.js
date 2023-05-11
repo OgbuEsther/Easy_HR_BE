@@ -67,7 +67,8 @@ const applyForLeave = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const { title, startDate, numberOfDays, reason } = req.body;
         const getStaff = yield staffAuth_1.default.findById(req.params.staffId);
         const getLeave = yield adminLeave_1.default.findOne({ title });
-        if (getStaff) {
+        const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
+        if (getStaff && getAdmin) {
             if ((getLeave === null || getLeave === void 0 ? void 0 : getLeave.title) === title) {
                 const apply = yield staffLeave_1.default.create({
                     title,
@@ -75,9 +76,12 @@ const applyForLeave = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     numberOfDays,
                     remainingDays: (getLeave === null || getLeave === void 0 ? void 0 : getLeave.days) - numberOfDays,
                     reason,
+                    approved: false
                 });
                 (_b = getStaff === null || getStaff === void 0 ? void 0 : getStaff.staffLeave) === null || _b === void 0 ? void 0 : _b.push(new mongoose_1.default.Types.ObjectId(apply === null || apply === void 0 ? void 0 : apply._id));
                 getStaff === null || getStaff === void 0 ? void 0 : getStaff.save();
+                getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewAppliedLeave.push(new mongoose_1.default.Types.ObjectId(apply === null || apply === void 0 ? void 0 : apply._id));
+                getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save();
                 return res.status(201).json({
                     message: "created application successfully",
                     data: apply,

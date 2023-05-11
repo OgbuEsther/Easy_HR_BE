@@ -20,6 +20,6 @@ const staffSchema = new mongoose_1.Schema({
     approved: {
         type: Boolean
     }
-});
-const staffLeaveModel = (0, mongoose_1.model)("staffLeave", staffSchema);
-exports.default = staffLeaveModel;
+}, { timestamps: true });
+const appliedLeave = (0, mongoose_1.model)("viewAppliedLeave", staffSchema);
+exports.default = appliedLeave;

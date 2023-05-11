@@ -16,6 +16,6 @@ staffRoutes.post("/clockout/:staffId/:adminId" , createClockOut)
 
 //LEAVE 
 //APPLICATION FOR LEAVE 
-staffRoutes.post("/applyforleave/:staffId" ,applyForLeave )
+staffRoutes.post("/applyforleave/:staffId/:adminId" ,applyForLeave )
 
 export default staffRoutes

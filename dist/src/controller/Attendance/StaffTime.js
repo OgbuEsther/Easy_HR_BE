@@ -156,7 +156,7 @@ const createClockIn = (req, res, ip) => __awaiter(void 0, void 0, void 0, functi
                     });
                     (_e = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewLateStaff) === null || _e === void 0 ? void 0 : _e.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id));
                     return res.status(200).json({
-                        message: "you are late  "
+                        message: "you are late"
                     });
                 }
                 else {

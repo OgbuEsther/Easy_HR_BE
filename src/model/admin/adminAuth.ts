@@ -126,6 +126,24 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
       ref: "StaffAttendance",
     },
   ],
+  viewAppliedLeave: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "viewAppliedLeave",
+    },
+  ],
+  // viewApprovedLeave: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "viewApprovedLeave",
+  //   },
+  // ],
+  // viewRejectedLeave: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "viewRejectedLeave",
+  //   },
+  // ],
   },
   { timestamps: true }
 );
