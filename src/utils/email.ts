@@ -85,7 +85,7 @@ export const verifyStaffEmailByAdmin = async (user: any, admin: any) => {
 
     const readData = await ejs.renderFile(getData, {
       companyName: admin.companyname,
-      name: user?.YourName,
+      name: user?.yourName,
       email: user?.email,
       token: user?.token,
       id: user?._id,

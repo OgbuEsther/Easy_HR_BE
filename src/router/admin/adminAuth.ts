@@ -12,3 +12,4 @@ adminAuthRoutes.get("/:adminId/verify", verifyUser);
 adminAuthRoutes.patch("/updateadmin/:adminId", updateAdmin);
 export default adminAuthRoutes;
 
+
