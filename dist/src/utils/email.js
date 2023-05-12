@@ -84,7 +84,7 @@ const verifyStaffEmailByAdmin = (user, admin) => __awaiter(void 0, void 0, void 
         const getData = path_1.default.join(__dirname, "../views/AdminUserSignUp.ejs");
         const readData = yield ejs_1.default.renderFile(getData, {
             companyName: admin.companyname,
-            name: user === null || user === void 0 ? void 0 : user.YourName,
+            name: user === null || user === void 0 ? void 0 : user.yourName,
             email: user === null || user === void 0 ? void 0 : user.email,
             token: user === null || user === void 0 ? void 0 : user.token,
             id: user === null || user === void 0 ? void 0 : user._id,
