@@ -183,7 +183,7 @@ export const finalVerifyStaffEmail = async (staff: any) => {
       token: staff?.token,
       id: staff?._id,
       staffToken: staff?.staffToken,
-      url: `http://localhost:3000/verify/${staff?._id}`,
+      url: `${staffURL}/verify/${staff?._id}`,
     });
 
     let mailerOptions = {

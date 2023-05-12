@@ -243,34 +243,16 @@ exports.deactivateStaff = deactivateStaff;
 //verify account via mail
 const verifyUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email, password, companyname, OTP } = req.body;
         const staff = yield staffAuth_1.default.findById(req.params.staffId);
-        if ((staff === null || staff === void 0 ? void 0 : staff.OTP) === OTP) {
+        if ((staff === null || staff === void 0 ? void 0 : staff.OTP) !== "") {
             if ((staff === null || staff === void 0 ? void 0 : staff.token) !== "") {
-                if ((staff === null || staff === void 0 ? void 0 : staff.companyname) !== companyname) {
-                    return res.status(400).json({
-                        message: "please enter the valid company name"
-                    });
-                }
-                else {
-                    const check = yield bcrypt_1.default.compare(password, staff === null || staff === void 0 ? void 0 : staff.password);
-                    if (check) {
-                        yield staffAuth_1.default.findByIdAndUpdate(staff === null || staff === void 0 ? void 0 : staff._id, {
-                            token: "",
-                            verified: true,
-                        }, { new: true });
-                        return res.status(201).json({
-                            message: "Account has been verified, you can now signin",
-                            //   data: user,
-                        });
-                    }
-                    else {
-                        console.log("bad");
-                        return res.status(400).json({
-                            message: "verification  failed",
-                        });
-                    }
-                }
+                yield staffAuth_1.default.findByIdAndUpdate(staff === null || staff === void 0 ? void 0 : staff._id, {
+                    token: "",
+                    verified: true,
+                }, { new: true });
+                return res.status(201).json({
+                    data: staff,
+                });
             }
             else {
                 return res.status(400).json({

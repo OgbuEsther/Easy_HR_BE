@@ -296,20 +296,14 @@ export const deactivateStaff = async(req:Request , res:Response)=>{
 
 export const verifyUser = async (req: Request, res: Response) => {
   try {
-    const { email, password, companyname , OTP } = req.body;
+
 
     const staff = await staffAuth.findById(req.params.staffId);
 
-    if (staff?.OTP === OTP) {
+    if (staff?.OTP !== "") {
       if (staff?.token !== "") {
-        if(staff?.companyname! !== companyname){
-          return res.status(400).json({
-            message : "please enter the valid company name"
-          });
-        
-        }else{
-          const check = await bcrypt.compare(password, staff?.password!);
-          if (check) {
+  
+          
 
             await staffAuth.findByIdAndUpdate(
               staff?._id,
@@ -319,23 +313,11 @@ export const verifyUser = async (req: Request, res: Response) => {
               },
               { new: true }
             );
-    
+
             return res.status(201).json({
-              message: "Account has been verified, you can now signin",
-              //   data: user,
+              data: staff,
             });
-           
-
-
-          } else {
-            console.log("bad");
-            return res.status(400).json({
-              message: "verification  failed",
-            });
-          }
-        }
-        
-      
+  
       } else {
         return res.status(400).json({
           message: "you have inputed a wrong otp",
@@ -353,6 +335,7 @@ export const verifyUser = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 
 export const verifiedStaff = async (req:Request, res:Response) => {
