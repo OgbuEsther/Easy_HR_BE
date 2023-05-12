@@ -87,7 +87,7 @@ const createAttendance = (req, res) => __awaiter(void 0, void 0, void 0, functio
 exports.createAttendance = createAttendance;
 //clock in time
 const createClockIn = (req, res, ip) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b, _c, _d, _e;
+    var _b, _c, _d;
     try {
         const { date, clockIn, message, time, setToken } = req.body;
         const getStaff = yield staffAuth_1.default.findById(req.params.staffId);
@@ -123,24 +123,19 @@ const createClockIn = (req, res, ip) => __awaiter(void 0, void 0, void 0, functi
                             message: customMessage,
                             time: getTime,
                             token: setToken,
-                            nameOfStaff: getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName
+                            nameOfStaff: getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName,
+                            staffId: getStaff === null || getStaff === void 0 ? void 0 : getStaff.staffToken
                         });
                         yield ((_b = getStaff === null || getStaff === void 0 ? void 0 : getStaff.Attendance) === null || _b === void 0 ? void 0 : _b.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
                         yield (getStaff === null || getStaff === void 0 ? void 0 : getStaff.save());
                         yield (getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewStaffAttendance.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
                         yield (getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.save());
-                        yield ((_c = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewStaffHistory) === null || _c === void 0 ? void 0 : _c.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
                         getAdmin.viewStaffHistory.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id));
-                        yield ((_d = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewAbsentStaff) === null || _d === void 0 ? void 0 : _d.pull(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id)));
+                        yield ((_c = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewAbsentStaff) === null || _c === void 0 ? void 0 : _c.pull(new mongoose_1.default.Types.ObjectId(getStaff === null || getStaff === void 0 ? void 0 : getStaff._id)));
                         yield (getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save());
                         return res.status(201).json({
                             message: "clockInTime done",
                             data: clockInTime,
-                        });
-                    }
-                    else {
-                        return res.status(400).json({
-                            message: "you are not within the office premises"
                         });
                     }
                 }
@@ -154,7 +149,7 @@ const createClockIn = (req, res, ip) => __awaiter(void 0, void 0, void 0, functi
                         token: setToken,
                         nameOfStaff: getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName
                     });
-                    (_e = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewLateStaff) === null || _e === void 0 ? void 0 : _e.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id));
+                    (_d = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewLateStaff) === null || _d === void 0 ? void 0 : _d.push(new mongoose_1.default.Types.ObjectId(clockInTime === null || clockInTime === void 0 ? void 0 : clockInTime._id));
                     return res.status(200).json({
                         message: "you are late"
                     });
@@ -188,7 +183,7 @@ const createClockIn = (req, res, ip) => __awaiter(void 0, void 0, void 0, functi
 exports.createClockIn = createClockIn;
 //clock Out time
 const createClockOut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _f;
+    var _e;
     try {
         const { date, clockOut, message, time, setToken } = req.body;
         const getDate = new Date().toLocaleDateString();
@@ -208,7 +203,7 @@ const createClockOut = (req, res) => __awaiter(void 0, void 0, void 0, function*
                     token: setToken,
                     nameOfStaff: getStaff === null || getStaff === void 0 ? void 0 : getStaff.yourName
                 });
-                yield ((_f = getStaff === null || getStaff === void 0 ? void 0 : getStaff.Attendance) === null || _f === void 0 ? void 0 : _f.push(new mongoose_1.default.Types.ObjectId(clockOutTime === null || clockOutTime === void 0 ? void 0 : clockOutTime._id)));
+                yield ((_e = getStaff === null || getStaff === void 0 ? void 0 : getStaff.Attendance) === null || _e === void 0 ? void 0 : _e.push(new mongoose_1.default.Types.ObjectId(clockOutTime === null || clockOutTime === void 0 ? void 0 : clockOutTime._id)));
                 yield (getStaff === null || getStaff === void 0 ? void 0 : getStaff.save());
                 yield (getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.viewStaffAttendance.push(new mongoose_1.default.Types.ObjectId(clockOutTime === null || clockOutTime === void 0 ? void 0 : clockOutTime._id)));
                 yield (getAdminAttendanceToken === null || getAdminAttendanceToken === void 0 ? void 0 : getAdminAttendanceToken.save());

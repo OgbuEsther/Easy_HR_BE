@@ -38,7 +38,9 @@ const AttendanceSchema = new mongoose.Schema<Attendance>({
     nameOfStaff : {
         type : String
     },
-
+staffId : {
+    type : String
+}
 })
 
 const AttendanceModel = mongoose.model<IAttend>("StaffAttendance" , AttendanceSchema)
