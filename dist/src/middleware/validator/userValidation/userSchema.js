@@ -10,11 +10,11 @@ exports.userSchema = {
         yourName: joi_1.default.string().required(),
         email: joi_1.default.string().email().required(),
         companyname: joi_1.default.string().required(),
-        password: joi_1.default.string().min(6).required(),
+        password: joi_1.default.string().required(),
     }),
     login: joi_1.default.object({
         companyname: joi_1.default.string().required(),
         email: joi_1.default.string().email().required(),
-        password: joi_1.default.string().min(6).alphanum().required(),
+        password: joi_1.default.string().required(),
     }),
 };
