@@ -79,7 +79,7 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
         getStaff?.staffLeave?.push(new mongoose.Types.ObjectId(apply?._id));
 
         getStaff?.save();
-        getAdmin?.viewAppliedLeave.push(new mongoose.Types.ObjectId(apply?._id))
+        getAdmin?.staffLeave.push(new mongoose.Types.ObjectId(apply?._id))
 
         getAdmin?.save()
         return res.status(201).json({
