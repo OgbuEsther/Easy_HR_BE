@@ -80,7 +80,7 @@ const applyForLeave = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 });
                 (_b = getStaff === null || getStaff === void 0 ? void 0 : getStaff.staffLeave) === null || _b === void 0 ? void 0 : _b.push(new mongoose_1.default.Types.ObjectId(apply === null || apply === void 0 ? void 0 : apply._id));
                 getStaff === null || getStaff === void 0 ? void 0 : getStaff.save();
-                getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewAppliedLeave.push(new mongoose_1.default.Types.ObjectId(apply === null || apply === void 0 ? void 0 : apply._id));
+                getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.staffLeave.push(new mongoose_1.default.Types.ObjectId(apply === null || apply === void 0 ? void 0 : apply._id));
                 getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save();
                 return res.status(201).json({
                     message: "created application successfully",
