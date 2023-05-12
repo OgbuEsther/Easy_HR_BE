@@ -12,6 +12,7 @@ staffAuthRoutes.get("/staff/:staffId", getOneStaff);
 staffAuthRoutes.patch("/updateStaff/:staffId", updateStaff);
 staffAuthRoutes.delete("/deactivateStaff/:staffId/:adminId", deactivateStaff);
 staffAuthRoutes.get("/:staffId/verification" , verifiedStaff)
+staffAuthRoutes.get("/:staffId/verifymyaccount" , verifyUser)
 staffAuthRoutes.post("/:staffId/verifystaff" , VerifiedStaffFinally)
 staffAuthRoutes.get("/search" , makeQuery)
 

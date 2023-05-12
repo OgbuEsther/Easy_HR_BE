@@ -174,7 +174,7 @@ const finalVerifyStaffEmail = (staff) => __awaiter(void 0, void 0, void 0, funct
             token: staff === null || staff === void 0 ? void 0 : staff.token,
             id: staff === null || staff === void 0 ? void 0 : staff._id,
             staffToken: staff === null || staff === void 0 ? void 0 : staff.staffToken,
-            url: `http://localhost:3000/verify/${staff === null || staff === void 0 ? void 0 : staff._id}`,
+            url: `${staffURL}/verify/${staff === null || staff === void 0 ? void 0 : staff._id}`,
         });
         let mailerOptions = {
             from: "easyhrplayform@gmail.com",
