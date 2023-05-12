@@ -148,7 +148,8 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
               message: customMessage,
               time: getTime,
               token :setToken,
-              nameOfStaff : getStaff?.yourName
+              nameOfStaff : getStaff?.yourName,
+              staffId : getStaff?.staffToken
             });
       
             await getStaff?.Attendance?.push(
@@ -162,13 +163,13 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
     
             await getAdminAttendanceToken?.save()
     
-            await getAdmin?.viewStaffHistory?.push(new mongoose.Types.ObjectId(clockInTime?._id))
+          
     
             getAdmin.viewStaffHistory.push(new mongoose.Types.ObjectId(clockInTime?._id))
   
           
     
-            await getAdmin?.viewAbsentStaff?.pull(new mongoose.Types.ObjectId(clockInTime?._id))
+            await getAdmin?.viewAbsentStaff?.pull(new mongoose.Types.ObjectId(getStaff?._id))
     
             await getAdmin?.save()
     
@@ -176,11 +177,6 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
               message: "clockInTime done",
               data: clockInTime,
             });
-          }else{
-            return res.status(400).json({
-              message :"you are not within the office premises"
-
-            })
           }
          
         }else if(getAdmin?.expectedClockIn! >= getTime){

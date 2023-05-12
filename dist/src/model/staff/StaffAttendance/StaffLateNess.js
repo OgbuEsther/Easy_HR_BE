@@ -28,6 +28,9 @@ const AttendanceSchema = new mongoose_1.default.Schema({
     nameOfStaff: {
         type: String
     },
+    staffId: {
+        type: String
+    }
 });
 const LateAttendanceModel = mongoose_1.default.model("viewLateStaff", AttendanceSchema);
 exports.default = LateAttendanceModel;

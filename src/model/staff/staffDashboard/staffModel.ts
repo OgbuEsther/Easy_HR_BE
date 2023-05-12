@@ -49,7 +49,7 @@ export interface Attendance {
   latitude : string
   token : string
   longitude : string
- 
+ staffId : string
   nameOfStaff : string
 }
 

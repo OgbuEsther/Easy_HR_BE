@@ -32,6 +32,9 @@ const AttendanceSchema = new mongoose.Schema<Attendance>({
     nameOfStaff : {
         type : String
     },
+staffId : {
+    type : String
+}
 
 })
 
