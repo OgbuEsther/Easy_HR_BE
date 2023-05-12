@@ -37,7 +37,7 @@ export const verifyEmail = async (user: any) => {
     const getData = path.join(__dirname, "../views/AdminSignUp.ejs");
 
     const readData = await ejs.renderFile(getData, {
-      name: user?.YourName,
+      name: user?.yourName,
       email: user?.email,
       token: user?.token,
       id: user?._id,
@@ -131,7 +131,7 @@ export const verifyStaffEmail = async (user: any) => {
     const getData = path.join(__dirname, "../views/UserSignUp.ejs");
 
     const readData = await ejs.renderFile(getData, {
-      name: user?.YourName,
+      name: user?.yourName,
       email: user?.email,
       token: user?.token,
       id: user?._id,
@@ -177,7 +177,7 @@ export const finalVerifyStaffEmail = async (staff: any) => {
     const getData = path.join(__dirname, "../views/FinalStaffVerification.ejs");
 
     const readData = await ejs.renderFile(getData, {
-      name: staff?.YourName,
+      name: staff?.yourName,
       companyname: staff?.companyname,
       email: staff?.email,
       token: staff?.token,
@@ -228,10 +228,10 @@ export const finalVerifyAdminEmail = async (staff: any, admin: any) => {
     );
 
     const readData = await ejs.renderFile(getData, {
-      name: staff?.YourName,
-      companyname: admin?.YourName,
+      name: staff?.yourName,
+      companyname: admin?.yourName,
       email: staff?.email,
-      token: staff?.token,
+      OTP: staff?.OTP,
       id: staff?._id,
       url: `${staffURL}/${staff?._id}`,
     });

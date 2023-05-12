@@ -41,7 +41,7 @@ const verifyEmail = (user) => __awaiter(void 0, void 0, void 0, function* () {
         });
         const getData = path_1.default.join(__dirname, "../views/AdminSignUp.ejs");
         const readData = yield ejs_1.default.renderFile(getData, {
-            name: user === null || user === void 0 ? void 0 : user.YourName,
+            name: user === null || user === void 0 ? void 0 : user.yourName,
             email: user === null || user === void 0 ? void 0 : user.email,
             token: user === null || user === void 0 ? void 0 : user.token,
             id: user === null || user === void 0 ? void 0 : user._id,
@@ -126,7 +126,7 @@ const verifyStaffEmail = (user) => __awaiter(void 0, void 0, void 0, function* (
         });
         const getData = path_1.default.join(__dirname, "../views/UserSignUp.ejs");
         const readData = yield ejs_1.default.renderFile(getData, {
-            name: user === null || user === void 0 ? void 0 : user.YourName,
+            name: user === null || user === void 0 ? void 0 : user.yourName,
             email: user === null || user === void 0 ? void 0 : user.email,
             token: user === null || user === void 0 ? void 0 : user.token,
             id: user === null || user === void 0 ? void 0 : user._id,
@@ -168,7 +168,7 @@ const finalVerifyStaffEmail = (staff) => __awaiter(void 0, void 0, void 0, funct
         });
         const getData = path_1.default.join(__dirname, "../views/FinalStaffVerification.ejs");
         const readData = yield ejs_1.default.renderFile(getData, {
-            name: staff === null || staff === void 0 ? void 0 : staff.YourName,
+            name: staff === null || staff === void 0 ? void 0 : staff.yourName,
             companyname: staff === null || staff === void 0 ? void 0 : staff.companyname,
             email: staff === null || staff === void 0 ? void 0 : staff.email,
             token: staff === null || staff === void 0 ? void 0 : staff.token,
@@ -212,10 +212,10 @@ const finalVerifyAdminEmail = (staff, admin) => __awaiter(void 0, void 0, void 0
         });
         const getData = path_1.default.join(__dirname, "../views/FinalAdminStaffVerification.ejs");
         const readData = yield ejs_1.default.renderFile(getData, {
-            name: staff === null || staff === void 0 ? void 0 : staff.YourName,
-            companyname: admin === null || admin === void 0 ? void 0 : admin.YourName,
+            name: staff === null || staff === void 0 ? void 0 : staff.yourName,
+            companyname: admin === null || admin === void 0 ? void 0 : admin.yourName,
             email: staff === null || staff === void 0 ? void 0 : staff.email,
-            token: staff === null || staff === void 0 ? void 0 : staff.token,
+            OTP: staff === null || staff === void 0 ? void 0 : staff.OTP,
             id: staff === null || staff === void 0 ? void 0 : staff._id,
             url: `${staffURL}/${staff === null || staff === void 0 ? void 0 : staff._id}`,
         });
