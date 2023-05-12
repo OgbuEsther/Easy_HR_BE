@@ -80,6 +80,7 @@ export const verifyStaffEmailByAdmin = async (user: any, admin: any) => {
       },
     });
 
+
     const getData = path.join(__dirname, "../views/AdminUserSignUp.ejs");
 
     const readData = await ejs.renderFile(getData, {
@@ -88,7 +89,7 @@ export const verifyStaffEmailByAdmin = async (user: any, admin: any) => {
       email: user?.email,
       token: user?.token,
       id: user?._id,
-      url: `${staffURL}/api/staff${user?._id}/verification`,
+      url: `${staffURL}/api/staff/${user?._id}/verification`,
     });
 
     let mailerOptions = {
