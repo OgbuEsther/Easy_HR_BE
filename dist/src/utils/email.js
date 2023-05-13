@@ -86,8 +86,8 @@ const verifyStaffEmailByAdmin = (user, admin) => __awaiter(void 0, void 0, void 
         const readData = yield ejs_1.default.renderFile(getData, {
             companyname: admin.companyname,
             name: user === null || user === void 0 ? void 0 : user.yourName,
+            adminname: admin === null || admin === void 0 ? void 0 : admin.companyname,
             email: user === null || user === void 0 ? void 0 : user.email,
-            token: user === null || user === void 0 ? void 0 : user.token,
             id: user === null || user === void 0 ? void 0 : user._id,
             url: `${staffURL}/api/staff/${user === null || user === void 0 ? void 0 : user._id}/verification`,
         });
