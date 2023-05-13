@@ -87,8 +87,8 @@ export const verifyStaffEmailByAdmin = async (user: any, admin: any) => {
     const readData = await ejs.renderFile(getData, {
       companyname: admin.companyname,
       name: user?.yourName,
+      adminname:admin?.companyname,
       email: user?.email,
-      token: user?.token,
       id: user?._id,
       url: `${staffURL}/api/staff/${user?._id}/verification`,
     });
