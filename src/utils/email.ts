@@ -14,8 +14,8 @@ const REFRESH =
 const oAuth = new google.auth.OAuth2(GOOGLE_ID, GOOGLE_SECRET, REFRESH);
 oAuth.setCredentials({ refresh_token: REFRESH });
 
-const adminURL = "https://eazyhr.netlify.app/";
-const staffURL = "https://eazyhr.netlify.app/";
+const adminURL = "https://eazyhr.netlify.app";
+const staffURL = "https://eazyhr.netlify.app";
 
 
 export const verifyEmail = async (admin: any) => {
