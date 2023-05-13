@@ -96,7 +96,7 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => _
                 httpCode: appError_1.HttpCode.BAD_REQUEST,
             }));
         }
-        (0, email_1.verifyEmail)(admin);
+        (0, email_1.verifyEmail)(admin).then((res) => console.log(res)).catch((err) => console.log(err));
         return res.status(200).json({
             message: "Success",
             data: admin,
