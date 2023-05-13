@@ -24,12 +24,14 @@ const asyncHandler_1 = require("../utils/asyncHandler");
 const crypto_1 = __importDefault(require("crypto"));
 const staffAuth_1 = __importDefault(require("../model/staff/staffAuth"));
 const email_1 = require("../utils/email");
+const axios_1 = __importDefault(require("axios"));
 const one_sdk_1 = require("@superfaceai/one-sdk");
 const app = (0, express_1.default)();
 app.set("trust proxy", true);
 const sdk = new one_sdk_1.SuperfaceClient();
-exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
+function run(ip) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Load the profile
         const profile = yield sdk.getProfile("address/ip-geolocation@1.0.1");
         // Use the profile
         const result = yield profile.getUseCase("IpGeolocation").perform({
@@ -43,7 +45,19 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => _
                 },
             },
         });
-        const data = result.unwrap();
+        // Handle the result
+        try {
+            const data = result.unwrap();
+            return data;
+        }
+        catch (error) {
+            console.error(error);
+        }
+    });
+}
+exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Use the profile
         const { companyname, email, yourName, password, walletNumber, token, OTP, } = req.body;
         const genToken = crypto_1.default.randomBytes(32).toString("hex");
         const genOTP = crypto_1.default.randomBytes(2).toString("hex");
@@ -56,6 +70,11 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => _
         const hash = yield bcrypt_1.default.hash(password, salt);
         const dater = Date.now();
         const defaultTime = "07:30:00 PM";
+        let dataIP;
+        yield axios_1.default.get("https://api.ipify.org/").then((res) => {
+            dataIP = res.data;
+        });
+        let realData = yield run(dataIP);
         const generateNumber = Math.floor(Math.random() * 78) + dater;
         const genCode = otp_generator_1.default.generate(6, {
             upperCaseAlphabets: false,
@@ -73,8 +92,8 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => _
             token: genToken,
             OTP: genOTP,
             expectedClockIn: defaultTime,
-            latitude: data === null || data === void 0 ? void 0 : data.latitude,
-            longitude: data === null || data === void 0 ? void 0 : data.longitude,
+            latitude: realData === null || realData === void 0 ? void 0 : realData.latitude,
+            longitude: realData === null || realData === void 0 ? void 0 : realData.longitude,
         });
         if (!admin) {
             next(new appError_1.AppError({
@@ -100,7 +119,7 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => _
         return res.status(200).json({
             message: "Success",
             data: admin,
-            result: data
+            result: realData
         });
     }
     catch (error) {

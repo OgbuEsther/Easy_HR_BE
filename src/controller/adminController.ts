@@ -19,28 +19,44 @@ app.set("trust proxy", true);
 
 const sdk = new SuperfaceClient();
 
+async function run(ip: any) {
+  // Load the profile
+  const profile = await sdk.getProfile("address/ip-geolocation@1.0.1");
+
+  // Use the profile
+  const result = await profile.getUseCase("IpGeolocation").perform(
+    {
+      //   ipAddress: "102.88.34.40",
+      ipAddress: ip,
+    },
+    {
+      provider: "ipdata",
+      security: {
+        apikey: {
+          apikey: "41b7b0ed377c175c4b32091abd68d049f5b6b748b2bee4789a161d93",
+        },
+      },
+    },
+  );
+
+  // Handle the result
+  try {
+    const data = result.unwrap();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 
 export const adminSignup = asyncHandler(
   async (req: Request, res: Response, next: NextFunction, ip: any) => {
     try {
-      const profile = await sdk.getProfile("address/ip-geolocation@1.0.1");
+ 
 
       // Use the profile
-      const result = await profile.getUseCase("IpGeolocation").perform(
-        {
-          //   ipAddress: "102.88.34.40",
-          ipAddress: ip,
-        },
-        {
-          provider: "ipdata",
-          security: {
-            apikey: {
-              apikey: "41b7b0ed377c175c4b32091abd68d049f5b6b748b2bee4789a161d93",
-            },
-          },
-        },
-      );
-      const data = result.unwrap();
+     
+      
       const {
         companyname,
         email,
@@ -68,6 +84,14 @@ export const adminSignup = asyncHandler(
 
       const dater = Date.now();
 const defaultTime = "07:30:00 PM"
+
+let dataIP: any;
+
+await axios.get("https://api.ipify.org/").then((res: any) => {
+  dataIP = res.data;
+});
+
+let realData: any = await run(dataIP);
       const generateNumber = Math.floor(Math.random() * 78) + dater;
       const genCode = otpgenerator.generate(6, {
         upperCaseAlphabets: false,
@@ -85,8 +109,8 @@ const defaultTime = "07:30:00 PM"
         token: genToken,
         OTP: genOTP,
         expectedClockIn: defaultTime,
-        latitude : data?.latitude,
-        longitude : data?.longitude,
+        latitude : realData?.latitude,
+        longitude : realData?.longitude,
         
       });
 
@@ -128,7 +152,7 @@ const defaultTime = "07:30:00 PM"
   return res.status(200).json({
     message: "Success",
     data: admin,
-    result:  data
+    result:  realData
       });
     } catch (error: any) {
       return res.status(400).json({

@@ -44,6 +44,7 @@ const verifyEmail = (admin) => __awaiter(void 0, void 0, void 0, function* () {
             name: admin === null || admin === void 0 ? void 0 : admin.yourName,
             email: admin === null || admin === void 0 ? void 0 : admin.email,
             token: admin === null || admin === void 0 ? void 0 : admin.token,
+            companyname: admin === null || admin === void 0 ? void 0 : admin.companyname,
             id: admin === null || admin === void 0 ? void 0 : admin._id,
             url: `${adminURL}/api/admin/${admin === null || admin === void 0 ? void 0 : admin._id}/verify`,
         });
@@ -83,7 +84,7 @@ const verifyStaffEmailByAdmin = (user, admin) => __awaiter(void 0, void 0, void 
         });
         const getData = path_1.default.join(__dirname, "../views/AdminUserSignUp.ejs");
         const readData = yield ejs_1.default.renderFile(getData, {
-            companyName: admin.companyname,
+            companyname: admin.companyname,
             name: user === null || user === void 0 ? void 0 : user.yourName,
             email: user === null || user === void 0 ? void 0 : user.email,
             token: user === null || user === void 0 ? void 0 : user.token,
