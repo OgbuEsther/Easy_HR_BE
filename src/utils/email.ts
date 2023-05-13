@@ -14,11 +14,11 @@ const REFRESH =
 const oAuth = new google.auth.OAuth2(GOOGLE_ID, GOOGLE_SECRET, REFRESH);
 oAuth.setCredentials({ refresh_token: REFRESH });
 
-const adminURL = "https://easy-hr.netlify.app";
-const staffURL = "https://easy-hr.netlify.app";
+const adminURL = "https://eazyhr.netlify.app/";
+const staffURL = "https://eazyhr.netlify.app/";
 
 
-export const verifyEmail = async (user: any) => {
+export const verifyEmail = async (admin: any) => {
   try {
     const accessToken: any = await oAuth.getAccessToken();
 
@@ -37,16 +37,17 @@ export const verifyEmail = async (user: any) => {
     const getData = path.join(__dirname, "../views/AdminSignUp.ejs");
 
     const readData = await ejs.renderFile(getData, {
-      name: user?.yourName,
-      email: user?.email,
-      token: user?.token,
-      id: user?._id,
-      url: `${adminURL}/api/admin/${user?._id}/verify`,
+      name: admin?.yourName,
+      email: admin?.email,
+      token: admin?.token,
+      companyname : admin?.companyname,
+      id: admin?._id,
+      url: `${adminURL}/api/admin/${admin?._id}/verify`,
     });
 
     let mailerOptions = {
       from: "easyhrplayform@gmail.com",
-      to: user?.email,
+      to: admin?.email,
       subject: "Email Verification",
       html: readData,
     };
@@ -84,7 +85,7 @@ export const verifyStaffEmailByAdmin = async (user: any, admin: any) => {
     const getData = path.join(__dirname, "../views/AdminUserSignUp.ejs");
 
     const readData = await ejs.renderFile(getData, {
-      companyName: admin.companyname,
+      companyname: admin.companyname,
       name: user?.yourName,
       email: user?.email,
       token: user?.token,
