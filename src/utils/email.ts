@@ -82,7 +82,7 @@ export const verifyStaffEmailByAdmin = async (user: any, admin: any) => {
     });
 
 
-    const getData = path.join(__dirname, "../views/AdminUserSignUp.ejs");
+    const getData = path.join(__dirname, "../views/AdminUserSignup.ejs");
 
     const readData = await ejs.renderFile(getData, {
       companyname: admin.companyname,
