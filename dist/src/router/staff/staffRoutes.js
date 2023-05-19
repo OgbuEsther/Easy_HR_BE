@@ -13,4 +13,5 @@ staffRoutes.post("/clockout/:staffId/:adminId", StaffTime_1.createClockOut);
 //LEAVE 
 //APPLICATION FOR LEAVE 
 staffRoutes.post("/applyforleave/:staffId/:adminId", leaves_1.applyForLeave);
+staffRoutes.patch("/getapprovedorrejected/:staffLeaveId/:adminId", leaves_1.ApproveOrReject);
 exports.default = staffRoutes;

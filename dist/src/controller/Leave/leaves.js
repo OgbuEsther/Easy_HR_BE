@@ -115,7 +115,7 @@ const ApproveOrReject = (req, res) => __awaiter(void 0, void 0, void 0, function
         const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
         const getStaffLeave = yield staffLeave_1.default.findById(req.params.staffLeaveId);
         const updateLeave = yield staffAuth_1.default.findByIdAndUpdate(getStaffLeave === null || getStaffLeave === void 0 ? void 0 : getStaffLeave._id, {
-            approved,
+            approved: (getStaffLeave === null || getStaffLeave === void 0 ? void 0 : getStaffLeave.approved) === false ? true : true,
         }, { new: true });
         if ((getStaffLeave === null || getStaffLeave === void 0 ? void 0 : getStaffLeave.approved) === true) {
             // getStaffLeave?.allApproved?.push
@@ -123,7 +123,7 @@ const ApproveOrReject = (req, res) => __awaiter(void 0, void 0, void 0, function
             getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save();
             return res.status(201).json({
                 message: "leave has been approved",
-                data: updateLeave
+                // data : updateLeave
             });
         }
         else {
@@ -131,7 +131,7 @@ const ApproveOrReject = (req, res) => __awaiter(void 0, void 0, void 0, function
             getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save();
             return res.status(201).json({
                 message: "leave has been rejected",
-                data: updateLeave
+                // data : updateLeave
             });
         }
     }
