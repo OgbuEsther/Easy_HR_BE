@@ -19,15 +19,7 @@ const staffSchema = new mongoose_1.Schema({
     },
     approved: {
         type: Boolean
-    },
-    // allApproved : [
-    //    {
-    //    }
-    // ],
-    // allRejected : [
-    //    {
-    //    }
-    // ]
-});
-const staffLeaveModel = (0, mongoose_1.model)("staffLeave", staffSchema);
-exports.default = staffLeaveModel;
+    }
+}, { timestamps: true });
+const approvedLeave = (0, mongoose_1.model)("staffLeave", staffSchema);
+exports.default = approvedLeave;

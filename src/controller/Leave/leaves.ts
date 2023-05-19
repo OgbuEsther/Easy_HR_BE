@@ -113,7 +113,7 @@ export const ApproveOrReject = async (req: Request, res: Response) => {
     const updateLeave = await staffAuth.findByIdAndUpdate(
       getStaffLeave?._id,
       {
-        approved,
+        approved : getStaffLeave?.approved === false ? true : true,
       },
       { new: true }
     );
@@ -129,7 +129,7 @@ export const ApproveOrReject = async (req: Request, res: Response) => {
 
       return res.status(201).json({
         message : "leave has been approved",
-        data : updateLeave
+        // data : updateLeave
       })
     }else{
       getAdmin?.viewRejectedLeave?.push(
@@ -138,7 +138,7 @@ export const ApproveOrReject = async (req: Request, res: Response) => {
       getAdmin?.save();
       return res.status(201).json({
         message : "leave has been rejected",
-        data : updateLeave
+        // data : updateLeave
       })
     }
   } catch (error: any) {
