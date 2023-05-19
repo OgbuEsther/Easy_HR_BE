@@ -12,6 +12,8 @@ export interface staffLeaveProps{
   remainingDays :number;
   reason : string;
   approved : boolean;
+  allApproved: [],
+  allRejected:[]
 }
 
 export interface plans {

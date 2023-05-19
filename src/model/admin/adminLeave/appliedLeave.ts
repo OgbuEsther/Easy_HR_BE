@@ -2,6 +2,7 @@ import { Document, Schema, model } from "mongoose";
 import { staffLeaveProps } from "../../staff";
 
 
+
 interface staffLeave extends staffLeaveProps, Document {}
 
 const staffSchema = new Schema<staffLeaveProps>({

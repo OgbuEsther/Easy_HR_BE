@@ -28,7 +28,12 @@ export interface adminSignUp extends mongoose.Document {
   
    PerformanceMilestone :{}[]
    viewLateStaff :{}[]
+
+   //leaves
    staffLeave :{}[]
+   viewApprovedLeave :{}[]
+   viewRejectedLeave :{}[]
+
   // ... other fields ...
 }
 

@@ -132,18 +132,18 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
       ref: "staffLeave",
     },
   ],
-  // viewApprovedLeave: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "viewApprovedLeave",
-  //   },
-  // ],
-  // viewRejectedLeave: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "viewRejectedLeave",
-  //   },
-  // ],
+  viewApprovedLeave: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "staffLeave",
+    },
+  ],
+  viewRejectedLeave: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "staffLeave",
+    },
+  ],
   },
   { timestamps: true }
 );

@@ -10,12 +10,8 @@ import staffAuth from "../../model/staff/staffAuth";
 export const createLeave = async (req: Request, res: Response) => {
   try {
     const getAdmin = await adminAuth.findById(req.params.adminId);
-
-
-   
-
     const { title, days } = req.body;
-    const getLeave = await adminLeaveModel.findOne({title})
+    const getLeave = await adminLeaveModel.findOne({ title });
     if (getAdmin) {
       if (getLeave?.title === title) {
         return res.status(400).json({
@@ -64,7 +60,7 @@ export const applyForLeave = async (req: Request, res: Response) => {
     const getStaff = await staffAuth.findById(req.params.staffId);
 
     const getLeave = await adminLeaveModel.findOne({ title });
-const getAdmin = await adminAuth.findById(req.params.adminId)
+    const getAdmin = await adminAuth.findById(req.params.adminId);
     if (getStaff && getAdmin) {
       if (getLeave?.title === title) {
         const apply = await staffLeaveModel.create({
@@ -73,15 +69,15 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
           numberOfDays,
           remainingDays: getLeave?.days! - numberOfDays,
           reason,
-          approved : false
+          approved: false,
         });
 
         getStaff?.staffLeave?.push(new mongoose.Types.ObjectId(apply?._id));
 
         getStaff?.save();
-        getAdmin?.staffLeave.push(new mongoose.Types.ObjectId(apply?._id))
+        getAdmin?.staffLeave.push(new mongoose.Types.ObjectId(apply?._id));
 
-        getAdmin?.save()
+        getAdmin?.save();
         return res.status(201).json({
           message: "created application successfully",
           data: apply,
@@ -100,6 +96,54 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
   } catch (error: any) {
     return res.status(404).json({
       message: "an error occurred while creating leave",
+      errMsg: error.message,
+      data: error,
+    });
+  }
+};
+
+export const ApproveOrReject = async (req: Request, res: Response) => {
+  try {
+    const { approved } = req.body;
+    const getAdmin = await adminAuth.findById(req.params.adminId);
+    const getStaffLeave = await staffLeaveModel.findById(
+      req.params.staffLeaveId
+    );
+
+    const updateLeave = await staffAuth.findByIdAndUpdate(
+      getStaffLeave?._id,
+      {
+        approved,
+      },
+      { new: true }
+    );
+
+    if (getStaffLeave?.approved === true) {
+
+      // getStaffLeave?.allApproved?.push
+
+      getAdmin?.viewApprovedLeave?.push(
+        new mongoose.Types.ObjectId(updateLeave?._id)
+      );
+      getAdmin?.save();
+
+      return res.status(201).json({
+        message : "leave has been approved",
+        data : updateLeave
+      })
+    }else{
+      getAdmin?.viewRejectedLeave?.push(
+        new mongoose.Types.ObjectId(updateLeave?._id)
+      );
+      getAdmin?.save();
+      return res.status(201).json({
+        message : "leave has been rejected",
+        data : updateLeave
+      })
+    }
+  } catch (error: any) {
+    return res.status(404).json({
+      message: "an error occurred while approving or rejecting leave",
       errMsg: error.message,
       data: error,
     });
