@@ -1,5 +1,7 @@
 import { Document, Schema, model } from "mongoose";
-import { staffLeaveProps } from "../staffDashboard";
+import { staffLeaveProps } from "../../staff";
+
+
 
 interface staffLeave extends staffLeaveProps, Document {}
 
@@ -20,20 +22,10 @@ const staffSchema = new Schema<staffLeaveProps>({
     type : String
  },
  approved:{
-   type: Boolean
-},
-// allApproved : [
-//    {
+    type: Boolean
+ }
+} , {timestamps:true});
 
-//    }
-// ],
-// allRejected : [
-//    {
-      
-//    }
-// ]
-});
+const approvedLeave = model<staffLeave>("staffLeave", staffSchema);
 
-const staffLeaveModel = model<staffLeave>("staffLeave", staffSchema);
-
-export default staffLeaveModel;
+export default approvedLeave;
