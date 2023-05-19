@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.applyForLeave = exports.createLeave = void 0;
+exports.ApproveOrReject = exports.applyForLeave = exports.createLeave = void 0;
 const staffLeave_1 = __importDefault(require("../../model/staff/staffLeave/staffLeave"));
 const adminLeave_1 = __importDefault(require("../../model/admin/adminLeave/adminLeave"));
 const adminAuth_1 = __importDefault(require("../../model/admin/adminAuth"));
@@ -76,7 +76,7 @@ const applyForLeave = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     numberOfDays,
                     remainingDays: (getLeave === null || getLeave === void 0 ? void 0 : getLeave.days) - numberOfDays,
                     reason,
-                    approved: false
+                    approved: false,
                 });
                 (_b = getStaff === null || getStaff === void 0 ? void 0 : getStaff.staffLeave) === null || _b === void 0 ? void 0 : _b.push(new mongoose_1.default.Types.ObjectId(apply === null || apply === void 0 ? void 0 : apply._id));
                 getStaff === null || getStaff === void 0 ? void 0 : getStaff.save();
@@ -108,3 +108,39 @@ const applyForLeave = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.applyForLeave = applyForLeave;
+const ApproveOrReject = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
+    try {
+        const { approved } = req.body;
+        const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
+        const getStaffLeave = yield staffLeave_1.default.findById(req.params.staffLeaveId);
+        const updateLeave = yield staffAuth_1.default.findByIdAndUpdate(getStaffLeave === null || getStaffLeave === void 0 ? void 0 : getStaffLeave._id, {
+            approved,
+        }, { new: true });
+        if ((getStaffLeave === null || getStaffLeave === void 0 ? void 0 : getStaffLeave.approved) === true) {
+            // getStaffLeave?.allApproved?.push
+            (_c = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewApprovedLeave) === null || _c === void 0 ? void 0 : _c.push(new mongoose_1.default.Types.ObjectId(updateLeave === null || updateLeave === void 0 ? void 0 : updateLeave._id));
+            getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save();
+            return res.status(201).json({
+                message: "leave has been approved",
+                data: updateLeave
+            });
+        }
+        else {
+            (_d = getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.viewRejectedLeave) === null || _d === void 0 ? void 0 : _d.push(new mongoose_1.default.Types.ObjectId(updateLeave === null || updateLeave === void 0 ? void 0 : updateLeave._id));
+            getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save();
+            return res.status(201).json({
+                message: "leave has been rejected",
+                data: updateLeave
+            });
+        }
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: "an error occurred while approving or rejecting leave",
+            errMsg: error.message,
+            data: error,
+        });
+    }
+});
+exports.ApproveOrReject = ApproveOrReject;
