@@ -104,7 +104,7 @@ export const applyForLeave = async (req: Request, res: Response) => {
 
 export const ApproveOrReject = async (req: Request, res: Response) => {
   try {
-    const { approved } = req.body;
+    // const { approved } = req.body;
     const getAdmin = await adminAuth.findById(req.params.adminId);
     const getStaffLeave = await staffLeaveModel.findById(
       req.params.staffLeaveId
