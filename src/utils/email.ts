@@ -234,7 +234,7 @@ export const finalVerifyAdminEmail = async (staff: any, admin: any) => {
       email: staff?.email,
       OTP: staff?.OTP,
       id: staff?._id,
-      url: `${staffURL}/${staff?._id}`,
+      url: `${staffURL}/${staff?._id}/activateaccount`,
     });
 
     let mailerOptions = {
@@ -243,6 +243,7 @@ export const finalVerifyAdminEmail = async (staff: any, admin: any) => {
       subject: "Email Verification",
       html: readData,
     };
+
 
     transporter
       .sendMail(mailerOptions)

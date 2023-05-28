@@ -418,7 +418,7 @@ export const VerifiedStaffFinally = async (req:Request, res:Response) => {
         company?.viewUser?.pull(new mongoose.Types.ObjectId(staff?._id));
         company?.save();
 
-        await staffAuth.findByIdAndDelete(req.params.id);
+        await staffAuth.findByIdAndDelete(req.params.staffId);
         return res.status(201).json({ message: "staff has been deleted" });
       }
     } else {

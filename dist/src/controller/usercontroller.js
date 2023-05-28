@@ -339,7 +339,7 @@ const VerifiedStaffFinally = (req, res) => __awaiter(void 0, void 0, void 0, fun
                 const company = yield adminAuth_1.default.findOne({ name });
                 (_a = company === null || company === void 0 ? void 0 : company.viewUser) === null || _a === void 0 ? void 0 : _a.pull(new mongoose_1.default.Types.ObjectId(staff === null || staff === void 0 ? void 0 : staff._id));
                 company === null || company === void 0 ? void 0 : company.save();
-                yield staffAuth_1.default.findByIdAndDelete(req.params.id);
+                yield staffAuth_1.default.findByIdAndDelete(req.params.staffId);
                 return res.status(201).json({ message: "staff has been deleted" });
             }
         }
