@@ -343,6 +343,7 @@ export const verifiedStaff = async (req:Request, res:Response) => {
     const user = await staffAuth.findById(req.params.staffId);
     console.log(`this is user OTP ${user?.OTP}`)
 
+    // const {} = req.body
    
     const company = await adminAuth.findOne({ name: user?.companyname! });
     const codedNumb = crypto.randomBytes(2).toString("hex");
