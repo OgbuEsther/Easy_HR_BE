@@ -1,10 +1,8 @@
-
 import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 
-
-import crypto from "crypto"
+import crypto from "crypto";
 
 import otpgenerator from "otp-generator";
 import adminAuth from "../model/admin/adminAuth";
@@ -12,19 +10,24 @@ import staffAuth from "../model/staff/staffAuth";
 import staffWalletModel from "../model/staff/staffDashboard/StaffWallet";
 import { asyncHandler } from "../utils/asyncHandler";
 import { AppError, HttpCode } from "../utils/appError";
-import { finalVerifyAdminEmail, finalVerifyStaffEmail, verifyStaffEmail, verifyStaffEmailByAdmin } from "../utils/email";
+import {
+  finalVerifyAdminEmail,
+  finalVerifyStaffEmail,
+  verifyStaffEmail,
+  verifyStaffEmailByAdmin,
+} from "../utils/email";
 
 export const staffSignup = asyncHandler(
-  async (req: Request, res: Response , next:NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { companyname, email, yourName, password, position, walletNumber  } =
+      const { companyname, email, yourName, password, position, walletNumber } =
         req.body;
 
-        const token = crypto.randomBytes(32).toString("hex");
-        const OTP = crypto.randomBytes(2).toString("hex");
-  
+      const token = crypto.randomBytes(32).toString("hex");
+      const OTP = crypto.randomBytes(2).toString("hex");
+
       const getAdmin = await adminAuth.findOne({ companyname });
-  
+
       if (!getAdmin) {
         next(
           new AppError({
@@ -33,21 +36,21 @@ export const staffSignup = asyncHandler(
           })
         );
       }
-  
+
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(password, salt);
-  
+
       const dater = Date.now();
-  
+
       const generateNumber = Math.floor(Math.random() * 78) + dater;
-  
+
       const genCode = otpgenerator.generate(6, {
         upperCaseAlphabets: false,
         specialChars: false,
         digits: true,
         lowerCaseAlphabets: false,
       });
-  
+
       const staff = await staffAuth.create({
         companyCode: getAdmin?.companyCode,
         companyname,
@@ -59,7 +62,7 @@ export const staffSignup = asyncHandler(
         amount: 0,
         token,
         OTP,
-        staffToken : "",
+        staffToken: "",
       });
 
       if (!staff) {
@@ -70,18 +73,13 @@ export const staffSignup = asyncHandler(
           })
         );
       }
-  
 
-  
       if (getAdmin?.companyname === staff?.companyname) {
-
-      
-        getAdmin.viewAbsentStaff.push(new mongoose.Types.ObjectId(staff?._id))
-      
+        getAdmin.viewAbsentStaff.push(new mongoose.Types.ObjectId(staff?._id));
 
         getAdmin.viewUser.push(new mongoose.Types.ObjectId(staff?._id));
         getAdmin.save();
-  
+
         const createWallet = await staffWalletModel.create({
           _id: staff?._id,
           balance: 15000,
@@ -89,11 +87,8 @@ export const staffSignup = asyncHandler(
           debit: 0,
         });
 
-       
-        
-  
         staff?.wallet.push(new mongoose.Types.ObjectId(createWallet?._id));
-  
+
         staff.save();
 
         if (!createWallet) {
@@ -110,7 +105,7 @@ export const staffSignup = asyncHandler(
 
         verifyStaffEmail(staff);
         verifyStaffEmailByAdmin(staff, getAdmin);
-  
+
         return res.status(200).json({
           status: 200,
           message: "Staff created successfully and mail sent",
@@ -123,32 +118,32 @@ export const staffSignup = asyncHandler(
       }
     } catch (error: any) {
       console.log("error", error);
-  
+
       return res.status(400).json({
         message: "an error occurred while creating staff",
         data: error.message,
       });
     }
   }
-)
+);
 
 export const staffSignin = asyncHandler(
-  async (req: Request, res: Response , next : NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { companyname, email, password } = req.body;
-  
+
       const staff = await staffAuth.findOne({ email });
-  
+
       if (staff?.companyname! !== companyname) {
         next(
           new AppError({
             message: "wrong request..... you are not under this company ",
             httpCode: HttpCode.BAD_REQUEST,
           })
-        )
+        );
       } else {
         const check = await bcrypt.compare(password, staff?.password!);
-  
+
         if (check) {
           res.status(201).json({
             message: "welcome",
@@ -156,30 +151,27 @@ export const staffSignin = asyncHandler(
           });
         } else {
           console.log("bad");
-        next(
-          new AppError({
-            message: "wrong request",
-            httpCode: HttpCode.BAD_REQUEST,
-          })
-        )
+          next(
+            new AppError({
+              message: "wrong request",
+              httpCode: HttpCode.BAD_REQUEST,
+            })
+          );
         }
       }
-  
+
       return res.status(200).json({
         message: "Success , staff is logged in",
         data: staff,
       });
     } catch (error: any) {
-  
-      
       return res.status(400).json({
         message: "an error occurred while logging in staff",
         data: error.message,
       });
     }
   }
-)
-
+);
 
 //get all admins
 export const getAllStaff = async (req: Request, res: Response) => {
@@ -217,7 +209,6 @@ export const getOneStaff = async (req: Request, res: Response) => {
       {
         path: "staffLeave",
       },
-
     ]);
 
     return res.status(200).json({
@@ -235,12 +226,11 @@ export const getOneStaff = async (req: Request, res: Response) => {
 
 //update staff details
 
-
 export const updateStaff = async (req: Request, res: Response) => {
   try {
     const { amount } = req.body;
 
-    const getAdmin = await adminAuth.findById(req.params.adminId)
+    const getAdmin = await adminAuth.findById(req.params.adminId);
 
     const getStaffDetails = await staffAuth.findById(req.params.staffId);
 
@@ -250,74 +240,65 @@ export const updateStaff = async (req: Request, res: Response) => {
       { new: true }
     );
 
-    getAdmin?.viewUser.push(new mongoose.Types.ObjectId(update?._id))
-       getAdmin?.save();
-
+    getAdmin?.viewUser.push(new mongoose.Types.ObjectId(update?._id));
+    getAdmin?.save();
 
     return res.status(201).json({
-      message : "updated staff amount successfully",
-      data : update
-    })
-  } catch (error:any) {
+      message: "updated staff amount successfully",
+      data: update,
+    });
+  } catch (error: any) {
     return res.status(400).json({
       message: "couldn't update staff",
-      data : error,
-      error : error.message
+      data: error,
+      error: error.message,
     });
   }
 };
 
-
 //deactivate a staff
-export const deactivateStaff = async(req:Request , res:Response)=>{
+export const deactivateStaff = async (req: Request, res: Response) => {
   try {
-    const getStaff = await staffAuth.findById(req.params.staffId)
+    const getStaff = await staffAuth.findById(req.params.staffId);
 
-    const getAdmin = await adminAuth.findById(req.params.adminId)
+    const getAdmin = await adminAuth.findById(req.params.adminId);
 
     await getAdmin?.viewUser.pull(new mongoose.Types.ObjectId(getStaff!._id));
-    await getAdmin?.save()
+    await getAdmin?.save();
 
     return res.status(200).json({
-      message : "deactivated Staff successfully",
-      data : getStaff
-    })
-  } catch (error:any) {
+      message: "deactivated Staff successfully",
+      data: getStaff,
+    });
+  } catch (error: any) {
     return res.status(400).json({
       message: "couldn't deactivate staff",
-      data : error,
-      error : error.message
+      data: error,
+      error: error.message,
     });
   }
-}
-
+};
 
 //verify account via mail
 
 export const verifyUser = async (req: Request, res: Response) => {
   try {
-
-
     const staff = await staffAuth.findById(req.params.staffId);
 
     if (staff?.OTP !== "") {
       if (staff?.token !== "") {
-  
-          
+        await staffAuth.findByIdAndUpdate(
+          staff?._id,
+          {
+            token: "",
+            verified: true,
+          },
+          { new: true }
+        );
 
-            await staffAuth.findByIdAndUpdate(
-              staff?._id,
-              {
-                token: "",
-                verified: true,
-              },
-              { new: true }
-            );
-
-            return res.status(201).json({
-              data: staff,
-            });
-  
+        return res.status(201).json({
+          data: staff,
+        });
       } else {
         return res.status(400).json({
           message: "you have inputed a wrong otp",
@@ -336,15 +317,13 @@ export const verifyUser = async (req: Request, res: Response) => {
   }
 };
 
-
-
-export const verifiedStaff = async (req:Request, res:Response) => {
+export const verifiedStaff = async (req: Request, res: Response) => {
   try {
     const user = await staffAuth.findById(req.params.staffId);
-    console.log(`this is user OTP ${user?.OTP}`)
+    console.log(`this is user OTP ${user?.OTP}`);
 
     // const {} = req.body
-   
+
     const company = await adminAuth.findOne({ name: user?.companyname! });
     const codedNumb = crypto.randomBytes(2).toString("hex");
     if (user) {
@@ -373,15 +352,14 @@ export const verifiedStaff = async (req:Request, res:Response) => {
         message: `Error getting User`,
       });
     }
-  } catch (err:any) {
+  } catch (err: any) {
     return res.status(404).json({
       message: err.message,
     });
   }
 };
 
-
-export const VerifiedStaffFinally = async (req:Request, res:Response) => {
+export const VerifiedStaffFinally = async (req: Request, res: Response) => {
   try {
     const { response } = req.body;
 
@@ -394,14 +372,14 @@ export const VerifiedStaffFinally = async (req:Request, res:Response) => {
           req.params.id,
           {
             token: "",
-           
+
             verified: true,
           },
           { new: true }
         );
 
         finalVerifyAdminEmail(getUser, company);
-        
+
         finalVerifyStaffEmail(getUser);
 
         res.status(201).json({ message: "Sent..." });
@@ -431,6 +409,17 @@ export const VerifiedStaffFinally = async (req:Request, res:Response) => {
     res.end();
   } catch (err) {
     return;
+  }
+};
+
+export const StaffOTPCheck = async (req: Request, res: Response) => {
+  try {
+  } catch (error: any) {
+    return res.json({
+      message: "an error occurred while entering OTP",
+      data: error,
+      err: error?.message,
+    });
   }
 };
 

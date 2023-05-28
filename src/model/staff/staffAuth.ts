@@ -12,6 +12,12 @@ const StaffAuth = new mongoose.Schema<staffSignUp>(
     staffToken: {
       type: String,
     },
+    OTP: {
+      type: String,
+    },
+    token: {
+      type: String,
+    },
     yourName: {
       type: String,
       required: [true, "please enter your name"],

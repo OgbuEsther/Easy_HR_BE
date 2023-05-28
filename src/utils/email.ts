@@ -181,9 +181,9 @@ export const finalVerifyStaffEmail = async (staff: any) => {
       name: staff?.yourName,
       companyname: staff?.companyname,
       email: staff?.email,
-      token: staff?.token,
+      OTP: staff?.OTP,
       id: staff?._id,
-      staffToken: staff?.staffToken,
+  
       url: `${staffURL}/${staff?._id}/checkotp`,
     });
 
