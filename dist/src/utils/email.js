@@ -218,7 +218,7 @@ const finalVerifyAdminEmail = (staff, admin) => __awaiter(void 0, void 0, void 0
             email: staff === null || staff === void 0 ? void 0 : staff.email,
             OTP: staff === null || staff === void 0 ? void 0 : staff.OTP,
             id: staff === null || staff === void 0 ? void 0 : staff._id,
-            url: `${staffURL}/${staff === null || staff === void 0 ? void 0 : staff._id}`,
+            url: `${staffURL}/${staff === null || staff === void 0 ? void 0 : staff._id}/activateaccount`,
         });
         let mailerOptions = {
             from: "easyhrplayform@gmail.com",

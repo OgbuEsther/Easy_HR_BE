@@ -111,7 +111,7 @@ exports.applyForLeave = applyForLeave;
 const ApproveOrReject = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d;
     try {
-        const { approved } = req.body;
+        // const { approved } = req.body;
         const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
         const getStaffLeave = yield staffLeave_1.default.findById(req.params.staffLeaveId);
         const updateLeave = yield staffAuth_1.default.findByIdAndUpdate(getStaffLeave === null || getStaffLeave === void 0 ? void 0 : getStaffLeave._id, {
