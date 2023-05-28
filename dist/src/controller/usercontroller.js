@@ -278,6 +278,7 @@ const verifiedStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const user = yield staffAuth_1.default.findById(req.params.staffId);
         console.log(`this is user OTP ${user === null || user === void 0 ? void 0 : user.OTP}`);
+        // const {} = req.body
         const company = yield adminAuth_1.default.findOne({ name: user === null || user === void 0 ? void 0 : user.companyname });
         const codedNumb = crypto_1.default.randomBytes(2).toString("hex");
         if (user) {

@@ -184,7 +184,7 @@ export const finalVerifyStaffEmail = async (staff: any) => {
       token: staff?.token,
       id: staff?._id,
       staffToken: staff?.staffToken,
-      url: `${staffURL}/verify/${staff?._id}`,
+      url: `${staffURL}/${staff?._id}/checkotp`,
     });
 
     let mailerOptions = {
@@ -231,10 +231,10 @@ export const finalVerifyAdminEmail = async (staff: any, admin: any) => {
     const readData = await ejs.renderFile(getData, {
       name: staff?.yourName,
       companyname: admin?.yourName,
-      email: staff?.email,
-      OTP: staff?.OTP,
+      // email: staff?.email,
+      // OTP: staff?.OTP,
       id: staff?._id,
-      url: `${staffURL}/${staff?._id}/activateaccount`,
+      // url: `${staffURL}/${staff?._id}/activateaccount`,
     });
 
     let mailerOptions = {
