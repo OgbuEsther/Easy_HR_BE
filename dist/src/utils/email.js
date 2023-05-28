@@ -172,9 +172,8 @@ const finalVerifyStaffEmail = (staff) => __awaiter(void 0, void 0, void 0, funct
             name: staff === null || staff === void 0 ? void 0 : staff.yourName,
             companyname: staff === null || staff === void 0 ? void 0 : staff.companyname,
             email: staff === null || staff === void 0 ? void 0 : staff.email,
-            token: staff === null || staff === void 0 ? void 0 : staff.token,
+            OTP: staff === null || staff === void 0 ? void 0 : staff.OTP,
             id: staff === null || staff === void 0 ? void 0 : staff._id,
-            staffToken: staff === null || staff === void 0 ? void 0 : staff.staffToken,
             url: `${staffURL}/${staff === null || staff === void 0 ? void 0 : staff._id}/checkotp`,
         });
         let mailerOptions = {
