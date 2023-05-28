@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VerifiedStaffFinally = exports.verifiedStaff = exports.verifyUser = exports.deactivateStaff = exports.updateStaff = exports.getOneStaff = exports.getAllStaff = exports.staffSignin = exports.staffSignup = void 0;
+exports.StaffOTPCheck = exports.VerifiedStaffFinally = exports.verifiedStaff = exports.verifyUser = exports.deactivateStaff = exports.updateStaff = exports.getOneStaff = exports.getAllStaff = exports.staffSignin = exports.staffSignup = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const crypto_1 = __importDefault(require("crypto"));
@@ -27,7 +27,12 @@ exports.staffSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
     try {
         const { companyname, email, yourName, password, position, walletNumber } = req.body;
         const token = crypto_1.default.randomBytes(32).toString("hex");
-        const OTP = crypto_1.default.randomBytes(2).toString("hex");
+        const OTP = otp_generator_1.default.generate(4, {
+            upperCaseAlphabets: false,
+            specialChars: false,
+            digits: true,
+            lowerCaseAlphabets: false,
+        });
         const getAdmin = yield adminAuth_1.default.findOne({ companyname });
         if (!getAdmin) {
             next(new appError_1.AppError({
@@ -207,14 +212,14 @@ const updateStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save();
         return res.status(201).json({
             message: "updated staff amount successfully",
-            data: update
+            data: update,
         });
     }
     catch (error) {
         return res.status(400).json({
             message: "couldn't update staff",
             data: error,
-            error: error.message
+            error: error.message,
         });
     }
 });
@@ -228,14 +233,14 @@ const deactivateStaff = (req, res) => __awaiter(void 0, void 0, void 0, function
         yield (getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.save());
         return res.status(200).json({
             message: "deactivated Staff successfully",
-            data: getStaff
+            data: getStaff,
         });
     }
     catch (error) {
         return res.status(400).json({
             message: "couldn't deactivate staff",
             data: error,
-            error: error.message
+            error: error.message,
         });
     }
 });
@@ -355,6 +360,39 @@ const VerifiedStaffFinally = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.VerifiedStaffFinally = VerifiedStaffFinally;
+const StaffOTPCheck = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { OTP } = req.body;
+        const getStaff = yield staffAuth_1.default.findById(req.params.staffId);
+        if (getStaff) {
+            if ((getStaff === null || getStaff === void 0 ? void 0 : getStaff.OTP) === OTP) {
+                return res.status(200).json({
+                    message: "Right Credentails , You can now sign in",
+                    data: OTP,
+                    check: getStaff === null || getStaff === void 0 ? void 0 : getStaff.OTP,
+                });
+            }
+            else {
+                return res.status(400).json({
+                    message: "Wrong Credentials!!!!",
+                });
+            }
+        }
+        else {
+            return res.status(400).json({
+                message: "couldn't find staff",
+            });
+        }
+    }
+    catch (error) {
+        return res.json({
+            message: "an error occurred while entering OTP",
+            data: error,
+            err: error === null || error === void 0 ? void 0 : error.message,
+        });
+    }
+});
+exports.StaffOTPCheck = StaffOTPCheck;
 /**const staffMonthlySalary = [
   {
     name: "Peter",
@@ -395,4 +433,4 @@ const dataPay = monthlySalary.map((el) => {
 });
 
 console.log(dataPay.flat().filter((el) => el !== null));
-console.log(staff); */ 
+console.log(staff); */

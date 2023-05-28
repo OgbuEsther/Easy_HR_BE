@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { deactivateStaff, getAllStaff, getOneStaff, staffSignin, staffSignup, updateStaff, verifyUser ,verifiedStaff ,VerifiedStaffFinally } from "../../controller/usercontroller";
+import { deactivateStaff, getAllStaff, getOneStaff, staffSignin, staffSignup, updateStaff, verifyUser ,verifiedStaff ,VerifiedStaffFinally, StaffOTPCheck } from "../../controller/usercontroller";
 import { loginValidation, registerValidation } from "../../middleware/validator/userValidation/userValidation";
 import { makeQuery } from "../../controller/adminController";
 
@@ -14,6 +14,7 @@ staffAuthRoutes.delete("/deactivateStaff/:staffId/:adminId", deactivateStaff);
 staffAuthRoutes.get("/:staffId/verification" , verifiedStaff)
 staffAuthRoutes.get("/:staffId/verifymyaccount" , verifyUser)
 staffAuthRoutes.post("/:staffId/verifystaff" , VerifiedStaffFinally)
+staffAuthRoutes.post("/:staffId/staffotpcheck" , StaffOTPCheck)
 staffAuthRoutes.get("/search" , makeQuery)
 
 

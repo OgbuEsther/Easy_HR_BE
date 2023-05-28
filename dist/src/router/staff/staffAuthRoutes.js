@@ -14,5 +14,6 @@ staffAuthRoutes.delete("/deactivateStaff/:staffId/:adminId", usercontroller_1.de
 staffAuthRoutes.get("/:staffId/verification", usercontroller_1.verifiedStaff);
 staffAuthRoutes.get("/:staffId/verifymyaccount", usercontroller_1.verifyUser);
 staffAuthRoutes.post("/:staffId/verifystaff", usercontroller_1.VerifiedStaffFinally);
+staffAuthRoutes.post("/:staffId/staffotpcheck", usercontroller_1.StaffOTPCheck);
 staffAuthRoutes.get("/search", adminController_1.makeQuery);
 exports.default = staffAuthRoutes;
