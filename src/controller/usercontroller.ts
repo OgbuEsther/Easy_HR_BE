@@ -3,8 +3,8 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 
 import crypto from "crypto";
-
 import otpgenerator from "otp-generator";
+
 import adminAuth from "../model/admin/adminAuth";
 import staffAuth from "../model/staff/staffAuth";
 import staffWalletModel from "../model/staff/staffDashboard/StaffWallet";
@@ -24,7 +24,12 @@ export const staffSignup = asyncHandler(
         req.body;
 
       const token = crypto.randomBytes(32).toString("hex");
-      const OTP = crypto.randomBytes(2).toString("hex");
+      const OTP = otpgenerator.generate(4, {
+        upperCaseAlphabets: false,
+        specialChars: false,
+        digits: true,
+        lowerCaseAlphabets: false,
+      });
 
       const getAdmin = await adminAuth.findOne({ companyname });
 
@@ -414,6 +419,26 @@ export const VerifiedStaffFinally = async (req: Request, res: Response) => {
 
 export const StaffOTPCheck = async (req: Request, res: Response) => {
   try {
+    const { OTP } = req.body;
+
+    const getStaff = await staffAuth.findById(req.params.staffId);
+    if (getStaff) {
+      if (getStaff?.OTP === OTP) {
+        return res.status(200).json({
+          message: "Right Credentails , You can now sign in",
+          data: OTP,
+          check: getStaff?.OTP,
+        });
+      } else {
+        return res.status(400).json({
+          message: "Wrong Credentials!!!!",
+        });
+      }
+    } else {
+      return res.status(400).json({
+        message: "couldn't find staff",
+      });
+    }
   } catch (error: any) {
     return res.json({
       message: "an error occurred while entering OTP",
