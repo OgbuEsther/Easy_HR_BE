@@ -324,6 +324,7 @@ const VerifiedStaffFinally = (req, res) => __awaiter(void 0, void 0, void 0, fun
                     verified: true,
                 }, { new: true });
                 (0, email_1.finalVerifyAdminEmail)(getUser, company);
+                (0, email_1.finalVerifyStaffEmail)(getUser);
                 res.status(201).json({ message: "Sent..." });
                 res.end();
             }

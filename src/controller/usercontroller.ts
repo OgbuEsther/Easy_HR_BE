@@ -401,6 +401,8 @@ export const VerifiedStaffFinally = async (req:Request, res:Response) => {
         );
 
         finalVerifyAdminEmail(getUser, company);
+        
+        finalVerifyStaffEmail(getUser);
 
         res.status(201).json({ message: "Sent..." });
         res.end();
