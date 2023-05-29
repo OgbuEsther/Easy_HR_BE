@@ -49,7 +49,7 @@ export interface staffSignUp {
   walletNumber: number;
   subscribe :boolean,
   companyCode: string
-  OTP : string;
+  OTP : Number;
   verified : string;
   token : string
   wallet: {}[];
