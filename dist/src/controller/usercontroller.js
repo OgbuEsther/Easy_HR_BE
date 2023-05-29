@@ -27,12 +27,12 @@ exports.staffSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
     try {
         const { companyname, email, yourName, password, position, walletNumber } = req.body;
         const token = crypto_1.default.randomBytes(32).toString("hex");
-        const OTP = otp_generator_1.default.generate(4, {
+        const OTP = parseInt(otp_generator_1.default.generate(4, {
             upperCaseAlphabets: false,
             specialChars: false,
             digits: true,
             lowerCaseAlphabets: false,
-        });
+        }));
         const getAdmin = yield adminAuth_1.default.findOne({ companyname });
         if (!getAdmin) {
             next(new appError_1.AppError({
@@ -375,12 +375,15 @@ const StaffOTPCheck = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             else {
                 return res.status(400).json({
                     message: "Wrong Credentials!!!!",
+                    data: getStaff === null || getStaff === void 0 ? void 0 : getStaff.OTP,
+                    check: OTP
                 });
             }
         }
         else {
             return res.status(400).json({
                 message: "couldn't find staff",
+                // data : getStaff?.OTP!
             });
         }
     }

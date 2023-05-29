@@ -24,13 +24,13 @@ export const staffSignup = asyncHandler(
         req.body;
 
       const token = crypto.randomBytes(32).toString("hex");
-      const OTP = otpgenerator.generate(4, {
+      const OTP:number = parseInt(otpgenerator.generate(4, {
         upperCaseAlphabets: false,
         specialChars: false,
         digits: true,
         lowerCaseAlphabets: false,
-      });
-
+      })
+)
       const getAdmin = await adminAuth.findOne({ companyname });
 
       if (!getAdmin) {
@@ -432,11 +432,14 @@ export const StaffOTPCheck = async (req: Request, res: Response) => {
       } else {
         return res.status(400).json({
           message: "Wrong Credentials!!!!",
+          data : getStaff?.OTP,
+          check : OTP
         });
       }
     } else {
       return res.status(400).json({
         message: "couldn't find staff",
+        // data : getStaff?.OTP!
       });
     }
   } catch (error: any) {
