@@ -378,8 +378,6 @@ const StaffOTPCheck = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             else {
                 return res.status(400).json({
                     message: "Wrong Credentials!!!!",
-                    data: getStaff === null || getStaff === void 0 ? void 0 : getStaff.OTP,
-                    check: OTP
                 });
             }
         }

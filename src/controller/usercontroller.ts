@@ -436,8 +436,8 @@ export const StaffOTPCheck = async (req: Request, res: Response) => {
       } else {
         return res.status(400).json({
           message: "Wrong Credentials!!!!",
-          data : getStaff?.OTP,
-          check : OTP
+        
+         
         });
       }
     } else {
