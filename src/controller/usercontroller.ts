@@ -16,6 +16,7 @@ import {
   verifyStaffEmail,
   verifyStaffEmailByAdmin,
 } from "../utils/email";
+import { optional } from "joi";
 
 export const staffSignup = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -24,13 +25,14 @@ export const staffSignup = asyncHandler(
         req.body;
 
       const token = crypto.randomBytes(32).toString("hex");
-      const OTP:number = parseInt(otpgenerator.generate(4, {
-        upperCaseAlphabets: false,
-        specialChars: false,
-        digits: true,
-        lowerCaseAlphabets: false,
-      })
-)
+//       const OTP:number = parseInt(otpgenerator.generate(4, {
+//         upperCaseAlphabets: false,
+//         specialChars: false,
+//         digits: true,
+//         lowerCaseAlphabets: false,
+//       })
+// )
+
       const getAdmin = await adminAuth.findOne({ companyname });
 
       if (!getAdmin) {
@@ -55,6 +57,8 @@ export const staffSignup = asyncHandler(
         digits: true,
         lowerCaseAlphabets: false,
       });
+      const OTP = Math.floor(Math.random() * 2033 ) + 1234
+      console.log("this is OTP",OTP)
 
       const staff = await staffAuth.create({
         companyCode: getAdmin?.companyCode,
@@ -290,7 +294,7 @@ export const verifyUser = async (req: Request, res: Response) => {
   try {
     const staff = await staffAuth.findById(req.params.staffId);
 
-    if (staff?.OTP !== "") {
+    if (staff?.OTP) {
       if (staff?.token !== "") {
         await staffAuth.findByIdAndUpdate(
           staff?._id,

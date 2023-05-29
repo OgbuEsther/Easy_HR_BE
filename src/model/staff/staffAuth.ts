@@ -13,7 +13,7 @@ const StaffAuth = new mongoose.Schema<staffSignUp>(
       type: String,
     },
     OTP: {
-      type: String,
+      type: Number,
     },
     token: {
       type: String,

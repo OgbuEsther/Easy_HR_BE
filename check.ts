@@ -22,3 +22,4 @@ console.log(numArray2);
 console.log(numArray3);
 // let strArray = getArray<string>(["bola", "sanni", "ola"]);
 // console.log(strArray);
+

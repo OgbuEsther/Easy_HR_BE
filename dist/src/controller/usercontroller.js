@@ -27,12 +27,13 @@ exports.staffSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
     try {
         const { companyname, email, yourName, password, position, walletNumber } = req.body;
         const token = crypto_1.default.randomBytes(32).toString("hex");
-        const OTP = parseInt(otp_generator_1.default.generate(4, {
-            upperCaseAlphabets: false,
-            specialChars: false,
-            digits: true,
-            lowerCaseAlphabets: false,
-        }));
+        //       const OTP:number = parseInt(otpgenerator.generate(4, {
+        //         upperCaseAlphabets: false,
+        //         specialChars: false,
+        //         digits: true,
+        //         lowerCaseAlphabets: false,
+        //       })
+        // )
         const getAdmin = yield adminAuth_1.default.findOne({ companyname });
         if (!getAdmin) {
             next(new appError_1.AppError({
@@ -50,6 +51,8 @@ exports.staffSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
             digits: true,
             lowerCaseAlphabets: false,
         });
+        const OTP = Math.floor(Math.random() * 2033) + 1234;
+        console.log("this is OTP", OTP);
         const staff = yield staffAuth_1.default.create({
             companyCode: getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.companyCode,
             companyname,
@@ -249,7 +252,7 @@ exports.deactivateStaff = deactivateStaff;
 const verifyUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const staff = yield staffAuth_1.default.findById(req.params.staffId);
-        if ((staff === null || staff === void 0 ? void 0 : staff.OTP) !== "") {
+        if (staff === null || staff === void 0 ? void 0 : staff.OTP) {
             if ((staff === null || staff === void 0 ? void 0 : staff.token) !== "") {
                 yield staffAuth_1.default.findByIdAndUpdate(staff === null || staff === void 0 ? void 0 : staff._id, {
                     token: "",
