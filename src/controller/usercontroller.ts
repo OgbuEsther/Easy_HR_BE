@@ -25,13 +25,13 @@ export const staffSignup = asyncHandler(
         req.body;
 
       const token = crypto.randomBytes(32).toString("hex");
-//       const OTP:number = parseInt(otpgenerator.generate(4, {
-//         upperCaseAlphabets: false,
-//         specialChars: false,
-//         digits: true,
-//         lowerCaseAlphabets: false,
-//       })
-// )
+      const OTP = otpgenerator.generate(4, {
+        upperCaseAlphabets: false,
+        specialChars: false,
+        digits: true,
+        lowerCaseAlphabets: false,
+      })
+
 
       const getAdmin = await adminAuth.findOne({ companyname });
 
@@ -57,7 +57,7 @@ export const staffSignup = asyncHandler(
         digits: true,
         lowerCaseAlphabets: false,
       });
-      const OTP = Math.floor(Math.random() * 2033 ) + 1234
+      // const OTP = Math.floor(Math.random() * 2033 ) + 1234
       console.log("this is OTP",OTP)
 
       const staff = await staffAuth.create({

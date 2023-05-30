@@ -27,13 +27,12 @@ exports.staffSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
     try {
         const { companyname, email, yourName, password, position, walletNumber } = req.body;
         const token = crypto_1.default.randomBytes(32).toString("hex");
-        //       const OTP:number = parseInt(otpgenerator.generate(4, {
-        //         upperCaseAlphabets: false,
-        //         specialChars: false,
-        //         digits: true,
-        //         lowerCaseAlphabets: false,
-        //       })
-        // )
+        const OTP = otp_generator_1.default.generate(4, {
+            upperCaseAlphabets: false,
+            specialChars: false,
+            digits: true,
+            lowerCaseAlphabets: false,
+        });
         const getAdmin = yield adminAuth_1.default.findOne({ companyname });
         if (!getAdmin) {
             next(new appError_1.AppError({
@@ -51,7 +50,7 @@ exports.staffSignup = (0, asyncHandler_1.asyncHandler)((req, res, next) => __awa
             digits: true,
             lowerCaseAlphabets: false,
         });
-        const OTP = Math.floor(Math.random() * 2033) + 1234;
+        // const OTP = Math.floor(Math.random() * 2033 ) + 1234
         console.log("this is OTP", OTP);
         const staff = yield staffAuth_1.default.create({
             companyCode: getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin.companyCode,
