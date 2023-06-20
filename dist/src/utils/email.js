@@ -23,8 +23,8 @@ const GOOGLE_REDIRECT = "https://developers.google.com/oauthplayground";
 const REFRESH = "1//04-3AwTjrEjYuCgYIARAAGAQSNwF-L9IrLZoaBCv22bphet8kwNV6rx1dVlYJZ44KQK_fAtkT1o7F4eT1qkn5_FhyjycjNTpSbm4";
 const oAuth = new googleapis_1.google.auth.OAuth2(GOOGLE_ID, GOOGLE_SECRET, REFRESH);
 oAuth.setCredentials({ refresh_token: REFRESH });
-const adminURL = "https://eazyhr.netlify.app";
-const staffURL = "https://eazyhr.netlify.app";
+const adminURL = "https://eazyhr.vercel.app/";
+const staffURL = "https://eazyhr.vercel.app/";
 const verifyEmail = (admin) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accessToken = yield oAuth.getAccessToken();
