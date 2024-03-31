@@ -46,45 +46,55 @@ async function run(ip: any) {
 }
 
 
-export const createAttendance = async(req:Request , res:Response)=>{
+export const createAttendance = async (req: Request, res: Response) => {
   try {
-   
-    const getAdmin = await adminAuth.findById(req.params.adminId)
-    
-    const getTime = new Date().toLocaleTimeString();
+    // Find admin by ID
+    const getAdmin = await adminAuth.findById(req.params.adminId);
 
-  if(getAdmin){
-    const token = await crypto.randomBytes(3).toString("hex")
+    if (!getAdmin) {
+      return res.status(400).json({
+        message: "Admin not found",
+      });
+    }
 
+    // Get the last generated token's timestamp
+    const lastTokenTimestamp = getAdmin.lastTokenTimestamp || new Date(0);
+
+    // Calculate the time difference since the last token was generated
+    const timeDifference = new Date().getTime() - lastTokenTimestamp.getTime();
+
+    // If less than 24 hours have passed since the last token generation, return an error
+    if (timeDifference < 24 * 60 * 60 * 1000) {
+      return res.status(400).json({
+        message: "Cannot generate a new token before 24 hours have passed since the last token generation.",
+      });
+    }
+
+    // Generate a new token
+    const token = await crypto.randomBytes(3).toString("hex");
+
+    // Create a new token record
     const createToken = await adminAttendanceModel.create({
-      setToken :token,
-     
-      // _id : getAdmin?._id
-    })
+      setToken: token,
+    });
 
-    await getAdmin?.SetAttendance?.push(new mongoose.Types.ObjectId(createToken?._id))
-  
-
-    await getAdmin?.save()
+    // Update admin's last token timestamp
+    getAdmin.lastTokenTimestamp = new Date();
+    await getAdmin.save();
 
     return res.status(201).json({
-      message : "create staff token successfully",
-      data : createToken
-    })
-  }else{
+      message: "Create staff token successfully",
+      data: createToken,
+    });
+  } catch (error: any) {
     return res.status(400).json({
-      message: "admin not found",
-  
+      message: "An error occurred in creating attendance",
+      data: error,
+      error: error.message,
     });
   }
-  } catch (error:any) {
-    return res.status(400).json({
-      message: "an error in creating attendance",
-      data : error,
-      error : error.message
-    });
-  }
-}
+};
+
 
 //clock in time
 export const createClockIn = async (req: Request, res: Response ,ip:any  ) => {

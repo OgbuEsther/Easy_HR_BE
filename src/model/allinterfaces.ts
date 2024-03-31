@@ -14,6 +14,7 @@ export interface adminSignUp extends mongoose.Document {
    email: string;
    yourName: string;
    password: string;
+   lastTokenTimestamp: Date;
    wallet: {}[];
    transactionHistory: {}[];
    walletNumber: number;
