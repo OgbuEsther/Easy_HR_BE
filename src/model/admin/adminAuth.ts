@@ -23,6 +23,9 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
     expectedClockOut : {
       type : String
     },
+    workingDays : {
+      type : String
+    },
     companyname: {
       type: String,
       unique:true

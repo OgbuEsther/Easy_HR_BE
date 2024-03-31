@@ -331,7 +331,7 @@ export const verifyUser = async (req: Request, res: Response) => {
 
 export const updateAdmin = async (req: Request, res: Response) => {
   try {
-    const { expectedClockIn , expectedClockOut,companyname ,email ,yourName } = req.body;
+    const { expectedClockIn , expectedClockOut,companyname ,email ,yourName ,workingDays } = req.body;
 
     const getAdmin = await adminAuth.findById(req.params.adminId)
 
@@ -340,7 +340,7 @@ export const updateAdmin = async (req: Request, res: Response) => {
     if(getAdmin){
       const update = await adminAuth.findByIdAndUpdate(
         getAdmin?._id,
-        { expectedClockIn , expectedClockOut,companyname ,email ,yourName },
+        { expectedClockIn , expectedClockOut,companyname ,email ,yourName, workingDays },
         { new: true }
       );
   
