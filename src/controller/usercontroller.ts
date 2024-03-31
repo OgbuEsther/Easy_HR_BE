@@ -1,10 +1,8 @@
 import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
-
 import crypto from "crypto";
 import otpgenerator from "otp-generator";
-
 import adminAuth from "../model/admin/adminAuth";
 import staffAuth from "../model/staff/staffAuth";
 import staffWalletModel from "../model/staff/staffDashboard/StaffWallet";
@@ -458,7 +456,7 @@ export const StaffOTPCheck = async (req: Request, res: Response) => {
   {
     name: "Peter",
     salary: 500,
-  },
+  },n
   {
     name: "Okus",
     salary: 1500,
