@@ -16,7 +16,6 @@ import {
   verifyStaffEmail,
   verifyStaffEmailByAdmin,
 } from "../utils/email";
-import { optional } from "joi";
 
 export const staffSignup = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
