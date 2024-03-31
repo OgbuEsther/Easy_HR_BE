@@ -7,7 +7,6 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
   {
     companyCode : {
       type : String,
-    
     },
     latitude : {
       type : String,
