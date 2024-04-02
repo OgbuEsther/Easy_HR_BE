@@ -37,7 +37,7 @@ export interface PayRoll {
   grossPay : number;
      expenses:[]
   netPay: number;
- 
+  EARNINGS? : string
 
 }
 
@@ -53,6 +53,8 @@ export interface Attendance {
   longitude : string
  staffId : string
   nameOfStaff : string
+  DEDUCTIONS? : number
+   
 }
 
 

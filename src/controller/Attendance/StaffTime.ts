@@ -99,10 +99,6 @@ export const createAttendance = async (req: Request, res: Response) => {
 //clock in time
 export const createClockIn = async (req: Request, res: Response ,ip:any  ) => {
   try {
-
-    
-
-
     const { date, clockIn, message, time , setToken } = req.body;
 
     const getStaff = await staffAuth.findById(req.params.staffId);
@@ -197,7 +193,8 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
             message: customMessage,
             time: getTime,
             token :setToken,
-            nameOfStaff : getStaff?.yourName
+            nameOfStaff : getStaff?.yourName,
+            DEDUCTIONS : 100
           });
           getAdmin?.viewLateStaff?.push(new mongoose.Types.ObjectId(clockInTime?._id))
           return res.status(200).json({

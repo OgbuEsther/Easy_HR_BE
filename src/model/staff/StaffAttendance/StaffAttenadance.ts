@@ -40,7 +40,11 @@ const AttendanceSchema = new mongoose.Schema<Attendance>({
     },
 staffId : {
     type : String
-}
+},
+DEDUCTIONS : {
+    type : String
+},
+
 })
 
 const AttendanceModel = mongoose.model<IAttend>("StaffAttendance" , AttendanceSchema)
