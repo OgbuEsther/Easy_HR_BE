@@ -35,6 +35,7 @@ export interface adminSignUp extends mongoose.Document {
    staffLeave :{}[]
    viewApprovedLeave :{}[]
    viewRejectedLeave :{}[]
+   viewPendingLeave : {}[]
 
   // ... other fields ...
 }
