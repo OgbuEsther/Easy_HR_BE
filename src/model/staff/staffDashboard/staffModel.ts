@@ -4,22 +4,21 @@ export interface staffWalletProps {
   debit: number;
 }
 
-
-export interface staffLeaveProps{
-  title :string;
-  startDate :string;
-  numberOfDays :number;
-  remainingDays :number;
-  reason : string;
-  approved : boolean;
-  allApproved: [],
-  allRejected:[]
+export interface staffLeaveProps {
+  title: string;
+  startDate: string;
+  numberOfDays: number;
+  remainingDays: number;
+  reason: string;
+  approved: boolean;
+  allApproved: [];
+  allRejected: [];
 }
 
 export interface plans {
-  percentageRate : number;
-  totalBal : number
-  subscribe :boolean
+  percentageRate: number;
+  totalBal: number;
+  subscribe: boolean;
 }
 
 export interface staffTransactionProps {
@@ -28,36 +27,29 @@ export interface staffTransactionProps {
   date: string;
   transactionReference: number;
   amount: number;
-
 }
-
-
 
 export interface PayRoll {
-  grossPay : number;
-     expenses:[]
+  grossPay: number;
+  expenses: [];
   netPay: number;
-  EARNINGS? : string
-
+  EARNINGS?: string;
 }
-
 
 export interface Attendance {
-  date : string;
-  clockIn : boolean;
-  clockOut : boolean;
-  message : string;
-  time : string
-  latitude : string
-  token : string
-  longitude : string
- staffId : string
-  nameOfStaff : string
-  DEDUCTIONS? : number
-   
+  date: string;
+  clockIn: boolean;
+  clockOut: boolean;
+  message: string;
+  time: string;
+  latitude: string;
+  token: string;
+  longitude: string;
+  staffId: string;
+  nameOfStaff: string;
+  DEDUCTIONS?: number;
 }
 
-
 export interface staffPerformanceProps {
-  ratings : number
+  ratings: number;
 }

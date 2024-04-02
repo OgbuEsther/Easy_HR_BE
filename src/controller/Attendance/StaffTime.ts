@@ -1,8 +1,8 @@
-import express,{ NextFunction, Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import AttendanceModel from "../../model/staff/StaffAttendance/StaffAttenadance";
 import staffAuth from "../../model/staff/staffAuth";
 import mongoose from "mongoose";
-import crypto from "crypto"
+import crypto from "crypto";
 import adminAttendanceModel from "../../model/admin/adminAttendance/AdminAttendance";
 import adminAuth from "../../model/admin/adminAuth";
 import { get } from "http";
@@ -12,7 +12,6 @@ import axios from "axios";
 import { SuperfaceClient } from "@superfaceai/one-sdk";
 const app = express();
 app.set("trust proxy", true);
-
 
 const sdk = new SuperfaceClient();
 
@@ -33,7 +32,7 @@ async function run(ip: any) {
           apikey: "41b7b0ed377c175c4b32091abd68d049f5b6b748b2bee4789a161d93",
         },
       },
-    },
+    }
   );
 
   // Handle the result
@@ -44,7 +43,6 @@ async function run(ip: any) {
     console.error(error);
   }
 }
-
 
 export const createAttendance = async (req: Request, res: Response) => {
   try {
@@ -66,7 +64,8 @@ export const createAttendance = async (req: Request, res: Response) => {
     // If less than 24 hours have passed since the last token generation, return an error
     if (timeDifference < 24 * 60 * 60 * 1000) {
       return res.status(400).json({
-        message: "Cannot generate a new token before 24 hours have passed since the last token generation.",
+        message:
+          "Cannot generate a new token before 24 hours have passed since the last token generation.",
       });
     }
 
@@ -95,18 +94,17 @@ export const createAttendance = async (req: Request, res: Response) => {
   }
 };
 
-
 //clock in time
-export const createClockIn = async (req: Request, res: Response ,ip:any  ) => {
+export const createClockIn = async (req: Request, res: Response, ip: any) => {
   try {
-    const { date, clockIn, message, time , setToken } = req.body;
+    const { date, clockIn, message, time, setToken } = req.body;
 
     const getStaff = await staffAuth.findById(req.params.staffId);
-const getAdmin = await adminAuth.findById(req.params.adminId)
-    const getAdminAttendanceToken = await adminAttendanceModel.findOne(
-      {setToken}
-    )
-    
+    const getAdmin = await adminAuth.findById(req.params.adminId);
+    const getAdminAttendanceToken = await adminAttendanceModel.findOne({
+      setToken,
+    });
+
     let dataIP: any;
 
     await axios.get("https://api.ipify.org/").then((res: any) => {
@@ -130,19 +128,22 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
 
     const customMessage = `you clocked in at ${getTime} on ${getDate} , make sure to clock out at the right time`;
 
-    
-   console.log("this is parseFloat(getAdmin?.expectedClockIn! ) " ,parseFloat(getAdmin?.expectedClockIn! ))
+    console.log(
+      "this is parseFloat(getAdmin?.expectedClockIn! ) ",
+      parseFloat(getAdmin?.expectedClockIn!)
+    );
 
-   console.log("this is parseFloat(getTime)" ,parseFloat(getTime))
-   console.log("this is (getAdmin?.expectedClockIn! ) " ,getAdmin?.expectedClockIn! )
+    console.log("this is parseFloat(getTime)", parseFloat(getTime));
+    console.log(
+      "this is (getAdmin?.expectedClockIn! ) ",
+      getAdmin?.expectedClockIn!
+    );
 
-   console.log("this is (getTime)" ,getTime)
+    console.log("this is (getTime)", getTime);
 
-    if(getStaff && getAdmin){
-
-
-      if(getAdminAttendanceToken?.setToken === setToken ){
-        if(getAdmin?.expectedClockIn! <= getTime){
+    if (getStaff && getAdmin) {
+      if (getAdminAttendanceToken?.setToken === setToken) {
+        if (getAdmin?.expectedClockIn! <= getTime) {
           if (
             realData?.latitude === parseFloat(getAdmin?.latitude!) &&
             realData?.longitude === parseFloat(getAdmin?.longitude!)
@@ -153,77 +154,74 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
               clockOut: false,
               message: customMessage,
               time: getTime,
-              token :setToken,
-              nameOfStaff : getStaff?.yourName,
-              staffId : getStaff?.staffToken
+              token: setToken,
+              nameOfStaff: getStaff?.yourName,
+              staffId: getStaff?.staffToken,
             });
-      
+
             await getStaff?.Attendance?.push(
               new mongoose.Types.ObjectId(clockInTime?._id)
             );
             await getStaff?.save();
-    
-            
-    
-            await getAdmin?.viewStaffAttendance.push(new mongoose.Types.ObjectId(clockInTime?._id))
-    
-            await getAdminAttendanceToken?.save()
-    
-          
-    
-            getAdmin.viewStaffHistory.push(new mongoose.Types.ObjectId(clockInTime?._id))
-  
-          
-    
-            await getAdmin?.viewAbsentStaff?.pull(new mongoose.Types.ObjectId(getStaff?._id))
-    
-            await getAdmin?.save()
-    
+
+            await getAdmin?.viewStaffAttendance.push(
+              new mongoose.Types.ObjectId(clockInTime?._id)
+            );
+
+            await getAdminAttendanceToken?.save();
+
+            getAdmin.viewStaffHistory.push(
+              new mongoose.Types.ObjectId(clockInTime?._id)
+            );
+
+            await getAdmin?.viewAbsentStaff?.pull(
+              new mongoose.Types.ObjectId(getStaff?._id)
+            );
+
+            await getAdmin?.save();
+
             return res.status(201).json({
               message: "clockInTime done",
               data: clockInTime,
             });
           }
-         
-        }else if(getAdmin?.expectedClockIn! >= getTime){
+        } else if (getAdmin?.expectedClockIn! >= getTime) {
           const clockInTime = await LateAttendanceModel.create({
             date: getDate,
             clockIn,
             clockOut: false,
             message: customMessage,
             time: getTime,
-            token :setToken,
-            nameOfStaff : getStaff?.yourName,
-            DEDUCTIONS : 100
+            token: setToken,
+            nameOfStaff: getStaff?.yourName,
+            DEDUCTIONS: 100,
           });
-          getAdmin?.viewLateStaff?.push(new mongoose.Types.ObjectId(clockInTime?._id))
+          getAdmin?.viewLateStaff?.push(
+            new mongoose.Types.ObjectId(clockInTime?._id)
+          );
           return res.status(200).json({
-            message : "you are late"
-
-          })
-        }else{
+            message: "you are late",
+          });
+        } else {
           return res.status(400).json({
-            message : "you didn't punch in today"
-          })
+            message: "you didn't punch in today",
+          });
         }
-
-        
-      }else{
+      } else {
         return res.status(400).json({
-          message : "token doesn't match"
-        })
+          message: "token doesn't match",
+        });
       }
-    }else{
+    } else {
       return res.status(400).json({
-        message : "couldn't get staff or admin"
-      })
+        message: "couldn't get staff or admin",
+      });
     }
-  } catch (error:any) {
+  } catch (error: any) {
     return res.status(400).json({
       message: "staff couldn't clocked in",
-      data : error,
-      err : error?.message
-      
+      data: error,
+      err: error?.message,
     });
   }
 };
@@ -231,61 +229,63 @@ const getAdmin = await adminAuth.findById(req.params.adminId)
 //clock Out time
 export const createClockOut = async (req: Request, res: Response) => {
   try {
-    const { date, clockOut, message, time , setToken } = req.body;
+    const { date, clockOut, message, time, setToken } = req.body;
 
     const getDate = new Date().toLocaleDateString();
 
     const getTime = new Date().toLocaleTimeString();
 
-    
-    const getAdminAttendanceToken = await adminAttendanceModel.findOne({setToken})
+    const getAdminAttendanceToken = await adminAttendanceModel.findOne({
+      setToken,
+    });
 
     const customMessage = `you clocked out at ${getTime} on ${getDate}`;
 
     const getStaff = await staffAuth.findById(req.params.staffId);
-    const getAdmin = await adminAuth.findById(req.params.adminId)
+    const getAdmin = await adminAuth.findById(req.params.adminId);
 
     if (getStaff && getAdmin) {
-      if(getAdminAttendanceToken?.setToken === setToken ){
+      if (getAdminAttendanceToken?.setToken === setToken) {
         const clockOutTime = await AttendanceModel.create({
           date: getDate,
-          clockOut ,
+          clockOut,
           clockIn: false,
           message: customMessage,
           time: getTime,
-          token :setToken,
-          nameOfStaff : getStaff?.yourName
+          token: setToken,
+          nameOfStaff: getStaff?.yourName,
         });
-  
 
         await getStaff?.Attendance?.push(
           new mongoose.Types.ObjectId(clockOutTime?._id)
         );
         await getStaff?.save();
 
-        await getAdminAttendanceToken?.viewStaffAttendance.push(new mongoose.Types.ObjectId(clockOutTime?._id))
+        await getAdminAttendanceToken?.viewStaffAttendance.push(
+          new mongoose.Types.ObjectId(clockOutTime?._id)
+        );
 
-        await getAdminAttendanceToken?.save()
+        await getAdminAttendanceToken?.save();
 
         return res.status(201).json({
           message: "clockOutTime done",
           data: clockOutTime,
         });
-      }else{
+      } else {
         return res.status(400).json({
-          message : "token doesn't match"
-        })
+          message: "token doesn't match",
+        });
       }
-    }else{
+    } else {
       return res.status(400).json({
-        message : "couldn't get staff"
-      })
+        message: "couldn't get staff",
+      });
     }
-  } catch (error:any) {
+  } catch (error: any) {
     return res.status(400).json({
       message: "staff couldn't clocked out",
-      data : error,
-      err : error?.message
+      data: error,
+      err: error?.message,
     });
   }
 };
