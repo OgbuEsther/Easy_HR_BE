@@ -115,18 +115,20 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => _
                 httpCode: appError_1.HttpCode.BAD_REQUEST,
             }));
         }
-        (0, email_1.verifyEmail)(admin).then((res) => console.log(res)).catch((err) => console.log(err));
+        (0, email_1.verifyEmail)(admin)
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
         return res.status(200).json({
             message: "Success",
             data: admin,
-            result: realData
+            result: realData,
         });
     }
     catch (error) {
         return res.status(400).json({
             message: "an error occurred while creating admin",
             data: error,
-            err: error.message
+            err: error.message,
         });
     }
 }));
@@ -283,14 +285,21 @@ exports.verifyUser = verifyUser;
 //account settings
 const updateAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { expectedClockIn, expectedClockOut, companyname, email, yourName } = req.body;
+        const { expectedClockIn, expectedClockOut, companyname, email, yourName, workingDays, } = req.body;
         const getAdmin = yield adminAuth_1.default.findById(req.params.adminId);
         // const getStaffDetails = await staffAuth.findById(req.params.staffId);
         if (getAdmin) {
-            const update = yield adminAuth_1.default.findByIdAndUpdate(getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id, { expectedClockIn, expectedClockOut, companyname, email, yourName }, { new: true });
+            const update = yield adminAuth_1.default.findByIdAndUpdate(getAdmin === null || getAdmin === void 0 ? void 0 : getAdmin._id, {
+                expectedClockIn,
+                expectedClockOut,
+                companyname,
+                email,
+                yourName,
+                workingDays,
+            }, { new: true });
             return res.status(201).json({
                 message: "updated admin details successfully",
-                data: update
+                data: update,
             });
         }
         else {
@@ -303,7 +312,7 @@ const updateAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.status(400).json({
             message: "couldn't update admin",
             data: error,
-            error: error.message
+            error: error.message,
         });
     }
 });

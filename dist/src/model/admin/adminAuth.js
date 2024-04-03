@@ -20,6 +20,10 @@ const AdminAuth = new mongoose_1.default.Schema({
     expectedClockOut: {
         type: String
     },
+    lastTokenTimestamp: { type: Date, default: new Date(0) },
+    workingDays: {
+        type: String
+    },
     companyname: {
         type: String,
         unique: true

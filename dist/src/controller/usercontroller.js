@@ -400,7 +400,7 @@ exports.StaffOTPCheck = StaffOTPCheck;
   {
     name: "Peter",
     salary: 500,
-  },
+  },n
   {
     name: "Okus",
     salary: 1500,

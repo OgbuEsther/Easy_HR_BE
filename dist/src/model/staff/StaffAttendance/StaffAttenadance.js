@@ -36,7 +36,10 @@ const AttendanceSchema = new mongoose_1.default.Schema({
     },
     staffId: {
         type: String
-    }
+    },
+    DEDUCTIONS: {
+        type: String
+    },
 });
 const AttendanceModel = mongoose_1.default.model("StaffAttendance", AttendanceSchema);
 exports.default = AttendanceModel;
