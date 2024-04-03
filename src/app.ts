@@ -38,7 +38,6 @@ const appConfig = (app: Application) => {
   app.use("/api/admin", adminAuthRoutes);
   app.use("/api", AdminRoutes);
   app.use("/api", staffRoutes);
-  // app.use("/api/auth", userRoutes);
 
   //checking all routes
   app.all("*", (req: Request, res: Response, next: NextFunction) => {
