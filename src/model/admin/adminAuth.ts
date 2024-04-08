@@ -13,7 +13,6 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
     },
     longitude : {
       type : String,
-    
     },
     expectedClockIn : {
       type : String
@@ -81,10 +80,7 @@ const AdminAuth = new mongoose.Schema<adminSignUp>(
       ref: "Attendance",
     },
   ],
-  payRoll: [
-    
-  ],
-
+  payRoll: [ ],
   PerformanceMilestone: [
     {
       type: mongoose.Schema.Types.ObjectId,
