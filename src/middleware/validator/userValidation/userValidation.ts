@@ -9,3 +9,4 @@ export const registerValidation: RequestHandler = (req, res, next) => {
 export const loginValidation: RequestHandler = (req, res, next) => {
   validator(userSchema.login, req.body, next);
 };
+6
