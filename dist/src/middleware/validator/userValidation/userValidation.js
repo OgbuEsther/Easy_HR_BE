@@ -11,3 +11,4 @@ const loginValidation = (req, res, next) => {
     (0, validator_1.validator)(userSchema_1.userSchema.login, req.body, next);
 };
 exports.loginValidation = loginValidation;
+6;

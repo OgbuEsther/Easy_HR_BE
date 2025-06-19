@@ -24,7 +24,6 @@ const asyncHandler_1 = require("../utils/asyncHandler");
 const crypto_1 = __importDefault(require("crypto"));
 const staffAuth_1 = __importDefault(require("../model/staff/staffAuth"));
 const email_1 = require("../utils/email");
-const axios_1 = __importDefault(require("axios"));
 const one_sdk_1 = require("@superfaceai/one-sdk");
 const app = (0, express_1.default)();
 app.set("trust proxy", true);
@@ -70,11 +69,6 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => _
         const hash = yield bcrypt_1.default.hash(password, salt);
         const dater = Date.now();
         const defaultTime = "07:30:00 PM";
-        let dataIP;
-        yield axios_1.default.get("https://api.ipify.org/").then((res) => {
-            dataIP = res.data;
-        });
-        let realData = yield run(dataIP);
         const generateNumber = Math.floor(Math.random() * 78) + dater;
         const genCode = otp_generator_1.default.generate(6, {
             upperCaseAlphabets: false,
@@ -92,8 +86,6 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => _
             token: genToken,
             OTP: genOTP,
             expectedClockIn: defaultTime,
-            latitude: realData === null || realData === void 0 ? void 0 : realData.latitude,
-            longitude: realData === null || realData === void 0 ? void 0 : realData.longitude,
         });
         if (!admin) {
             next(new appError_1.AppError({
@@ -121,7 +113,6 @@ exports.adminSignup = (0, asyncHandler_1.asyncHandler)((req, res, next, ip) => _
         return res.status(200).json({
             message: "Success",
             data: admin,
-            result: realData,
         });
     }
     catch (error) {
