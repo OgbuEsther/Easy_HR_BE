@@ -77,14 +77,7 @@ export const adminSignup = asyncHandler(
       const dater = Date.now();
       const defaultTime = "07:30:00 PM";
 
-      let dataIP: any;
-
-      await axios.get("https://api.ipify.org/").then((res: any) => {
-        dataIP = res.data;
-      });
-
-      let realData: any = await run(dataIP);
-      const generateNumber = Math.floor(Math.random() * 78) + dater;
+const generateNumber = Math.floor(Math.random() * 78) + dater;
       const genCode = otpgenerator.generate(6, {
         upperCaseAlphabets: false,
         specialChars: false,
@@ -101,8 +94,7 @@ export const adminSignup = asyncHandler(
         token: genToken,
         OTP: genOTP,
         expectedClockIn: defaultTime,
-        latitude: realData?.latitude,
-        longitude: realData?.longitude,
+      
       });
 
       if (!admin) {
@@ -142,7 +134,7 @@ export const adminSignup = asyncHandler(
       return res.status(200).json({
         message: "Success",
         data: admin,
-        result: realData,
+      
       });
     } catch (error: any) {
       return res.status(400).json({
